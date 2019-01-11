@@ -155,14 +155,7 @@
 		    	console.log('typeList Event Test.');
 		    	var getType = $('#typeList option:selected').val();
 				$('#typeSearch').val(getType);
-				
-				//console.log(index);
-				//var index = $('#indexSearch').val();
-				//var type = $('#typeSearch').val();
-		    	//var data = {"index" : index, "type" : type};
-		    	//console.log($('#multiForm'));
-		    	//var formData = $('#multiForm').serialize();
-				
+						
 		    });	
 	 		
 	 		$('#idList').change(() => {
@@ -181,15 +174,21 @@
 	 		var serverList = $('#serverList option:selected').val();
 	 			console.log(serverList);
 	 		var config = $('#serverList option:selected').val();;
-	 		
-	 		if(config === "") {
+	 		var defualt = "<option>"+"선택하세요"+"</option>";	
+	 			$(indexSearch).val('');
+	 			$(typeSearch).val('');
+		 		$(idKeySearch).val('');
+		 		$(idValueSearch).val('');
+		 		$('#json').html('');
+		 		$('#typeList').html('').append(defualt);
+		 		
+		 		if(config === "") {
 		 		alert("다시 선택해 주시기 바랍니다.");
 		 		$(indexSearch).val('');
 		 		$(typeSearch).val('');
 		 		$(idKeySearch).val('');
 		 		$(idValueSearch).val('');
 		 		$('#json').html('');
-		 		var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#indexList').html('').append(defualt);
 		 		$('#typeList').html('').append(defualt);
 		 		$("input[id^='creKey']").remove();
@@ -258,42 +257,12 @@
 				//추가 버튼을 클릭하였을 때 인풋창에 추가 될 아이콘을 클릭했을 때! 
 				$(".deleteBtn").on("click", function(){
 		    		
-					//this 메서드는 자기 자신을 뜻함.
 					$(this).parent().remove();
-					
-			   		/* var getKeyText = $("input[id^='creKey']").val();
-	 		   		var getValueText = $("input[id^='creValue']").val(); */
-			    		
-			    	/* 	console.log("i[id^='deleteBtn']");
-	 		   			
-	 		   		
-			    		$("input[id^='creKey']").remove();
-			    		$("input[id^='creValue']").remove();
-			    		$("label[for^='creKey']").remove();
-			    		$("label[for^='creValue']").remove();
-			    		$("i[id^='deleteBtn']").remove(); */
-			    		
-			    		// 텍스트 창이 없을 때 얼럿창 띄우기!!!!!!!*************************
-			    		/* if($("input[id^='creKey']") === undefined || $("input[id^='creValue']") === undefined){
-			    			alert("지울 텍스트창이 없습니다!");
-			    		} */
+			
 			    		seq = seq+1;
 			    	});
 			});
 		    
-		    // **** 삭제 버튼의 인풋창 삭제 기능 !!!!!!
-		    
-		    		
-		   		/* var getKeyText = $("input[id^='creKey']").val();
- 		   		var getValueText = $("input[id^='creValue']").val(); */
-		    		
-		    		
-		    		// 텍스트 창이 없을 때 얼럿창 띄우기!!!!!!!*************************
-		    		/* if($("input[id^='creKey']") === undefined || $("input[id^='creValue']") === undefined){
-		    			alert("지울 텍스트창이 없습니다!");
-		    		} */
-		    	
-		    	
 		    	
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
@@ -405,7 +374,7 @@
 		                			JSON.stringify : stringify 메소드는 json 객체를 string 객체로 변환시켜 줍니다. 
 		                			+JSON.stringify(data, null, 4)
 		                			*/ 
-			    			var html ="<p>"+JSON.stringify(data, null, 4);+"</p>"
+			    			var html ='<pre>'+JSON.stringify(data, null, 4)+'</pre>'
 							$("#json").html(html); // 타입 리스트에 연결 html 변수기능을 넣어 준다.
 
 		                }

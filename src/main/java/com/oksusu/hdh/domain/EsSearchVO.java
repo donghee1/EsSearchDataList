@@ -10,11 +10,7 @@ public class EsSearchVO {
 	private String index;
 	private String type;
 	private String id;
-	private String title;
-	private String name;
-	private String content;
-	private List<Map<String, String>> params;
-	private List<Map<String, String[]>> arrayParams;
+	
 	public int getBno() {
 		return bno;
 	}
@@ -39,43 +35,11 @@ public class EsSearchVO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public List<Map<String, String>> getParams() {
-		return params;
-	}
-	public void setParams(List<Map<String, String>> params) {
-		this.params = params;
-	}
-	public List<Map<String, String[]>> getArrayParams() {
-		return arrayParams;
-	}
-	public void setArrayParams(List<Map<String, String[]>> arrayParams) {
-		this.arrayParams = arrayParams;
-	}
 	@Override
 	public String toString() {
-		return "BoardVO [bno=" + bno + ", index=" + index + ", type=" + type + ", id=" + id + ", title=" + title
-				+ ", name=" + name + ", content=" + content + ", params=" + params + ", arrayParams=" + arrayParams
-				+ "]";
+		return "EsSearchVO [bno=" + bno + ", index=" + index + ", type=" + type + ", id=" + id + "]";
 	}
-	
+		
 	
 	
 	

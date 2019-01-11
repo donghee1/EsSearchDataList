@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @SpringBootApplication
 @MapperScan({"com.oksusu.hdh.mapper"})
@@ -39,7 +40,11 @@ public class OksusuApplication {
             
             return sessionFactory.getObject();
     }
-
-
+//    @Bean
+//    public MappingJackson2JsonView jsonView() {
+//    		return new MappingJackson2JsonView();
+//    }
+    
+ 
       
 }

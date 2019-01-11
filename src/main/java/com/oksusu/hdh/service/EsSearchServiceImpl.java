@@ -32,10 +32,10 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		@Autowired
 		BoardMapper mapper;
 		
-		
 		@Override
 		public List<String> searchIndexList(String index, String config) {
 			
+			System.out.println("Start search Project!");
 			
 			List<String> result = null;
 			try {
@@ -47,26 +47,10 @@ public  class EsSearchServiceImpl implements EsSearchService {
 				System.out.println("searchIndex 오류!!!");
 			}
 			
-			System.out.println("result는 무엇일까? " + result);
-			
-			
 			return result;
 
 		}
 		
-//		@Override
-//		public String testId(String index, String type, String id)throws Exception {
-//			
-//			List<Map<String, Object>> idList = new ArrayList<>();
-//			ObjectMapper mapper = new ObjectMapper();
-//			String json;
-//			
-//			System.out.println("idSearch Start!!!!!");
-//			idList = repository.idSearch(index, type, id);
-//			json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(idList);
-//			
-//			return json;
-//		}
 		
 		@Override
 		public List<String> typeListMappings(EsTest vo, String config) throws Exception {
@@ -84,7 +68,6 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			return typeList;
 		
 		}
-//		public Object GetList(BoardVO vo)throws Exception;
 		@Override
 		public String elSearch(String index, String type, String id, String[] idkey,
 				String[] idvalue, String config) throws Exception {
