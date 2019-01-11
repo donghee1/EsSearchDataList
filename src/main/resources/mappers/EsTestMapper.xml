@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.oksusu.hdh.mapper.EsTestMapper">
+ 
+    <insert id="boardInsert" parameterType="com.oksusu.hdh.domain.EsTest">
+        insert into movie
+            values
+        (#{movie_no},#{title},#{runningTime},#{genre},#{summary},#{typetype})
+    </insert>
+    
+    <select id="listSelect" resultType="com.oksusu.hdh.domain.EsTest">
+    select * from VOD.movie;
+    
+    </select>
+    
+   <!--  <select id="listIndex" resultType="com.ex.hdh.domain.BoardVO">
+    select * from hdh_tb where index = #{index};
+    </select>
+    
+    <select id="listType" resultType="com.ex.hdh.domain.BoardVO">
+    select * from hdh_tb where type = #{type};
+    </select>
+    
+    <update id="boardUpdate" parameterType="com.ex.hdh.domain.BoardVO">
+    update hdh_tb set title= #{title}, content= #{content} where bno=#{bno}
+    
+    </update>
+    
+    <delete id="boardDelete" parameterType="com.ex.hdh.domain.BoardVO">
+    delete from hdh_tb where bno = #{bno}
+    </delete> -->
+ 
+</mapper>
