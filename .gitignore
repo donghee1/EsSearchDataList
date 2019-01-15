@@ -10,6 +10,8 @@
 .settings
 .springBeans
 .sts4-cache
+*.jar
+.application.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -25,5 +27,10 @@
 /nbdist/
 /.nb-gradle/
 
-### application ### 
-/src/main/resources
+### properties ###
+/src/main/resources/application.properties
+
+### Mac ###
+.DS_Store
+.DS_Store?
+_*
