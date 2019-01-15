@@ -51,33 +51,30 @@ public class EsRepository {
 	@Autowired
 	private Client bmt;
 	
-	public Client changeClient(String server) {
-		if(server.equals("dev")){
-			client = dev;
-		}else if(server.equals("bmt")) {
-			client = bmt;
-		}
-			return client;
-	}
+//	public Client changeClient(String config) {
+//		if(server.equals("dev")){
+//			client = dev;
+//		}else if(server.equals("bmt")) {
+//			client = bmt;
+//		}
+//			return client;
+//	}
 	public List<String> searchIndexList(String index, String config) throws Exception {
 
 		List<String> list = null;
 
-		if (index == null && config == null) {
+		if (index == null && config == null || "test".equals(config)) {
 			String[] res = client.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
 			list = Arrays.asList(res);
-
 		} else if ("dev".equals(config) && index == null) {
 			String[] devRes = dev.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
 			list = Arrays.asList(devRes);
 
 		} else if ("bmt".equals(config) && index == null) {
+			System.out.println("this point bmt");
 			String[] bmtRes = bmt.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
 			list = Arrays.asList(bmtRes);
 
-		} else if ("test".equals(config) && index == null) {
-			String[] res = client.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
-			list = Arrays.asList(res);
 		}
 
 		return list;

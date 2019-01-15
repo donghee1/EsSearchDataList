@@ -25,6 +25,5 @@
 /nbdist/
 /.nb-gradle/
 
-### config ### 
-
-/src/main/java/com/oksusu/hdh/config/
+### application ### 
+/src/main/resources

@@ -6,17 +6,12 @@ import java.util.Map;
 public class EsSearchVO {
 
 	
-	private int bno;
+	
 	private String index;
 	private String type;
 	private String id;
 	
-	public int getBno() {
-		return bno;
-	}
-	public void setBno(int bno) {
-		this.bno = bno;
-	}
+	
 	public String getIndex() {
 		return index;
 	}
@@ -37,9 +32,9 @@ public class EsSearchVO {
 	}
 	@Override
 	public String toString() {
-		return "EsSearchVO [bno=" + bno + ", index=" + index + ", type=" + type + ", id=" + id + "]";
+		return "EsSearchVO [index=" + index + ", type=" + type + ", id=" + id + "]";
 	}
-		
+	
 	
 	
 	

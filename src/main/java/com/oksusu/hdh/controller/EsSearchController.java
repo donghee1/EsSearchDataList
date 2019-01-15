@@ -11,19 +11,19 @@ import java.util.Map;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oksusu.hdh.domain.EsTest;
-
 import com.oksusu.hdh.service.EsSearchService;
 import com.oksusu.hdh.service.EsTestService;
-
 
 
 
@@ -36,7 +36,19 @@ public class EsSearchController {
 	@Autowired
 	private EsTestService testService;
 	
-	//private static final Logger logger = org.slf4j.LoggerFactory.getLogger(EsSearchController.class);
+	
+
+	@GetMapping("/mainPage")
+	public String MainPage(Model model) {
+		
+		MappingJackson2JsonView json = new MappingJackson2JsonView();
+		
+		model.addAttribute(json);
+		
+		System.out.println("mv?" + model);
+		
+		return "mainPage";
+	}
 	
 	
 	@GetMapping("/checkServer")
@@ -46,6 +58,7 @@ public class EsSearchController {
 		List<String> result = null;
 		String index = null;
 		
+		System.out.println("config?" + config);
 		if(config != null) {
 			result = service.searchIndexList(index, config);
 		}else {
@@ -58,7 +71,7 @@ public class EsSearchController {
 	
 	// 첫 웹 페이지 화면!!! -> index List를 뽑아 줌.
 	@GetMapping("/list")
-	public String startIndexList(Model model, String index, String config)throws Exception {
+	public List<String> startIndexList(String index, String config)throws Exception {
 	
 		//***********연구필요!
 		//MappingJackson2JsonView mv = new MappingJackson2JsonView();
@@ -69,10 +82,10 @@ public class EsSearchController {
 		
 		//System.out.println("final dataList!!!" + list.toString());
 		
-		model.addAttribute("data", list);
 		
 		
-		return "list";
+		
+		return list;
 	}
 	
 	

@@ -173,7 +173,8 @@
 	 			console.log("serverList Start!!!");
 	 		var serverList = $('#serverList option:selected').val();
 	 			console.log(serverList);
-	 		var config = $('#serverList option:selected').val();;
+	 		var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
+	 		var config = $('#serverList option:selected').val();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";	
 	 			$(indexSearch).val('');
 	 			$(typeSearch).val('');
