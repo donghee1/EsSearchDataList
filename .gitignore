@@ -29,6 +29,7 @@
 
 ### properties ###
 /src/main/resources/*.properties
+/bin/main/resources/*.properties
 src/main/resources/application.properties
 
 ### Mac ###
