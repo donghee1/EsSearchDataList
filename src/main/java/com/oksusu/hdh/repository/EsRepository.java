@@ -2,7 +2,7 @@ package com.oksusu.hdh.repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,32 +51,29 @@ public class EsRepository {
 	@Autowired
 	private Client bmt;
 	
-//	public Client changeClient(String config) {
-//		if(server.equals("dev")){
-//			client = dev;
-//		}else if(server.equals("bmt")) {
-//			client = bmt;
-//		}
-//			return client;
-//	}
+	public Client changeClient(String config) {
+		
+		//System.out.println("dataType!!!" + config.toString());
+		
+		if(config.equals("dev")){
+			client = dev;
+		}else if(config.equals("bmt")) {
+			client = bmt;
+		}else if(config.equals("test")) {
+			client = client;
+		}
+			return client;
+	}
 	public List<String> searchIndexList(String index, String config) throws Exception {
 
-		List<String> list = null;
-
-		if (index == null && config == null || "test".equals(config)) {
+		List<String> list = new ArrayList<>();
+		
 			String[] res = client.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
 			list = Arrays.asList(res);
-		} else if ("dev".equals(config) && index == null) {
-			String[] devRes = dev.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
-			list = Arrays.asList(devRes);
+		
 
-		} else if ("bmt".equals(config) && index == null) {
-			System.out.println("this point bmt");
-			String[] bmtRes = bmt.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
-			list = Arrays.asList(bmtRes);
-
-		}
-
+		Collections.sort(list);
+		
 		return list;
 	}
 
@@ -86,15 +83,9 @@ public class EsRepository {
 		// System.out.println("typeList index data ::: " + vo.getIndex());
 		// System.out.println("typeList config data :::" + config);
 		GetMappingsResponse res = null;
-
-		if ("dev".equals(config)) {
-			res = dev.admin().indices().getMappings(new GetMappingsRequest().indices(vo.getIndex().toString())).get();
-		} else if ("bmt".equals(config)) {
-			res = bmt.admin().indices().getMappings(new GetMappingsRequest().indices(vo.getIndex().toString())).get();
-		} else if ("".equals(config) || "test".equals(config) && vo.getIndex() != null) {
 			res = client.admin().indices().getMappings(new GetMappingsRequest().indices(vo.getIndex().toString()))
 					.get();
-		}
+		
 		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(vo.getIndex());
 		// System.out.println("immutableopenmap" + mapping.toString());
 		for (ObjectObjectCursor<String, MappingMetaData> c : mapping) {
@@ -103,6 +94,8 @@ public class EsRepository {
 				typeList.add(c.key);
 			}
 		}
+		
+		Collections.sort(typeList);
 
 		return typeList;
 
@@ -117,13 +110,9 @@ public class EsRepository {
 		SearchResponse onlyIndex = null;
 		if (index != null) {
 			// System.out.println("onlyIndexStart!!!!!!");
-			if ("test".equals(config) || "".equals(config)) {
+			
 				onlyIndex = client.prepareSearch(index).get();
-			} else if ("dev".equals(config)) {
-				onlyIndex = dev.prepareSearch(index).get();
-			} else if ("bmt".equals(config)) {
-				onlyIndex = bmt.prepareSearch(index).get();
-			}
+			
 		} else {
 			System.out.println("onlyIndex Search Error!!!!!");
 			return null;
@@ -154,13 +143,8 @@ public class EsRepository {
 		SearchResponse res = null;
 
 		if (index != null && type != null) {
-			if (("".equals(config) || index == null) || ("test".equals(config) && config != null)) {
 				res = client.prepareSearch(index).setTypes(type).get();
-			} else if ("dev".equals(config)) {
-				res = dev.prepareSearch(index).setTypes(type).get();
-			} else if ("bmt".equals(config)) {
-				res = bmt.prepareSearch(index).setTypes(type).get();
-			}
+			
 		} else {
 			System.out.println("indexAndType Search Error!!!!!");
 			return null;
@@ -195,14 +179,9 @@ public class EsRepository {
 //		System.out.println("config data :::" + config);
 
 		if (index != null && type != null) {
-			System.out.println("this keyAndValue point!!");
-			if (("".equals(config) || config == null) || "test".equals(config)) {
+			
 				srb = client.prepareSearch(index).setTypes(type);
-			} else if ("dev".equals(config)) {
-				srb = dev.prepareSearch(index).setTypes(type);
-			} else if ("bmt".equals(config)) {
-				srb = bmt.prepareSearch(index).setTypes(type);
-			}
+			
 		} else {
 			System.out.println("keyAndValue Search Error!!!!!");
 		}
@@ -265,13 +244,7 @@ public class EsRepository {
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
-		if ("".equals(config) || "test".equals(config)) {
 			srb = client.prepareSearch(index);
-		} else if ("dev".equals(config)) {
-			srb = dev.prepareSearch(index);
-		} else if ("bmt".equals(config)) {
-			srb = bmt.prepareSearch(index);
-		}
 
 		if (idkey.length > 0) {
 			for (int i = 0; i < idkey.length; i++) {
@@ -302,13 +275,7 @@ public class EsRepository {
 		Map<String, Object> map = new LinkedHashMap<>();
 		GetRequestBuilder req = null;
 
-		if ("".equals(config) || "test".equals(config)) {
 			req = client.prepareGet(index, type, id);
-		} else if ("dev".equals(config)) {
-			req = dev.prepareGet(index, type, id);
-		} else if ("bmt".equals(config)) {
-			req = bmt.prepareGet(index, type, id);
-		}
 
 		GetResponse res1 = req.get();
 		map.put("_index", res1.getIndex());

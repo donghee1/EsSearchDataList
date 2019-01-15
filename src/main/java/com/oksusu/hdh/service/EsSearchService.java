@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
 import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.search.SearchHit;
@@ -33,6 +34,8 @@ public interface EsSearchService {
 	public List<String> typeListMappings(EsTest vo, String config) throws Exception;
 	
 	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue, String config)throws Exception;
+
+	public Client dataType(String config)throws Exception;
 
 	
 

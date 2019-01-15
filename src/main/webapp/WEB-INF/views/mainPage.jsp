@@ -12,12 +12,15 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css">
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-
-<title>테스트 엘라스틱 서치</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- <script src="src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.min.js"></script>
+<link rel="stylesheet" href="/src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.css">
+ -->
+<title>엘라스틱 서치</title>
 </head>
 <body>
-
-	<h3>테스트 엘라스틱 서치</h3>
+	<div id = "fakeLoader"></div>
+	<h3>엘라스틱 서치</h3>
 	<div style="padding: 30px;">
 		<!-- onchange 사용해보기  -->
 		<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
@@ -25,12 +28,15 @@
 		<form id="multiForm" action ="#">
 			<div  class="form-group">
 				<label for="server">서버</label>
-				<select id="serverList">
+				<select id="serverList" name="file_name">
 					<option value="">선택하세요.</option>
 					<option value="test">test</option>
 					<option value="dev">dev</option>
 					<option value="bmt">bmt</option>
 				</select>
+				<!-- <div class = "progress">
+				<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+				</div> -->
 				<label for="indexList">인덱스</label> 
 				<select id="indexList">
 					<option value="indexListOption">선택하세요.</option>
@@ -59,6 +65,7 @@
 					</div>
 				</div>
 				<button id = "SearchStart" type = "button" class="btn btn-primary">검색 </button>
+				<button id = "clearBtn" type = "button" class="btn btn-primary">클리어 </button>
 			</div>
 		</form>
 	</div>
@@ -82,11 +89,28 @@
 	 let obj = {};
  $(document).ready(function(){
 	 
-	 //Index List Value
+	 /* var sort = $("#select[file_name]>option").sort(function(a,b){
+			return a.value.toLowerCase()>b.value.toLowerCase() ? 1: -1;
+	 });
+	 
+	 $("#select[file_name]>option").empty();
+	 $("#select[file_name]>option").append(sort);
+	 $("#select[file_name]>option:first").attr("selected","selected"); */
+	 
+	 
+	/*  $("#fakeLoader").fakeLoader({
+	
+		 timeToHide:1200,
+		 bgColor:"#f8f8f8",
+		 spinner:"spinner6"
+	 
+	 }); */
+	 
 	 
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
 	 	console.log($('#indexList option:selected').val()); //선택 인덱스값이 나온다.
+	 
 	 
 	 	var getIndex = {}; //추가 
 	 	var config = {};
@@ -127,6 +151,12 @@
 			$('#idValueSearch').val('');
 			$("input[id^='creKey']").val('');
 			$('#json').html('');
+			
+			$(window).load(function(){
+			
+				$('.progress-var').jide();
+			})
+			
 			
 			var defualt = "<option>"+"선택하세요"+"</option>";
 	 		$('#typeList').append(defualt);
@@ -173,7 +203,7 @@
 	 			console.log("serverList Start!!!");
 	 		var serverList = $('#serverList option:selected').val();
 	 			console.log(serverList);
-	 		var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
+	 		//var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
 	 		var config = $('#serverList option:selected').val();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";	
 	 			$(indexSearch).val('');
@@ -264,7 +294,20 @@
 			    	});
 			});
 		    
+		    $('#clearBtn').click(()=>{
+		    
+		    	console.log("clean click")
+		    	$('#idSearch').val('');
+		    	$(idKeySearch).val('');
+		    	$(idValueSearch).val('');
+		    	$("input[id^='creKey']").val('').remove();
+		 		$("input[id^='creValue']").val('').remove();
+		 		$("label[for^='creKey']").remove();
+	    		$("label[for^='creValue']").remove();
+	    		$(".deleteBtn").remove();
 		    	
+		    });
+		    
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
 		    		    - 인덱스 값이 없음 if 문으로

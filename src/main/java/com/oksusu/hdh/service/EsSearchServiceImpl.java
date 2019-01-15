@@ -32,6 +32,7 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		@Autowired
 		BoardMapper mapper;
 		
+		
 		@Override
 		public List<String> searchIndexList(String index, String config) {
 			
@@ -105,6 +106,15 @@ public  class EsSearchServiceImpl implements EsSearchService {
 				}
 				
 			return json;
+		}
+
+
+		@Override
+		public Client dataType(String config) throws Exception {
+			
+			Client data = repository.changeClient(config);
+			
+			return data;
 		}
 
 		

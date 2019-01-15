@@ -58,9 +58,13 @@ public class EsSearchController {
 		List<String> result = null;
 		String index = null;
 		
+		//data type 정의!!
+		service.dataType(config);
+		
 		System.out.println("config?" + config);
 		if(config != null) {
 			result = service.searchIndexList(index, config);
+			
 		}else {
 			System.out.println("server check Error!!!!!");
 			return null;
