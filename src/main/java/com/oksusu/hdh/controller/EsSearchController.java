@@ -33,11 +33,6 @@ public class EsSearchController {
 	@Autowired
 	private EsSearchService service;
 	
-	@Autowired
-	private EsTestService testService;
-	
-	
-
 	@GetMapping("/mainPage")
 	public String MainPage(Model model) {
 		
@@ -58,7 +53,7 @@ public class EsSearchController {
 		List<String> result = null;
 		String index = null;
 		
-		//data type 정의!!
+		//data type 정의!! 
 		service.dataType(config);
 		
 		System.out.println("config?" + config);
@@ -73,7 +68,6 @@ public class EsSearchController {
 		return result;
 	}
 	
-	// 첫 웹 페이지 화면!!! -> index List를 뽑아 줌.
 	@GetMapping("/list")
 	public List<String> startIndexList(String index, String config)throws Exception {
 	
@@ -115,17 +109,23 @@ public class EsSearchController {
 	
 	@PostMapping("/startSearch")
 	@ResponseBody
-	public String startSearch(String index, String type, String id, String[] idkey , String[] idvalue, String config)throws Exception{
+	public String startSearch(String index, String type, String id, String[] idkey
+			, String[] idvalue, String config, String searchType, String sortType)throws Exception{
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
+		System.out.println("index" + index);
+		System.out.println("config" + config);
+		System.out.println("dataType" + searchType);
+		System.out.println("sortType" + sortType);
 		
-		if(index == null) {
+		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");
 			return null;
 		}else {
 		
-			json = service.elSearch(index, type, id, idkey, idvalue, config);	
+			json = service.elSearch(index, type, id, idkey, idvalue
+						, config, searchType, sortType);	
 		}
 //		System.out.println("type ::: " + type);
 //		System.out.println("id ::: " + id);
@@ -134,21 +134,7 @@ public class EsSearchController {
 		return json;
 	}
 	
-	@GetMapping("/board")
-	public Map<String, Object> boardList(EsTest vo)throws Exception{
-		
-		System.out.println("값이 들어 갔나요!? ");
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("값이 들어 갔나요!?2222 ");
-		
-		
-		result.put("elasticsearch", testService.GetList(vo));
-		System.out.println("result : " + result);
-		
-		
-		return result;
-	}
+	
 		
 	
 }

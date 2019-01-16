@@ -33,15 +33,13 @@ public interface EsSearchService {
 	
 	public List<String> typeListMappings(EsTest vo, String config) throws Exception;
 	
-	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue, String config)throws Exception;
+	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue
+			, String config, String searchType, String sortType)throws Exception;
 
 	public Client dataType(String config)throws Exception;
 
 	
 
-	//public String testId(String index, String type, String id)throws Exception;
-
-	//public Object GetList()throws Exception;
 	
 	
 	

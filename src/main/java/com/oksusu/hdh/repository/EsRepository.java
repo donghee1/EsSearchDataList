@@ -3,41 +3,32 @@ package com.oksusu.hdh.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
-
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-
 import org.elasticsearch.action.search.SearchType;
-
 import org.elasticsearch.client.Client;
-
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
-
 import org.elasticsearch.index.query.BoolQueryBuilder;
-
 import org.elasticsearch.index.query.QueryBuilders;
-
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Repository;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
+import com.oksusu.hdh.compare.DataCompare;
 import com.oksusu.hdh.domain.EsTest;
-import com.oksusu.hdh.mapper.BoardMapper;
 
 @Repository
 public class EsRepository {
@@ -51,6 +42,9 @@ public class EsRepository {
 	@Autowired
 	private Client bmt;
 	
+	@Autowired
+	private DataCompare compare;
+	
 	public Client changeClient(String config) {
 		
 		//System.out.println("dataType!!!" + config.toString());
@@ -60,9 +54,17 @@ public class EsRepository {
 		}else if(config.equals("bmt")) {
 			client = bmt;
 		}else if(config.equals("test")) {
-			client = client;
+			client = client; // 자기 자신을 가리키는 법. this 메소드 활용법을 알아보자!
 		}
 			return client;
+	}
+	
+	public Object searchType(String searchType, String sortType) {
+		
+		searchType = new String();
+		sortType = new String();
+		
+		return null;
 	}
 	public List<String> searchIndexList(String index, String config) throws Exception {
 
@@ -70,9 +72,7 @@ public class EsRepository {
 		
 			String[] res = client.admin().indices().getIndex(new GetIndexRequest()).actionGet().getIndices();
 			list = Arrays.asList(res);
-		
-
-		Collections.sort(list);
+			Collections.sort(list);
 		
 		return list;
 	}
@@ -166,7 +166,7 @@ public class EsRepository {
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
 	public List<Map<String, Object>> keyAndVlaueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config) {
+			String config, String searchType, String sortType) {
 
 		System.out.println("start keyAndValueSearch!!!");
 		List<Map<String, Object>> keyValue = new ArrayList<>();
@@ -184,38 +184,67 @@ public class EsRepository {
 			
 		} else {
 			System.out.println("keyAndValue Search Error!!!!!");
+			return null;
 		}
 
-		if (idkey != null) {
-			for (int i = 0; i < idkey.length; i++) {
+		if(searchType.length() == 0 || searchType == null) {
+			System.out.println("keyAndValue searchType Error!!!!!");
+			return null;
+		}else {
+			
+			if("".equals(searchType) || "and".equals(searchType) && idkey != null) {
+				for (int i = 0; i < idkey.length; i++) {
 
-				String keyField = idkey[i];
-				String valueField = idvalue[i];
-				// System.out.println("this keyField!! " + keyField.indexOf("*") + " " +
-				// valueField.indexOf("*"));
+					String keyField = idkey[i];
+					String valueField = idvalue[i];
 
-				if (keyField != null) {
-					if (valueField.indexOf("*") >= 0) {
-						bool.must(QueryBuilders.wildcardQuery(keyField, valueField));
-					} else {
-						bool.must(QueryBuilders.termQuery(keyField, valueField));
-					}
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
-							System.out.println("start shold!!!!!!");
-							bool.should(QueryBuilders.wildcardQuery(keyField, valueField));
+							bool.must(QueryBuilders.wildcardQuery(keyField, valueField));
 						} else {
-							bool.should(QueryBuilders.termQuery(keyField, valueField));
+							bool.must(QueryBuilders.termQuery(keyField, valueField));
 						}
 					}
 				}
+			}else if("or".equals(searchType) && idkey != null) {
+				for (int i = 0; i < idkey.length; i++) {
+
+					String keyField = idkey[i];
+					String valueField = idvalue[i];
+
+					if (keyField != null) {
+					if (valueField.indexOf("*") >= 0) {
+						System.out.println("start shold!!!!!!");
+						bool.should(QueryBuilders.wildcardQuery(keyField, valueField));
+					} else {
+						bool.should(QueryBuilders.termQuery(keyField, valueField));
+					}
+				}
+				
+				}
+			}else if("andNot".equals(searchType) && idkey != null) {
+				for (int i = 0; i < idkey.length; i++) {
+
+					String keyField = idkey[i];
+					String valueField = idvalue[i];
+
+					if (keyField != null) {
+					if (valueField.indexOf("*") >= 0) {
+						System.out.println("start shold!!!!!!");
+						bool.mustNot(QueryBuilders.wildcardQuery(keyField, valueField));
+					} else {
+						bool.mustNot(QueryBuilders.termQuery(keyField, valueField));
+					}
+				}
+				
+				}
 			}
-		} else {
-			System.out.println("error!!!!!!!!!!!!");
-			return null;
 		}
 		if (idkey != null) {
 			srb.setQuery(bool);
+		} else {
+			System.out.println("error!!!!!!!!!!!!");
+			return null;
 		}
 		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
 
@@ -231,27 +260,54 @@ public class EsRepository {
 
 			keyValue.add(map);
 		}
-
+		if(sortType.length()>0 || sortType != null) {
+			if("ASC".equals(sortType)) {
+			Collections.sort(keyValue, compare);
+			}else if("DESC".equals(sortType)) {
+			Collections.sort(keyValue, compare);
+			}
+		}
 		return keyValue;
 
 	}
 
 	public List<Map<String, Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config) {
+			String config, String searchType, String sortType) {
 		System.out.println("indexAndKeyValueSearch");
+		
+		
 		List<Map<String, Object>> data = new ArrayList<>();
-
+		
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
 			srb = client.prepareSearch(index);
-
-		if (idkey.length > 0) {
-			for (int i = 0; i < idkey.length; i++) {
-				bool.must(QueryBuilders.matchQuery(idkey[i], idvalue[i]));
-				srb.setQuery(bool);
+		if(searchType.length()>0 && "and".equals(searchType)) {
+			System.out.println("andType Search!!!");
+			if (idkey.length > 0) {
+				for (int i = 0; i < idkey.length; i++) {
+					bool.must(QueryBuilders.matchQuery(idkey[i], idvalue[i]));
+					srb.setQuery(bool);
+				}
+			}
+		}else if("or".equals(searchType)) {
+			System.out.println("orType Search!!!");
+			if (idkey.length > 0) {
+				for (int i = 0; i < idkey.length; i++) {
+					bool.should(QueryBuilders.matchQuery(idkey[i], idvalue[i]));
+					srb.setQuery(bool);
+				}
+			}
+		}else if("andNot".equals(searchType)) {
+			System.out.println("andNotType Search!!!");
+			if (idkey.length > 0) {
+				for (int i = 0; i < idkey.length; i++) {
+					bool.mustNot(QueryBuilders.matchQuery(idkey[i], idvalue[i]));
+					srb.setQuery(bool);
+				}
 			}
 		}
+		
 
 		SearchResponse response = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
 
@@ -265,6 +321,15 @@ public class EsRepository {
 
 			data.add(map);
 		}
+		
+		if(sortType.length()>0 || sortType != null) {
+			if("ASC".equals(sortType)) {
+			Collections.sort(data, new DataCompare());
+			}else if("DESC".equals(sortType)) {
+			Collections.sort(data, new DataCompare());
+			}
+		}
+		
 		System.out.println("data" + data);
 		return data;
 	}
@@ -289,5 +354,6 @@ public class EsRepository {
 
 		return dataList;
 	}
+	
 
 }

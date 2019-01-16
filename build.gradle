@@ -32,7 +32,6 @@ dependencies {
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	
-	
 	//MyBatis 설정 
 	compile('mysql:mysql-connector-java') // 스프링부트와 mybatis를 연결해 준다.
 	compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
@@ -44,7 +43,6 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
 	
-
 	//DB 설정을 위한 JDBC 라이브러리 등록 
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 
@@ -59,11 +57,14 @@ dependencies {
 	// JSP 사용을 위한 라이브러리 등록 
 	compile('org.apache.tomcat.embed:tomcat-embed-jasper')
 	compile('javax.servlet:jstl')
-
+	
+	// data sort를 위한 compare 사용
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+	compile('com.google.guava:guava:22.0')
 
 	// 프로젝트 라이브러리 해석
 	// https://mvnrepository.com/artifact/com.google.guava/guava
-	compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+	
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	//compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core

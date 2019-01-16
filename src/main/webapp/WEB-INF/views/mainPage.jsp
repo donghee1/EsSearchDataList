@@ -27,7 +27,7 @@
 		
 		<form id="multiForm" action ="#">
 			<div  class="form-group">
-				<label for="server">서버</label>
+				<label for="serverList">서버</label>
 				<select id="serverList" name="file_name">
 					<option value="">선택하세요.</option>
 					<option value="test">test</option>
@@ -45,7 +45,7 @@
 								value="${row}" /></option>
 					</c:forEach>
 				</select> 
-				<label for="type">타입</label>
+				<label for="typeList">타입</label>
 				<select id="typeList">
 					<option value="">선택하세요.</option>
 				</select>
@@ -57,6 +57,21 @@
 					<label for="idSearch">아이디</label>
 					<input type="text" id="idSearch">
 					<div>
+				<div id = dataType>
+					<label for="typeAndOr">검색 조건</label>
+					<select id = typeAndOr>
+						<option value="">선택하세요.</option>
+						<option value="and">and</option>
+						<option value="or">or</option>
+						<option value="andNot">andNot</option>
+					</select>
+					<label for="dataCheck">정렬 조건</label>
+					<select id = dataCheck>
+						<option value="">선택하세요.</option>
+						<option value="ASC">오름차순</option>
+						<option value="DESC">내림차순</option>
+					</select>
+				</div>
 					<label for="idKeySearch">키</label>
 					<input type="text" class = "key" id="idKeySearch">
 					<label for="idValueSearch">값</label>
@@ -85,6 +100,8 @@
 	 var idSearch = $('#idSearch');
 	 var idKeySearch = $('#idKeySearch');
 	 var idValueSearch = $('#idValueSearch');
+	 let typeAndOr = "";
+	 let dataCheck = "";
 	  
 	 let obj = {};
  $(document).ready(function(){
@@ -201,8 +218,6 @@
 	 		$('#serverList').change(()=>{
 	 		
 	 			console.log("serverList Start!!!");
-	 		var serverList = $('#serverList option:selected').val();
-	 			console.log(serverList);
 	 		//var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
 	 		var config = $('#serverList option:selected').val();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";	
@@ -230,7 +245,6 @@
 		 		return false;
 		 	}
 	 			
-	 			
 	 		$.get(`${location.origin}/checkServer`, {
 	 				
 				config :config
@@ -255,6 +269,17 @@
 	 		
 	 		});
 		    
+	 		$('#typeAndOr').change(()=>{
+	 			console.log("ddd")
+	 			typeAndOr = $('#typeAndOr option:selected').val();
+	 		
+	 		}); 
+	 		
+	 		$('#dataCheck').change(()=>{
+	 			console.log("zzz")
+	 			dataCheck = $('#dataCheck option:selected').val();
+	 		
+	 		});
 	 		
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
 		    var seq = 0;
@@ -264,7 +289,6 @@
 				var creLabelKey = '';
 				var creLabelValue = '';
 				var creInput = '';
-				
 				
 				creLabelKey = '<div id ="creDiv'+seq+'"><label for="creKey'+seq+'">'+"키"+'</label>';
 				creLabelValue = '<label for="creValue'+seq+'">'+"값"+'</label>';
@@ -324,9 +348,14 @@
 		    	var index ="";
 		    	var type = "";
 		    	var id = "";
+		    	var searchType = "";
+		    	var sortType = "";
 			    var obj = {};
 			    var config = {};
 		    	var url = "startSearch";
+		    	
+		    	console.log(searchType);
+		    	console.log(dataCheck);
 		    	
 		    	if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
 		    		console.log('NoSearchIndex');
@@ -339,6 +368,7 @@
 		    			type = typeSearch.value;
 		    			
 		    			config = $('#serverList option:selected').val();
+		    			
 					
 		    	}
 		    	 
@@ -351,8 +381,25 @@
 	    			id = idSearch.value;
 	    			
 	    			config = $('#serverList option:selected').val();
-		    	
 		    	}
+		    	
+		    	if(key[0].value != "" && value[0].value != ""){
+		    		if(typeAndOr == "" && dataCheck == ""){
+		    			alert("검색 조건과 정렬조건을 입력해주시기 바랍니다.");
+		    			return;
+		    		}else if(typeAndOr.value == null && dataCheck.value == null){
+						
+		    			index = indexSearch.value;
+		    			type = typeSearch.value;
+		    			sortType = $('#dataCheck option:selected').val();
+		    			searchType = $('#typeAndOr option:selected').val();
+		    			
+		    		}
+		    			
+		    		}
+		    		
+		    	
+		    	
 		    	
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
 		    	// 반대의 경우를 생각해야 함.
@@ -362,7 +409,6 @@
 		    	// 두 값이 모두 입력이 되어도 콘솔로그를 찍는다. 다음 단계로 가지 않는다는 얘기.
 		    	// 정리 : 기준을 디폴트 input의 배열의 길이가 1일때 (배열 변수는1개이상 있다)true else문 이후엔 추가버튼을 눌렀을 때 생성되는 input창의 모든 밸류값을 조건식으로 넣어주었고,
 		    	//	     true 일때 if문을 추가하여 디폴트 input의 키 밸류의 값이 한개씩만 들어갔을 때 조건식을 달아 주었다.
-		    	
 		    	
 		    	if(key.length == 1 && value.length == 1) {
 		    		
@@ -409,7 +455,10 @@
 		                	  id : id,
 		                	  idkey : ids, 
           			  		  idvalue : values,
-          			  		  config : config},
+          			  		  config : config,
+          			  		  searchType : searchType,
+          			  		  sortType : sortType},
+          			  		  
 		                dataType : 'json',
 		                traditional : true,
 		                success : function(data){

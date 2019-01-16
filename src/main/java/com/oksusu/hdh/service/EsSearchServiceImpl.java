@@ -71,7 +71,7 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		}
 		@Override
 		public String elSearch(String index, String type, String id, String[] idkey,
-				String[] idvalue, String config) throws Exception {
+				String[] idvalue, String config, String searchType, String sortType) throws Exception {
 			
 			ObjectMapper mapper = new ObjectMapper();
 			List<Map<String, Object>> list = new ArrayList<>();
@@ -83,22 +83,22 @@ public  class EsSearchServiceImpl implements EsSearchService {
 					list = repository.onlyOneIndexSearch(index, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					System.out.println("json??" + json.toString());
-				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0) {
+				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0) {
 					System.out.println("typeSearch Start!!!!!");
 					 list = repository.indexAndTypeSearch(index, type, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0) {
+				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0) {
 					System.out.println("idSearch Start!!!!!");
 					idList = repository.idSearch(index,type,id, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(idList);
-				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0 ) {
+				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0 && searchType.length() > 0 && sortType.length() > 0 ) {
 					System.out.println("typeOut SearchStart!!!");
-					list = repository.indexAndKeyValueSearch(index, idkey, idvalue, config);
+					list = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, sortType);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					//keyValue 한개 검색 가능 or 한개이상 검색 가능!
-				}else if( idkey.length > 0 && idvalue.length > 0  && !"".equals(type)) {
+				}else if( idkey.length > 0 && idvalue.length > 0  && !"".equals(type) && searchType.length() > 0 && sortType.length() > 0) {
 					System.out.println("allSearch Start!!!!!");
-					list = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config);
+					list = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config, searchType, sortType);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else {
 					System.out.println("No Searxh!!!!");
@@ -116,6 +116,7 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			
 			return data;
 		}
+
 
 		
 		
