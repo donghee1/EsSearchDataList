@@ -68,7 +68,7 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		}
 		@Override
 		public String elSearch(String index, String type, String id, String[] idkey,
-				String[] idvalue, String config, String searchType, String sortType, int searchSize) throws Exception {
+				String[] idvalue, String config, String searchType, String sortType, Integer searchSize) throws Exception {
 			
 			ObjectMapper mapper = new ObjectMapper();
 			List<Map<String, Object>> list = new ArrayList<>();
@@ -80,11 +80,11 @@ public  class EsSearchServiceImpl implements EsSearchService {
 					list = repository.onlyOneIndexSearch(index, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					System.out.println("json??" + json.toString());
-				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0) {
+				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0 ) {
 					System.out.println("typeSearch Start!!!!!");
 					 list = repository.indexAndTypeSearch(index, type, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0) {
+				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 && searchType.length() == 0 && sortType.length() == 0 ) {
 					System.out.println("idSearch Start!!!!!");
 					idList = repository.idSearch(index,type,id, config);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(idList);
@@ -107,11 +107,10 @@ public  class EsSearchServiceImpl implements EsSearchService {
 
 
 		@Override
-		public Client dataType(String config) throws Exception {
+		public void dataType(String config) throws Exception {
 			
 			Client data = repository.changeClient(config);
 			
-			return data;
 		}
 
 

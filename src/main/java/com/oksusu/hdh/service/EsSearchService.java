@@ -1,30 +1,9 @@
 package com.oksusu.hdh.service;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpSession;
 
-import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
-import org.elasticsearch.action.delete.DeleteRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.collect.ImmutableOpenMap;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.oksusu.hdh.domain.EsSearchVO;
-import com.oksusu.hdh.domain.EsTest;
-import com.oksusu.hdh.repository.EsRepository;
-
-import net.minidev.json.JSONObject;
 
 public interface EsSearchService {
 
@@ -34,9 +13,9 @@ public interface EsSearchService {
 	public List<String> typeListMappings(String getIndex, String config) throws Exception;
 	
 	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue
-			, String config, String searchType, String sortType, int searchSize)throws Exception;
+			, String config, String searchType, String sortType, Integer searchSize)throws Exception;
 
-	public Client dataType(String config)throws Exception;
+	public void dataType(String config)throws Exception;
 
 	
 

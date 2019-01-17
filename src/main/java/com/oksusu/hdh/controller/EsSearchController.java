@@ -104,8 +104,11 @@ public class EsSearchController {
 	@PostMapping("/startSearch")
 	@ResponseBody
 	public String startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType, int searchSize)throws Exception{
-		searchSize = 500;
+			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize)throws Exception{
+		//primitive type.
+		System.out.println("searchSize" + searchSize);
+		
+		
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
 		System.out.println("index" + index);
@@ -117,9 +120,12 @@ public class EsSearchController {
 			System.out.println("index Null!! check Error!!");
 			return null;
 		}else {
+			if(searchSize == null || searchSize >= 0) {
+				json = service.elSearch(index, type, id, idkey, idvalue
+						, config, searchType, sortType, searchSize);
+			}
 		
-			json = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, sortType, searchSize);	
+			
 		}
 //		System.out.println("type ::: " + type);
 //		System.out.println("id ::: " + id);

@@ -3,7 +3,7 @@ package com.oksusu.hdh.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.search.SearchRequest;
+
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -24,18 +24,17 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.ScoreSortBuilder;
+
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+
 import org.springframework.stereotype.Repository;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
-import com.fasterxml.jackson.databind.ser.SerializerCache;
 
-import com.oksusu.hdh.domain.EsTest;
+
+
 
 @Repository
 public class EsRepository {
@@ -86,6 +85,8 @@ public class EsRepository {
 		GetMappingsResponse res = null;
 			res = client.admin().indices().getMappings(new GetMappingsRequest().indices(getIndex.toString()))
 					.get();
+			
+			
 		
 		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(getIndex);
 		// System.out.println("immutableopenmap" + mapping.toString());
@@ -167,9 +168,10 @@ public class EsRepository {
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
 	public List<Map<String, Object>> keyAndVlaueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, String searchType, String sortType, int searchSize) {
-
+			String config, String searchType, String sortType, Integer searchSize) {
+		
 		System.out.println("start keyAndValueSearch!!!");
+		//System.out.println("searchSize???" + searchSize);
 		List<Map<String, Object>> keyValue = new ArrayList<>();
 
 		BoolQueryBuilder bool = new BoolQueryBuilder();
@@ -183,7 +185,7 @@ public class EsRepository {
 		if (index != null && type != null) {
 			
 				srb = client.prepareSearch(index).setTypes(type);
-			
+				
 				//ssb.docValueFields().sort(Collections.sort(keyValue, c));;
 				//ssb.fetchSource().includes().equals(index); 값이 없다고 뜸
 			
@@ -205,10 +207,14 @@ public class EsRepository {
 					System.out.println("this and type point!!!");
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
+							System.out.println("this true point!");
 							bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
 							.must(QueryBuilders.termQuery(keyField, valueField));
 						} else {
-							bool.must(QueryBuilders.matchQuery(keyField, valueField));
+							System.out.println("this false point!");
+							bool.must(QueryBuilders.matchAllQuery())
+							.must(QueryBuilders.matchQuery(keyField, valueField));
+								
 						}
 					}
 				}
@@ -247,23 +253,27 @@ public class EsRepository {
 			}
 		}
 		if (idkey != null) {
-			//ssb.query(bool);
-			srb.setQuery(bool).setSize(searchSize);
-			
-			if(sortType.length()>0 || sortType != null) {
-				if("ASC".equals(sortType)) {
-				System.out.println("this asc point");
-				//Collections.sort(keyValue, compare);
-				ssb.sort(new ScoreSortBuilder().order(SortOrder.ASC));
-				//srb.addSort(new source..order(SortOrder.ASC));
-				}else if("DESC".equals(sortType)) {
-				System.out.println("this DESC point");
-				//Collections.sort(keyValue, compare);
-				ssb.sort(new ScoreSortBuilder().order(SortOrder.DESC));
-				//srb.addSort(new SortBuilders().scoreSort().order(SortOrder.DESC));
+			for(int i =0; i <idkey.length; i++) {
+				if(sortType.length()>0 || sortType != null) {
+					if("ASC".equals(sortType)) {
+					System.out.println("this asc point");
+					String sortData = idkey[i];
+					//Collections.sort(keyValue, compare);
+					ssb.sort(SortBuilders.fieldSort(sortData).order(SortOrder.ASC));
+					//srb.addSort(new SortBuilders().scoreSort().order(SortOrder.DESC));
+					}else if("DESC".equals(sortType)) {
+					System.out.println("this DESC point");
+					String sortData = idkey[i];
+					//Collections.sort(keyValue, compare);
+					ssb.sort(SortBuilders.fieldSort(sortData).order(SortOrder.DESC));
+					//srb.addSort(new SortBuilders().scoreSort().order(SortOrder.DESC));
+					}
+					srb.setSource(ssb);
+					srb.setQuery(bool).setFrom(0).setSize(searchSize);
+					
 				}
-				srb.setSource(ssb);
 			}
+		
 			
 		} else {
 			System.out.println("error!!!!!!!!!!!!");
@@ -291,7 +301,7 @@ public class EsRepository {
 	}
 
 	public List<Map<String, Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config, String searchType, String sortType, int searchSize) {
+			String config, String searchType, String sortType, Integer searchSize) {
 		System.out.println("indexAndKeyValueSearch");
 		
 		

@@ -76,6 +76,8 @@
 					<input type="text" class = "key" id="idKeySearch">
 					<label for="idValueSearch">값</label>
 					<input type="text" class = "value" id="idValueSearch" >
+					<label for="sizeData">사이즈</label>
+					<input type="number" class = "size" id="sizeData" >
 					<button id= "getText" type = "button" class="btn btn-warning">추가</button>
 					</div>
 				</div>
@@ -348,6 +350,7 @@
 		    	var index ="";
 		    	var type = "";
 		    	var id = "";
+		    	var searchSize = "";
 		    	var searchType = "";
 		    	var sortType = "";
 			    var obj = {};
@@ -393,14 +396,14 @@
 		    			type = typeSearch.value;
 		    			sortType = $('#dataCheck option:selected').val();
 		    			searchType = $('#typeAndOr option:selected').val();
+		    			searchSize = $('#sizeData').val();
 		    			
+		    			console.log("searchSize" + searchSize);
 		    		}
 		    			
 		    		}
+		    	
 		    		
-		    	
-		    	
-		    	
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
 		    	// 반대의 경우를 생각해야 함.
 		    	// 아래 예제는 1개를 뜻하기 떄문에 0 이나 -1은 될수가 없다. 
@@ -457,7 +460,8 @@
           			  		  idvalue : values,
           			  		  config : config,
           			  		  searchType : searchType,
-          			  		  sortType : sortType},
+          			  		  sortType : sortType,
+          			  		  searchSize : searchSize},
           			  		  
 		                dataType : 'json',
 		                traditional : true,
