@@ -33,10 +33,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	
 	//MyBatis 설정 
-	compile('mysql:mysql-connector-java') // 스프링부트와 mybatis를 연결해 준다.
-	compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
-	compile("org.mybatis:mybatis-spring")
-	compile("org.mybatis:mybatis")
+	//compile('mysql:mysql-connector-java') // 스프링부트와 mybatis를 연결해 준다.
+	//compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
+	//compile("org.mybatis:mybatis-spring")
+	//compile("org.mybatis:mybatis")
 
 	//JSON 라이브러리 등록 
 	compile group: 'org.json', name: 'json', version: '20180130'
@@ -44,7 +44,7 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
 	
 	//DB 설정을 위한 JDBC 라이브러리 등록 
-	compile('org.springframework.boot:spring-boot-starter-jdbc')
+//	compile('org.springframework.boot:spring-boot-starter-jdbc')
 
 	//ElasticSearch 라이브러리 등록 
 	compile('org.elasticsearch:elasticsearch:5.6.3')

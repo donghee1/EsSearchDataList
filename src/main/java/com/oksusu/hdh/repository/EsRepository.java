@@ -13,6 +13,7 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -22,12 +23,18 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Repository;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
-import com.oksusu.hdh.compare.DataCompare;
+import com.fasterxml.jackson.databind.ser.SerializerCache;
+
 import com.oksusu.hdh.domain.EsTest;
 
 @Repository
@@ -42,8 +49,8 @@ public class EsRepository {
 	@Autowired
 	private Client bmt;
 	
-	@Autowired
-	private DataCompare compare;
+//	@Autowired
+//	private DataCompare compare;
 	
 	public Client changeClient(String config) {
 		
@@ -59,13 +66,7 @@ public class EsRepository {
 			return client;
 	}
 	
-	public Object searchType(String searchType, String sortType) {
-		
-		searchType = new String();
-		sortType = new String();
-		
-		return null;
-	}
+	
 	public List<String> searchIndexList(String index, String config) throws Exception {
 
 		List<String> list = new ArrayList<>();
@@ -77,16 +78,16 @@ public class EsRepository {
 		return list;
 	}
 
-	public List<String> typeListMappings(EsTest vo, String config) throws Exception {
+	public List<String> typeListMappings(String getIndex, String config) throws Exception {
 
 		List<String> typeList = new ArrayList<>();
 		// System.out.println("typeList index data ::: " + vo.getIndex());
 		// System.out.println("typeList config data :::" + config);
 		GetMappingsResponse res = null;
-			res = client.admin().indices().getMappings(new GetMappingsRequest().indices(vo.getIndex().toString()))
+			res = client.admin().indices().getMappings(new GetMappingsRequest().indices(getIndex.toString()))
 					.get();
 		
-		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(vo.getIndex());
+		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(getIndex);
 		// System.out.println("immutableopenmap" + mapping.toString());
 		for (ObjectObjectCursor<String, MappingMetaData> c : mapping) {
 			if (c != null) {
@@ -172,15 +173,19 @@ public class EsRepository {
 		List<Map<String, Object>> keyValue = new ArrayList<>();
 
 		BoolQueryBuilder bool = new BoolQueryBuilder();
+		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		SearchRequestBuilder srb = null;
-
+		
 //		System.out.println("index data :::" + index);
 //		System.out.println("type data :::" + type);
 //		System.out.println("config data :::" + config);
-
+		
 		if (index != null && type != null) {
 			
 				srb = client.prepareSearch(index).setTypes(type);
+			
+				//ssb.docValueFields().sort(Collections.sort(keyValue, c));;
+				//ssb.fetchSource().includes().equals(index); 값이 없다고 뜸
 			
 		} else {
 			System.out.println("keyAndValue Search Error!!!!!");
@@ -197,12 +202,14 @@ public class EsRepository {
 
 					String keyField = idkey[i];
 					String valueField = idvalue[i];
-
+					System.out.println("this and type point!!!");
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
-							bool.must(QueryBuilders.wildcardQuery(keyField, valueField));
+							bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
+							.must(QueryBuilders.matchAllQuery())
+							.must(QueryBuilders.termQuery(keyField, valueField));
 						} else {
-							bool.must(QueryBuilders.termQuery(keyField, valueField));
+							bool.must(QueryBuilders.matchQuery(keyField, valueField));
 						}
 					}
 				}
@@ -211,13 +218,13 @@ public class EsRepository {
 
 					String keyField = idkey[i];
 					String valueField = idvalue[i];
-
+					System.out.println("this or type point!!!");
 					if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
 						System.out.println("start shold!!!!!!");
 						bool.should(QueryBuilders.wildcardQuery(keyField, valueField));
 					} else {
-						bool.should(QueryBuilders.termQuery(keyField, valueField));
+						bool.should(QueryBuilders.matchQuery(keyField, valueField));
 					}
 				}
 				
@@ -227,13 +234,13 @@ public class EsRepository {
 
 					String keyField = idkey[i];
 					String valueField = idvalue[i];
-
+					System.out.println("this andNot type point!!!");
 					if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
 						System.out.println("start shold!!!!!!");
 						bool.mustNot(QueryBuilders.wildcardQuery(keyField, valueField));
 					} else {
-						bool.mustNot(QueryBuilders.termQuery(keyField, valueField));
+						bool.mustNot(QueryBuilders.matchQuery(keyField, valueField));
 					}
 				}
 				
@@ -241,15 +248,31 @@ public class EsRepository {
 			}
 		}
 		if (idkey != null) {
+			//ssb.query(bool);
 			srb.setQuery(bool);
+			
+			if(sortType.length()>0 || sortType != null) {
+				if("ASC".equals(sortType)) {
+				System.out.println("this asc point");
+				//Collections.sort(keyValue, compare);
+				ssb.sort(new ScoreSortBuilder().order(SortOrder.ASC));
+				//srb.addSort(new source..order(SortOrder.ASC));
+				}else if("DESC".equals(sortType)) {
+				System.out.println("this DESC point");
+				//Collections.sort(keyValue, compare);
+				ssb.sort(new ScoreSortBuilder().order(SortOrder.DESC));
+				//srb.addSort(new SortBuilders().scoreSort().order(SortOrder.DESC));
+				}
+				srb.setSource(ssb);
+			}
+			
 		} else {
 			System.out.println("error!!!!!!!!!!!!");
 			return null;
 		}
+			
 		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
-
 		// System.out.println("keyAndValue" + keyAndValue);
-
 		for (SearchHit hit : keyAndValue.getHits().getHits()) {
 			Map<String, Object> map = new LinkedHashMap<>();
 
@@ -259,14 +282,11 @@ public class EsRepository {
 			map.put("_source", hit.getSourceAsMap());
 
 			keyValue.add(map);
+			
+		
 		}
-		if(sortType.length()>0 || sortType != null) {
-			if("ASC".equals(sortType)) {
-			Collections.sort(keyValue, compare);
-			}else if("DESC".equals(sortType)) {
-			Collections.sort(keyValue, compare);
-			}
-		}
+		
+		
 		return keyValue;
 
 	}
@@ -324,9 +344,9 @@ public class EsRepository {
 		
 		if(sortType.length()>0 || sortType != null) {
 			if("ASC".equals(sortType)) {
-			Collections.sort(data, new DataCompare());
+			//Collections.sort(data, new DataCompare());
 			}else if("DESC".equals(sortType)) {
-			Collections.sort(data, new DataCompare());
+			//Collections.sort(data, new DataCompare());
 			}
 		}
 		

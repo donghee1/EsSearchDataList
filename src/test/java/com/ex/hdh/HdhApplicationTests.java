@@ -10,19 +10,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oksusu.hdh.mapper.BoardMapper;
 import com.oksusu.hdh.repository.EsRepository;
 
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
 public class HdhApplicationTests {
 
-	@Autowired
-	private BoardMapper mapper;
+//	@Autowired
+//	private BoardMapper mapper;
 	
 	@Autowired
 	EsRepository es;

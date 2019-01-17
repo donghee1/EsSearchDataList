@@ -31,7 +31,7 @@ public interface EsSearchService {
 
 	public List<String> searchIndexList(String index, String config)throws Exception;
 	
-	public List<String> typeListMappings(EsTest vo, String config) throws Exception;
+	public List<String> typeListMappings(String getIndex, String config) throws Exception;
 	
 	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue
 			, String config, String searchType, String sortType)throws Exception;

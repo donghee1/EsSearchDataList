@@ -4,7 +4,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
  
-<mapper namespace="com.oksusu.hdh.mapper.EsTestMapper">
+<!-- <mapper namespace="com.oksusu.hdh.mapper.EsTestMapper">
  
     <insert id="boardInsert" parameterType="com.oksusu.hdh.domain.EsTest">
         insert into movie
@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     </select>
     
-   <!--  <select id="listIndex" resultType="com.ex.hdh.domain.BoardVO">
+    <select id="listIndex" resultType="com.ex.hdh.domain.BoardVO">
     select * from hdh_tb where index = #{index};
     </select>
     
@@ -32,6 +32,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <delete id="boardDelete" parameterType="com.ex.hdh.domain.BoardVO">
     delete from hdh_tb where bno = #{bno}
-    </delete> -->
+    </delete>
  
-</mapper>
+</mapper> -->

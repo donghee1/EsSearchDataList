@@ -18,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oksusu.hdh.domain.EsSearchVO;
-import com.oksusu.hdh.domain.EsTest;
-import com.oksusu.hdh.mapper.BoardMapper;
+
 import com.oksusu.hdh.repository.EsRepository;
 
 @Service
@@ -29,8 +27,8 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		@Autowired
 		EsRepository repository;
 
-		@Autowired
-		BoardMapper mapper;
+//		@Autowired
+//		BoardMapper mapper;
 		
 		
 		@Override
@@ -54,17 +52,17 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		
 		
 		@Override
-		public List<String> typeListMappings(EsTest vo, String config) throws Exception {
+		public List<String> typeListMappings(String getIndex, String config) throws Exception {
 			
 			
 			List<String> typeList = new ArrayList<>();
 			
-			if(vo == null || config == null) {
+			if(getIndex == null || config == null) {
 				System.out.println("typeList Search Error!!!");
 				return null;
 			}
 			
-			typeList = repository.typeListMappings(vo, config);
+			typeList = repository.typeListMappings(getIndex, config);
 			
 			return typeList;
 		

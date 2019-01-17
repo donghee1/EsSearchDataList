@@ -4,26 +4,25 @@ package com.oksusu.hdh.controller;
 
 import java.util.ArrayList;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
-import org.slf4j.Logger;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oksusu.hdh.domain.EsTest;
+
 import com.oksusu.hdh.service.EsSearchService;
-import com.oksusu.hdh.service.EsTestService;
+
 
 
 
@@ -80,25 +79,20 @@ public class EsSearchController {
 		
 		//System.out.println("final dataList!!!" + list.toString());
 		
-		
-		
-		
 		return list;
 	}
 	
 	
 	@PostMapping("/typeList")
 	@ResponseBody
-	public List<String> startTypeList(String getIndex, EsTest vo, String config)throws Exception{
+	public List<String> startTypeList(String getIndex, String config)throws Exception{
 		
 		System.out.println("typeList Start!");
-		
-		vo.setIndex(getIndex); 
 		
 		List<String> typeList = new ArrayList<>();	
 		//서버 정보를 가지고 옴 체크서버에서 가지고 온게 아니면 의미가 없으니 지워둠.
 		
-		typeList = service.typeListMappings(vo, config);
+		typeList = service.typeListMappings(getIndex, config);
 	
 		//System.out.println("typeList" + typeList);
 		
