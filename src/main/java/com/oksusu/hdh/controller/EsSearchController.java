@@ -32,7 +32,7 @@ public class EsSearchController {
 	@Autowired
 	private EsSearchService service;
 	
-	@GetMapping("/mainPage")
+	@GetMapping("/")
 	public String MainPage(Model model) {
 		
 		MappingJackson2JsonView json = new MappingJackson2JsonView();
@@ -41,7 +41,7 @@ public class EsSearchController {
 		
 		System.out.println("mv?" + model);
 		
-		return "mainPage";
+		return "/mainPage";
 	}
 	
 	
@@ -104,8 +104,8 @@ public class EsSearchController {
 	@PostMapping("/startSearch")
 	@ResponseBody
 	public String startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType)throws Exception{
-		
+			, String[] idvalue, String config, String searchType, String sortType, int searchSize)throws Exception{
+		searchSize = 500;
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
 		System.out.println("index" + index);
@@ -119,7 +119,7 @@ public class EsSearchController {
 		}else {
 		
 			json = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, sortType);	
+						, config, searchType, sortType, searchSize);	
 		}
 //		System.out.println("type ::: " + type);
 //		System.out.println("id ::: " + id);

@@ -167,7 +167,7 @@ public class EsRepository {
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
 	public List<Map<String, Object>> keyAndVlaueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, String searchType, String sortType) {
+			String config, String searchType, String sortType, int searchSize) {
 
 		System.out.println("start keyAndValueSearch!!!");
 		List<Map<String, Object>> keyValue = new ArrayList<>();
@@ -206,7 +206,6 @@ public class EsRepository {
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
 							bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
-							.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.termQuery(keyField, valueField));
 						} else {
 							bool.must(QueryBuilders.matchQuery(keyField, valueField));
@@ -249,7 +248,7 @@ public class EsRepository {
 		}
 		if (idkey != null) {
 			//ssb.query(bool);
-			srb.setQuery(bool);
+			srb.setQuery(bool).setSize(searchSize);
 			
 			if(sortType.length()>0 || sortType != null) {
 				if("ASC".equals(sortType)) {
@@ -292,7 +291,7 @@ public class EsRepository {
 	}
 
 	public List<Map<String, Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config, String searchType, String sortType) {
+			String config, String searchType, String sortType, int searchSize) {
 		System.out.println("indexAndKeyValueSearch");
 		
 		
