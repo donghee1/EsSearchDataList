@@ -57,7 +57,6 @@ public class EsConfig {
 		Settings settings = Settings.builder()
 				.put("cluster.name", clusterName).build();
 		
-		System.out.println("start client!!!!!!!!!!!!!!!!!!");
 		return new PreBuiltTransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
 		
@@ -69,7 +68,6 @@ public class EsConfig {
 		Settings settings = Settings.builder()
 				.put("cluster.name", devClusterName).build();
 		
-		System.out.println("start dev!!!!!!!!!!!!!!!!!!");
 		return new PreBuiltTransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(devHost), devPort));
 		
@@ -81,7 +79,6 @@ public class EsConfig {
 		Settings settings = Settings.builder()
 				.put("cluster.name", bmtClusterName).build();
 		
-		System.out.println("start bmt!!!!!!!!!!!!!!!!!!");
 		return new PreBuiltTransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(bmtHost), bmtPort));
 		

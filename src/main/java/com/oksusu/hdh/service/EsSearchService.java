@@ -13,7 +13,7 @@ public interface EsSearchService {
 	public List<String> typeListMappings(String getIndex, String config) throws Exception;
 	
 	public String elSearch(String index, String type, String id, String[] idkey, String[] idvalue
-			, String config, String searchType, String sortType, Integer searchSize)throws Exception;
+			, String config, Integer searchSize)throws Exception;
 
 	public void dataType(String config)throws Exception;
 

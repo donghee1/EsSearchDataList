@@ -39,8 +39,6 @@ public class EsSearchController {
 		
 		model.addAttribute(json);
 		
-		System.out.println("mv?" + model);
-		
 		return "/mainPage";
 	}
 	
@@ -55,7 +53,7 @@ public class EsSearchController {
 		//data type 정의!! 
 		service.dataType(config);
 		
-		System.out.println("config?" + config);
+		//System.out.println("config?" + config);
 		if(config != null) {
 			result = service.searchIndexList(index, config);
 			
@@ -87,16 +85,10 @@ public class EsSearchController {
 	@ResponseBody
 	public List<String> startTypeList(String getIndex, String config)throws Exception{
 		
-		System.out.println("typeList Start!");
-		
 		List<String> typeList = new ArrayList<>();	
-		//서버 정보를 가지고 옴 체크서버에서 가지고 온게 아니면 의미가 없으니 지워둠.
 		
 		typeList = service.typeListMappings(getIndex, config);
 	
-		//System.out.println("typeList" + typeList);
-		
-
 		return typeList;
 		
 	}
@@ -104,17 +96,17 @@ public class EsSearchController {
 	@PostMapping("/startSearch")
 	@ResponseBody
 	public String startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize)throws Exception{
+			, String[] idvalue, String config, Integer searchSize)throws Exception{
 		//primitive type.
-		System.out.println("searchSize" + searchSize);
+	//	System.out.println("searchSize" + searchSize);
 		
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
-		System.out.println("index" + index);
-		System.out.println("config" + config);
-		System.out.println("dataType" + searchType);
-		System.out.println("sortType" + sortType);
+		//System.out.println("index" + index);
+		//System.out.println("config" + config);
+		//System.out.println("dataType" + searchType);
+		//System.out.println("sortType" + sortType);
 		
 		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");
@@ -122,15 +114,11 @@ public class EsSearchController {
 		}else {
 			if(searchSize == null || searchSize >= 0) {
 				json = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, sortType, searchSize);
+						, config, searchSize);
 			}
 		
 			
 		}
-//		System.out.println("type ::: " + type);
-//		System.out.println("id ::: " + id);
-//		System.out.println("idkey ::: " + idkey);
-//		System.out.println("idvalue ::: " + idvalue);
 		return json;
 	}
 	

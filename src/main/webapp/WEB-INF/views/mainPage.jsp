@@ -58,7 +58,7 @@
 					<input type="text" id="idSearch">
 					<div>
 				<div id = dataType>
-					<label for="typeAndOr">검색 조건</label>
+				<!-- 	<label for="typeAndOr">검색 조건</label>
 					<select id = typeAndOr>
 						<option value="">선택하세요.</option>
 						<option value="and">and</option>
@@ -70,7 +70,7 @@
 						<option value="">선택하세요.</option>
 						<option value="ASC">오름차순</option>
 						<option value="DESC">내림차순</option>
-					</select>
+					</select> -->
 				</div>
 					<label for="idKeySearch">키</label>
 					<input type="text" class = "key" id="idKeySearch">
@@ -102,6 +102,7 @@
 	 var idSearch = $('#idSearch');
 	 var idKeySearch = $('#idKeySearch');
 	 var idValueSearch = $('#idValueSearch');
+	 var sizeData = $('#sizeData');
 	 let typeAndOr = "";
 	 let dataCheck = "";
 	  
@@ -128,8 +129,6 @@
 	 
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
-	 	console.log($('#indexList option:selected').val()); //선택 인덱스값이 나온다.
-	 
 	 
 	 	var getIndex = {}; //추가 
 	 	var config = {};
@@ -142,6 +141,7 @@
 	 		$(typeSearch).val('');
 	 		$(idKeySearch).val('');
 	 		$(idValueSearch).val('');
+	 		$(sizeData).val('');
 	 		$('#json').html('');
 	 		var defualt = "<option>"+"선택하세요"+"</option>";
 	 		$('#typeList').html('').append(defualt);
@@ -159,7 +159,6 @@
 				config : config
 		 
 		}, (result) => {
-			console.log("result:"+result[0]);
 				
 			$('#indexSearch').val(getIndex);
 			$('#typeList').empty();
@@ -171,10 +170,10 @@
 			$("input[id^='creKey']").val('');
 			$('#json').html('');
 			
-			$(window).load(function(){
+			/* $(window).load(function(){
 			
 				$('.progress-var').jide();
-			})
+			}) */
 			
 			
 			var defualt = "<option>"+"선택하세요"+"</option>";
@@ -201,7 +200,6 @@
 		    $('#typeList').change(() => {
 		    	
 		    	var IndexList = $('#indexList').val();
-		    	console.log('typeList Event Test.');
 		    	var getType = $('#typeList option:selected').val();
 				$('#typeSearch').val(getType);
 						
@@ -219,7 +217,6 @@
 	 		
 	 		$('#serverList').change(()=>{
 	 		
-	 			console.log("serverList Start!!!");
 	 		//var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
 	 		var config = $('#serverList option:selected').val();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";	
@@ -227,6 +224,7 @@
 	 			$(typeSearch).val('');
 		 		$(idKeySearch).val('');
 		 		$(idValueSearch).val('');
+		 		$(sizeData).val('');
 		 		$('#json').html('');
 		 		$('#typeList').html('').append(defualt);
 		 		
@@ -236,6 +234,7 @@
 		 		$(typeSearch).val('');
 		 		$(idKeySearch).val('');
 		 		$(idValueSearch).val('');
+		 		$(sizeData).val('');
 		 		$('#json').html('');
 		 		$('#indexList').html('').append(defualt);
 		 		$('#typeList').html('').append(defualt);
@@ -252,9 +251,7 @@
 				config :config
 			 
 			}, (result) => {
-	 			
-				console.log(result+"%%%success serverList!!!");
-				console.log(result.length);
+				
 				$('#indexList').empty();
 				var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#indexList').append(defualt);
@@ -270,7 +267,7 @@
 	 		},"json");
 	 		
 	 		});
-		    
+		   /*  
 	 		$('#typeAndOr').change(()=>{
 	 			console.log("ddd")
 	 			typeAndOr = $('#typeAndOr option:selected').val();
@@ -281,7 +278,7 @@
 	 			console.log("zzz")
 	 			dataCheck = $('#dataCheck option:selected').val();
 	 		
-	 		});
+	 		}); */
 	 		
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
 		    var seq = 0;
@@ -357,8 +354,8 @@
 			    var config = {};
 		    	var url = "startSearch";
 		    	
-		    	console.log(searchType);
-		    	console.log(dataCheck);
+		    	/* console.log(searchType);
+		    	console.log(dataCheck); */
 		    	
 		    	if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
 		    		console.log('NoSearchIndex');
@@ -376,7 +373,7 @@
 		    	}
 		    	 
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") {
-		    		console.log("idSearch Start!!!!");
+		    //		console.log("idSearch Start!!!!");
 		    		index = indexSearch.value;
 	    			
 	    			type = typeSearch.value;
@@ -387,10 +384,10 @@
 		    	}
 		    	
 		    	if(key[0].value != "" && value[0].value != ""){
-		    		if(typeAndOr == "" && dataCheck == ""){
+		    		/* if(typeAndOr == "" && dataCheck == ""){
 		    			alert("검색 조건과 정렬조건을 입력해주시기 바랍니다.");
 		    			return;
-		    		}else if(typeAndOr.value == null && dataCheck.value == null){
+		    		}else if(typeAndOr.value == null && dataCheck.value == null){ */
 						
 		    			index = indexSearch.value;
 		    			type = typeSearch.value;
@@ -399,9 +396,15 @@
 		    			searchSize = $('#sizeData').val();
 		    			
 		    			console.log("searchSize" + searchSize);
-		    		}
+		    		//}
 		    			
 		    		}
+		    	if((indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") 
+		    			&& (key[0].value != "" && value[0].value != "" && searchSize != "")){
+		    		alert("아이디를 지워주시기 바랍니다!!!!");
+		    		return false;
+		    	}
+		    	
 		    	
 		    		
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
@@ -440,13 +443,11 @@
 		    	for(var i = 0; i<key.length; i++){
 		    		//obj.idkey[i] = key[i].value;
 		    	 	ids[i] = key[i].value;
-		    	 	console.log("key" + key[i].value);
+		    	// 	console.log("key" + key[i].value);
 		    	 	values[i] = value[i].value;
-		    		console.log("value" + value[i].value);
+		    	//	console.log("value" + value[i].value);
 		    		
 		    	}
-		    	
-		    	console.log("start Data!");	
 		    	
 		    //	$ajax(`${location.origin}/startSearch`,{index : index, type : type, idkey : ids, idvalue : values}, (result) => {
 
