@@ -22,15 +22,6 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @Configuration
 public class EsConfig {
 	
-	@Value("${spring.data.elasticsearch.cluster-name}")
-	private String clusterName;
-	
-	@Value("${spring.elasticsearch.jest.proxy.host}")
-	private String host;
-		
-	@Value("${spring.elasticsearch.jest.proxy.port}")
-	private int port;
-	
 	@Value("${spring.data.elasticsearch.devCluster-name}")
 	private String devClusterName;
 	
@@ -48,19 +39,6 @@ public class EsConfig {
 	
 	@Value("${spring.elasticsearch.jest.proxy.bmtPort}")
 	private int bmtPort;
-	
-	
-	
-	@Bean("client")
-	public Client client() throws Exception{
-		
-		Settings settings = Settings.builder()
-				.put("cluster.name", clusterName).build();
-		
-		return new PreBuiltTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
-		
-	}
 	
 	@Bean("dev")
 	public Client devClient() throws Exception{

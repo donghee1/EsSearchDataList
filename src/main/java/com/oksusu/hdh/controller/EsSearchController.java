@@ -46,7 +46,6 @@ public class EsSearchController {
 		//data type 정의!! 
 		service.dataType(vo);
 		
-		//System.out.println("config?" + config);
 		if(config != null) {
 			result = service.searchIndexList(index, config);
 			
@@ -90,17 +89,9 @@ public class EsSearchController {
 	@ResponseBody
 	public String startSearch(String index, String type, String id, String[] idkey
 			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize)throws Exception{
-		//primitive type.
-		//System.out.println("searchType" + searchType);
-		System.out.println("index" + index);
-		System.out.println("size" + searchSize);
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
-		//System.out.println("index" + index);
-		//System.out.println("config" + config);
-		//System.out.println("dataType" + searchType);
-		//System.out.println("sortType" + sortType);
 		
 		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");

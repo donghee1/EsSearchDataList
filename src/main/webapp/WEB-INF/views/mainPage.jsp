@@ -30,7 +30,6 @@
 				<label for="serverList">서버</label>
 				<select id="serverList" name="file_name">
 					<option value="">선택하세요.</option>
-					<option value="test">test</option>
 					<option value="dev">dev</option>
 					<option value="bmt">bmt</option>
 				</select>
@@ -58,14 +57,13 @@
 					<input type="text" id="idSearch">
 					<div>
 				<div id = dataType>
-				<!-- 	<label for="typeAndOr">검색 조건</label>
+				 <!-- 	<label for="typeAndOr">검색 조건</label>
 					<select id = typeAndOr>
 						<option value="">선택하세요.</option>
 						<option value="and">and</option>
 						<option value="or">or</option>
-						<option value="andNot">andNot</option>
-					</select>
-					<label for="dataCheck">정렬 조건</label>
+					</select> -->
+					<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
 						<option value="">선택하세요.</option>
 						<option value="ASC">오름차순</option>
@@ -267,13 +265,13 @@
 	 		},"json");
 	 		
 	 		});
-		   /*  
+		      
 	 		$('#typeAndOr').change(()=>{
 	 			console.log("ddd")
 	 			typeAndOr = $('#typeAndOr option:selected').val();
 	 		
 	 		}); 
-	 		
+	 		/*
 	 		$('#dataCheck').change(()=>{
 	 			console.log("zzz")
 	 			dataCheck = $('#dataCheck option:selected').val();
@@ -395,10 +393,10 @@
 		    	}
 		    	
 		    	if(key[0].value != "" && value[0].value != ""){
-		    		/* if(typeAndOr == "" && dataCheck == ""){
+		    		 /* if(typeAndOr == "" && dataCheck == ""){
 		    			alert("검색 조건과 정렬조건을 입력해주시기 바랍니다.");
 		    			return;
-		    		}else if(typeAndOr.value == null && dataCheck.value == null){ */
+		    		} else*/ if(typeAndOr.value == null && dataCheck.value == null){ 
 						
 		    			index = indexSearch.value;
 		    			type = typeSearch.value;
@@ -407,7 +405,7 @@
 		    			searchSize = $('#sizeData').val();
 		    			
 		    			console.log("searchSize" + searchSize);
-		    		//}
+		    		}
 		    			
 		    		}
 		    	if((indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") 
