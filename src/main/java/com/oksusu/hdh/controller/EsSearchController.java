@@ -3,27 +3,19 @@ package com.oksusu.hdh.controller;
 
 
 import java.util.ArrayList;
-
-
 import java.util.List;
 import java.util.Map;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-
+import com.oksusu.hdh.domain.EsSearchVO;
 import com.oksusu.hdh.service.EsSearchService;
-
-
 
 
 @Controller
@@ -49,9 +41,10 @@ public class EsSearchController {
 
 		List<String> result = null;
 		String index = null;
-		
+		EsSearchVO vo = new EsSearchVO();
+		vo.setConfig(config);
 		//data type 정의!! 
-		service.dataType(config);
+		service.dataType(vo);
 		
 		//System.out.println("config?" + config);
 		if(config != null) {
@@ -96,10 +89,11 @@ public class EsSearchController {
 	@PostMapping("/startSearch")
 	@ResponseBody
 	public String startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, Integer searchSize)throws Exception{
+			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize)throws Exception{
 		//primitive type.
-	//	System.out.println("searchSize" + searchSize);
-		
+		//System.out.println("searchType" + searchType);
+		System.out.println("index" + index);
+		System.out.println("size" + searchSize);
 		
 		List<Map<String, Object>> list = new ArrayList<>();
 		String json = null;
@@ -114,7 +108,7 @@ public class EsSearchController {
 		}else {
 			if(searchSize == null || searchSize >= 0) {
 				json = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchSize);
+						, config, searchType, searchSize);
 			}
 		
 			

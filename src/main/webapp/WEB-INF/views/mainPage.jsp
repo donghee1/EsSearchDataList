@@ -369,8 +369,19 @@
 		    			
 		    			config = $('#serverList option:selected').val();
 		    			
-					
+		    			searchSize = $('#sizeData').val();
 		    	}
+		    	
+		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value == "" ) {
+				    //		console.log("idSearch Start!!!!");
+				    		index = indexSearch.value;
+			    			
+			    			type = typeSearch.value;
+			    			
+			    			searchSize = $('#sizeData').val();
+			    			
+			    			config = $('#serverList option:selected').val();
+				    	}
 		    	 
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") {
 		    //		console.log("idSearch Start!!!!");

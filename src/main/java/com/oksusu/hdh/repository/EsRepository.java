@@ -3,7 +3,6 @@ package com.oksusu.hdh.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,25 +14,21 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
-
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
-import org.elasticsearch.common.inject.Singleton;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.aop.target.SingletonTargetSource;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Repository;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import com.oksusu.hdh.config.EsConfig;
+import com.oksusu.hdh.domain.EsSearchVO;
 
 
 
@@ -53,20 +48,16 @@ public class EsRepository {
 	@Resource
 	private EsConfig cofig;
 	
-//	@Autowired
-//	private DataCompare compare;
-	
-	public Client changeClient(String config) throws Exception {
+	public Client changeClient(EsSearchVO vo) throws Exception {
 		
-		if(config.equals("dev")){
+		if(vo.getConfig().equals("dev")){
 			client = dev;
-		}else if(config.equals("bmt")) {
+		}else if(vo.getConfig().equals("bmt")) {
 			client = bmt;
-		}else if(config.equals("test")) {
+		}else if(vo.getConfig().equals("test")) {
 			if(client == bmt || client == dev) {
 				client = cofig.client();
 			}
-			 // 자기 자신을 가리키는 법. this 메소드 활용법을 알아보자!
 		}
 			return client;
 	}
@@ -86,19 +77,14 @@ public class EsRepository {
 	public List<String> typeListMappings(String getIndex, String config) throws Exception {
 
 		List<String> typeList = new ArrayList<>();
-		// System.out.println("typeList index data ::: " + vo.getIndex());
-		// System.out.println("typeList config data :::" + config);
 		GetMappingsResponse res = null;
 			res = client.admin().indices().getMappings(new GetMappingsRequest().indices(getIndex.toString()))
 					.get();
 			
-			
-		
 		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(getIndex);
 		// System.out.println("immutableopenmap" + mapping.toString());
 		for (ObjectObjectCursor<String, MappingMetaData> c : mapping) {
 			if (c != null) {
-				// c의 키값을 타입리스트에 add한다.
 				typeList.add(c.key);
 			}
 		}
@@ -109,21 +95,18 @@ public class EsRepository {
 
 	}
 
-	public List<Map<String, Object>> onlyOneIndexSearch(String index, String config) {
+	public List<Map<String, Object>> onlyOneIndexSearch(String index, String config, Integer searchSize) {
 
-		// System.out.println("onlyOne index!!! "+ index);
-		// System.out.println("onlyOne config!!! "+ config);
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 		SearchResponse onlyIndex = null;
-		if (index != null) {
-			// System.out.println("onlyIndexStart!!!!!!");
+		if (index != null && searchSize == null) {
 			
 				onlyIndex = client.prepareSearch(index).get();
 			
-		} else {
-			System.out.println("onlyIndex Search Error!!!!!");
-			return null;
+		} else if(index != null && searchSize > 0){
+			 
+				onlyIndex = client.prepareSearch(index).setFrom(0).setSize(searchSize).get();
 		}
 
 		for (SearchHit hits : onlyIndex.getHits().getHits()) {
@@ -144,18 +127,17 @@ public class EsRepository {
 	}
 
 	// 인덱스와 타입을 검색하여 결과값을 도출하는 메서드 입니다.
-	public List<Map<String, Object>> indexAndTypeSearch(String index, String type, String config) throws Exception {
+	public List<Map<String, Object>> indexAndTypeSearch(String index, String type, String config, Integer searchSize) throws Exception {
 
 		List<Map<String, Object>> list = new ArrayList<>();
 
 		SearchResponse res = null;
-
-		if (index != null && type != null) {
-				res = client.prepareSearch(index).setTypes(type).get();
-			
-		} else {
-			System.out.println("indexAndType Search Error!!!!!");
-			return null;
+		
+		if (index != null && type != null && searchSize == null) {
+				res = client.prepareSearch(index).setTypes(type).setFrom(0).get();
+				
+		} else if(index != null && type != null && searchSize != null) {
+				res = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize).get();
 		}
 
 		for (SearchHit hits : res.getHits().getHits()) {
@@ -174,31 +156,16 @@ public class EsRepository {
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
 	public List<Map<String, Object>> keyAndVlaueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, Integer searchSize) {
+			String config, String searchType, Integer searchSize) {
 		
-		//System.out.println("start keyAndValueSearch!!!");
-		//System.out.println("searchSize???" + searchSize);
 		List<Map<String, Object>> keyValue = new ArrayList<>();
 
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchSourceBuilder ssb = new SearchSourceBuilder();
 		SearchRequestBuilder srb = null;
 		
-//		System.out.println("index data :::" + index);
-//		System.out.println("type data :::" + type);
-//		System.out.println("config data :::" + config);
-		
-		if (index != null && type != null) {
-			
-				srb = client.prepareSearch(index).setTypes(type);
+		srb = client.prepareSearch(index).setTypes(type);
 				
-				//ssb.docValueFields().sort(Collections.sort(keyValue, c));;
-				//ssb.fetchSource().includes().equals(index); 값이 없다고 뜸
-			
-		} else {
-			System.out.println("keyAndValue Search Error!!!!!");
-			return null;
-		}
 
 		for (int i = 0; i < idkey.length; i++) {
 
@@ -214,8 +181,23 @@ public class EsRepository {
 						
 				}
 			}
-		}	
-		
+		 }	
+		for (int i = 0; i < idkey.length; i++) {
+
+			String keyField = idkey[i];
+			String valueField = idvalue[i];
+			if (keyField != null) {
+				if (valueField.indexOf("*") >= 0) {
+					bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
+					.should(QueryBuilders.termQuery(keyField, valueField));
+				} else {
+					bool.must(QueryBuilders.matchAllQuery())
+					.must(QueryBuilders.matchQuery(keyField, valueField));
+						
+				}
+			}
+		 }	
+
 		srb.setQuery(bool).setFrom(0).setSize(searchSize);
 
 			
@@ -240,7 +222,7 @@ public class EsRepository {
 	}
 
 	public List<Map<String, Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config, Integer searchSize) {
+			String config, String searchType, Integer searchSize) {
 		System.out.println("indexAndKeyValueSearch");
 		
 		
@@ -289,8 +271,6 @@ public class EsRepository {
 		map.put("_source", res1.getSourceAsMap());
 
 		dataList.add(map);
-
-		// System.out.println("res6??" + dataList.toString());
 
 		return dataList;
 	}
