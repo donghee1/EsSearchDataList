@@ -31,7 +31,8 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	
+	//서버 배포 테스트를 위해 등록!
+	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	//MyBatis 설정 
 	//compile('mysql:mysql-connector-java') // 스프링부트와 mybatis를 연결해 준다.
 	//compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
