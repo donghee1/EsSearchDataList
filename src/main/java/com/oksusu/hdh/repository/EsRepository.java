@@ -161,7 +161,7 @@ public class EsRepository {
 
 		srb = client.prepareSearch(index).setTypes(type);
 
-		//if ("and".equals(searchType)) {
+		if ("and".equals(searchType)) {
 			System.out.println("and point");
 			for (int i = 0; i < idkey.length; i++) {
 
@@ -180,28 +180,27 @@ public class EsRepository {
 					}
 				}
 			}
-		//} 
-		//else if ("or".equals(searchType)) {
-//			System.out.println("or point");
-//			for (int i = 0; i < idkey.length; i++) {
-//
-//				String keyField = idkey[i];
-//				String valueField = idvalue[i];
-//				if (keyField != null) {
-//					if (valueField.indexOf("*") >= 0) {
-//						System.out.println("OR true");
-//						bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
-//							.should(QueryBuilders.termQuery(keyField, valueField));
-//					} else {
-//						System.out.println("OR false");
-//						bool.must(QueryBuilders.matchAllQuery())
-//							.should(QueryBuilders.matchQuery(keyField, valueField));
-//
-//					}
-//				}
-//			}
-//
-//		}
+		}else if ("or".equals(searchType)) {
+			System.out.println("or point");
+			for (int i = 0; i < idkey.length; i++) {
+
+				String keyField = idkey[i];
+				String valueField = idvalue[i];
+				if (keyField != null) {
+					if (valueField.indexOf("*") >= 0) {
+						System.out.println("OR true");
+						bool.should(QueryBuilders.wildcardQuery(keyField, valueField))
+							.should(QueryBuilders.termQuery(keyField, valueField));
+					} else {
+						System.out.println("OR false");
+						bool.should(QueryBuilders.matchAllQuery())
+							.should(QueryBuilders.matchQuery(keyField, valueField));
+
+					}
+				}
+			}
+
+		}
 		
 		if(idkey != null && searchSize == null) {
 			srb.setQuery(bool).setFrom(0);

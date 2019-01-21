@@ -57,12 +57,12 @@
 					<input type="text" id="idSearch">
 					<div>
 				<div id = dataType>
-				 <!-- 	<label for="typeAndOr">검색 조건</label>
+				<label for="typeAndOr">검색 조건</label>
 					<select id = typeAndOr>
 						<option value="">선택하세요.</option>
 						<option value="and">and</option>
 						<option value="or">or</option>
-					</select> -->
+					</select>
 					<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
 						<option value="">선택하세요.</option>
@@ -393,10 +393,10 @@
 		    	}
 		    	
 		    	if(key[0].value != "" && value[0].value != ""){
-		    		 /* if(typeAndOr == "" && dataCheck == ""){
+		    		  if(typeAndOr == "" && dataCheck == ""){
 		    			alert("검색 조건과 정렬조건을 입력해주시기 바랍니다.");
 		    			return;
-		    		} else*/ if(typeAndOr.value == null && dataCheck.value == null){ 
+		    		} else if(typeAndOr.value == null && dataCheck.value == null){ 
 						
 		    			index = indexSearch.value;
 		    			type = typeSearch.value;

@@ -83,7 +83,10 @@ public  class EsSearchServiceImpl implements EsSearchService {
 					list = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config, searchType, searchSize);
 					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else {
-					System.out.println("No Searxh!!!!");
+					System.out.println("No "
+							+ ""
+							+ ""
+							+ "!!!!");
 					return null;
 				}
 				
