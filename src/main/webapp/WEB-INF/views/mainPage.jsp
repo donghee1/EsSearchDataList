@@ -86,7 +86,7 @@
 	</div>
 
 	<div>
-		
+		<div id = 'total'></div>
 		<div  id ='json'>
 		
 		</div>
@@ -141,6 +141,7 @@
 	 		$(idValueSearch).val('');
 	 		$(sizeData).val('');
 	 		$('#json').html('');
+	 		$('#total').html('');
 	 		var defualt = "<option>"+"선택하세요"+"</option>";
 	 		$('#typeList').html('').append(defualt);
 	 		$("input[id^='creKey']").remove();
@@ -224,6 +225,7 @@
 		 		$(idValueSearch).val('');
 		 		$(sizeData).val('');
 		 		$('#json').html('');
+		 		$('#total').html('');
 		 		$('#typeList').html('').append(defualt);
 		 		
 		 		if(config === "") {
@@ -352,6 +354,7 @@
 			    var config = {};
 		    	var url = "startSearch";
 		    	
+		    	
 		    	/* console.log(searchType);
 		    	console.log(dataCheck); */
 		    	
@@ -449,6 +452,7 @@
 		    	var searchQuery = new Map();
 		    	var ids = new Array();
 		    	var values = new Array();
+		    	var total = new Map();
 		    	for(var i = 0; i<key.length; i++){
 		    		//obj.idkey[i] = key[i].value;
 		    	 	ids[i] = key[i].value;
@@ -481,7 +485,25 @@
 		                			JSON.stringify : stringify 메소드는 json 객체를 string 객체로 변환시켜 줍니다. 
 		                			+JSON.stringify(data, null, 4)
 		                			*/ 
-			    			var html ='<pre>'+JSON.stringify(data, null, 4)+'</pre>'
+		                			console.log(data)
+		                			if(data.totalData == null && data.totalData == undefined){
+		                				console.log("idSearch Start");
+		                			}else{
+		                				total = '<div>'+JSON.stringify(data.totalData[0].datas, null, 4)+'</div>'
+			                			console.log(data.totalData[0].datas);			
+		                			}
+		                	
+		                			
+		                	for(var key in data){
+		                		//console.log('default??' + JSON.stringify(data[key].map, null, 4));
+		                		//console.log('total??' + JSON.stringify(data[key].data, null, 4));
+		                		//console.log('map??' + JSON.stringify(data[key], null, 4));
+		                				
+		                	}
+		                	
+                			console.log(total.value)
+		                	$('#total').html(total);
+			    			var html ='<pre>'+JSON.stringify(data[key], null, 4)+'</pre>'
 							$("#json").html(html); // 타입 리스트에 연결 html 변수기능을 넣어 준다.
 
 		                }
@@ -497,6 +519,26 @@
    
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

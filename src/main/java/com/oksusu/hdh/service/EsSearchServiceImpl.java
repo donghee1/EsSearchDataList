@@ -4,6 +4,7 @@ package com.oksusu.hdh.service;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,42 +58,41 @@ public  class EsSearchServiceImpl implements EsSearchService {
 		
 		}
 		@Override
-		public String elSearch(String index, String type, String id, String[] idkey,
-				String[] idvalue, String config, String searchType, Integer searchSize) throws Exception {
+		public Map<String, List<Object>> elSearch(String index, String type, String id, String[] idkey,
+				String[] idvalue, String config, String searchType, Integer searchSize, Integer total) throws Exception {
 			
 			ObjectMapper mapper = new ObjectMapper();
-			List<Map<String, Object>> list = new ArrayList<>();
-			List<Map<String, Object>> idList = new ArrayList<>();
+			Map<String, List<Object>> mapList = new HashMap<>();
 			
-			String json ;
+
+			String json = null ;
 				if( ("".equals(type) && idkey.length == 0 && idvalue.length == 0)) {
-					list = repository.onlyOneIndexSearch(index, config, searchSize);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-					System.out.println("json??" + json.toString());
+					mapList = repository.onlyOneIndexSearch(index, config, searchSize, total);
+					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+					
 				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0) {
-					 list = repository.indexAndTypeSearch(index, type, config, searchSize);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+					mapList = repository.indexAndTypeSearch(index, type, config, searchSize, total);
+					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 ) {
-					idList = repository.idSearch(index,type,id, config);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(idList);
-				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0  ) {
-					list = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, searchSize);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+					mapList = repository.idSearch(index,type,id, config, total);
+					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0  && id == null ) {
+					mapList = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, searchSize, total);
+					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					//keyValue 한개 검색 가능 or 한개이상 검색 가능!
 				}else if( idkey.length > 0 && idvalue.length > 0  && !"".equals(type)) {
-					list = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config, searchType, searchSize);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+					mapList = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
+					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else {
-					System.out.println("No "
-							+ ""
-							+ ""
-							+ "!!!!");
+					
 					return null;
 				}
-				
-			return json;
-		}
 
+				
+			return mapList;
+		}
+		
+		
 
 		@Override
 		public void dataType(EsSearchVO vo) throws Exception {

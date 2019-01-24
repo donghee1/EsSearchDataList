@@ -3,6 +3,7 @@ package com.oksusu.hdh.controller;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,26 +86,35 @@ public class EsSearchController {
 		
 	}
 	
+	//토탈 히츠 매개변수 타입 변경하기 인티저에서 롱으로. 만약 오류 날 경우 객체화 방법 찾아야 함.
+	// 위 문제가 해결되면 ajax 통신으로 어떻게 매개변수 값을 보낼껀지 판단하자.(스트링형으로 보내주고있다 현재...)
+	// 
 	@PostMapping("/startSearch")
 	@ResponseBody
-	public String startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize)throws Exception{
+	public Map<String, List<Object>> startSearch(String index, String type, String id, String[] idkey
+			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize, Integer total)throws Exception{
 		
 		List<Map<String, Object>> list = new ArrayList<>();
-		String json = null;
+		Map<String, List<Object>> test= new HashMap<>();
+		//String json = null;
+		
+		
 		
 		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");
 			return null;
 		}else {
 			if(searchSize == null || searchSize >= 0) {
-				json = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, searchSize);
+				test = service.elSearch(index, type, id, idkey, idvalue
+						, config, searchType, searchSize, total);
+				
 			}
+
 		
 			
+			
 		}
-		return json;
+		return test;
 	}
 	
 	
