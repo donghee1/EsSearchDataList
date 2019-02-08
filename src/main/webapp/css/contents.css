@@ -1,0 +1,273 @@
+.nonpadding{
+	padding : 0;
+}
+.form-control{
+	width:170px;
+	display:inline-block;
+	margin-top:7px;
+}
+/* 왜 안먹히는지 모르겠다...ㅡ*/
+.form-group{
+	position: fixed;
+	top : 30px;
+}
+.col-sm-3{
+	padding:0px;
+	width: auto;
+}
+.col-sm-4{
+	padding:0px;
+	width: auto;
+}
+.col-sm-8{
+	width: 60%;
+}
+.col-sm-5{
+	width: auto;
+	padding:0px;
+}
+.col-sm-12{
+	padding:0px;
+	box-sizing: content-box;
+	display: block;
+	width: auto;
+	position: fixed;
+	top: 338px;
+}
+.col-xs-6{
+	padding:0px;
+	width: 45%;
+}
+.col-md-4{
+	padding:0px;
+	padding-left: 5px;
+	box-sizing: content-box;
+	width: 33%;
+}
+
+.col-md-8{
+	padding:0px;
+	width: 72%;
+	box-sizing: border-box;
+	float: inherit;
+	margin-left: 530px;
+}
+
+label{
+	margin:10px;
+	padding-top:7px;
+	padding-left:5px;
+	float:left;
+	font-size: 12px;
+}
+
+pre {
+	width: 1390px;
+}
+
+#sizeData{
+	width: 66px;
+	margin-left: 1px;
+}
+
+#idKeySearch{
+	margin-left: 11px;
+}
+
+#idValueSearch{
+	margin-left: -4px;
+}
+
+#getText{
+	margin-bottom: 3px;
+	margin-left: 3px;
+	margin-top: 7px;
+}
+#search-Btn{
+	margin:5px;
+	margin-left:235px;
+	float: left;
+}
+#createSearch{
+	width: auto;
+	top:380px;
+}
+#json{
+	float: left;	
+	width: auto;
+}
+
+#total{
+	float: left;
+	position: relative;
+	margin:5px;
+	right: 115px;
+	width: 260px;
+	
+}
+.two{
+	margin-right: 20px;
+}
+.four{
+	margin-left: 14px;
+}
+.one{
+	margin-right: 20px;
+	margin-left: 25px;
+}
+
+.btn-primary{
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+
+
+
+/* @charset "UTF-8";
+
+	
+	 html{
+	
+	margin : auto;
+	height: 700px;
+	}
+	
+	.container{
+	margin: 40px 40px 40px 10px;
+	padding-left: 5px;
+	width:620px;
+	}
+
+	body {
+    margin: 0;
+    display: inline-block;
+    height: 800px;
+    width: 700px;
+	}
+	
+	#btn-group{
+	width:620px;
+	height: 300px;
+	}
+	
+	
+	label{
+	padding-top: 10px;
+	margin-top : 10px;
+	margin-left: 0px;
+	padding-left: 0px;
+	font-size: 12px;
+	float: left;
+	text-align: left;
+	}
+	
+	.control-label {
+	text-align: left;
+	width : 90px;
+	}
+	
+	select{
+	margin:0px;
+	
+	}
+	
+	.col-sm-2 {
+	margin-top: 5px;
+	padding-right: 10px;
+	margin-left:0px;
+	padding-left:0px;
+	float: left;
+	text-align: left;
+	}
+	
+	.col-sm-3{
+	padding:0px;
+	
+	}
+	
+	.col-sm-10{
+	padding:0px;
+	
+	}
+	
+	.form-group {
+	
+	margin: 20px;
+	padding-left: 5px;
+	width:620px;
+	height: 400px;
+	float: left;
+	
+	}
+	
+	.form-inline {
+		width : auto;
+	}
+	
+	.form-control {
+	width: 150px;
+	padding: 3px;
+	margin: 3px;
+	}
+	
+
+	
+	#sizeData{
+	width: 100px;
+	}
+	
+	#idKeySearch{
+	width: 170px;
+	padding: 10px;
+	border: 1px;
+	margin: 10px;
+	
+	}
+	
+	#idValueSearch{
+	width: 170px;
+	padding: 10px;
+	border: 1px;
+	margin: 10px;
+	}
+	
+	#getText {
+	padding-top:5px; 
+	margin-top: 10px;
+	}
+	
+	#btn-group {
+	
+	height: 120px;
+	margin-top: 0px;
+	}
+	
+	.creDiv {
+	width : 620px;
+	height: 120px;
+	}
+	
+	.container-fluid{
+	
+	margin-top: 70px;
+	} 
+	
+	#dataAllText{
+	float: left;
+	}
+	
+	#search-Btn{
+	
+	margin-left: 75px;
+	}
+	
+	
+	
+	label {
+	
+	padding : 5px;
+	margin-right : 5px;
+	
+	} */

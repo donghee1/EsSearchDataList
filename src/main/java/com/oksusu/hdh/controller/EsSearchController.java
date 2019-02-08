@@ -7,14 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.oksusu.hdh.config.EsConfig;
 import com.oksusu.hdh.domain.EsSearchVO;
 import com.oksusu.hdh.service.EsSearchService;
 
@@ -22,17 +27,22 @@ import com.oksusu.hdh.service.EsSearchService;
 @Controller
 public class EsSearchController {
 
-	@Autowired
+	@Resource
 	private EsSearchService service;
 	
+	@Resource
+	private MappingJackson2JsonView jsonView;
+	
+	
 	@GetMapping("/")
-	public String MainPage(Model model) {
+	public ModelAndView MainPage(Model model) {
 		
-		MappingJackson2JsonView json = new MappingJackson2JsonView();
+		ModelAndView mv = new ModelAndView(jsonView);
 		
-		model.addAttribute(json);
-		
-		return "/mainPage";
+		//mv.addObject(jsonView);
+		mv.setView(jsonView);
+		mv.setViewName("/mainPage");
+		return mv;
 	}
 	
 	
@@ -95,26 +105,25 @@ public class EsSearchController {
 			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize, Integer total)throws Exception{
 		
 		List<Map<String, Object>> list = new ArrayList<>();
-		Map<String, List<Object>> test= new HashMap<>();
+		Map<String, List<Object>> data = new HashMap<>();
 		//String json = null;
 		
-		
+		ModelAndView mv = new ModelAndView(jsonView);
 		
 		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");
 			return null;
 		}else {
 			if(searchSize == null || searchSize >= 0) {
-				test = service.elSearch(index, type, id, idkey, idvalue
+				data = service.elSearch(index, type, id, idkey, idvalue
 						, config, searchType, searchSize, total);
 				
 			}
-
-		
+			mv.addObject(data);
 			
 			
 		}
-		return test;
+		return data;
 	}
 	
 	

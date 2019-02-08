@@ -6,11 +6,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- BootStrap CDN -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css">
+<!-- <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css"> -->
+<link rel="stylesheet" href="./../css/contents.css?ver=3" type="text/css">
+<!-- BootStrap CDN -->
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- <script src="src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.min.js"></script>
@@ -19,78 +20,101 @@
 <title>엘라스틱 서치</title>
 </head>
 <body>
-	<div id = "fakeLoader"></div>
-	<h3>엘라스틱 서치</h3>
-	<div style="padding: 30px;">
-		<!-- onchange 사용해보기  -->
-		<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
-		
-		<form id="multiForm" action ="#">
-			<div  class="form-group">
-				<label for="serverList">서버</label>
-				<select id="serverList" name="file_name">
-					<option value="">선택하세요.</option>
-					<option value="dev">dev</option>
-					<option value="bmt">bmt</option>
-				</select>
-				<!-- <div class = "progress">
+	<div class="row">
+		<div class="col-md-4" >
+			<!-- onchange 사용해보기  -->
+			<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
+			<form class="" id="multiForm" action="#">
+				<div class="form-group">
+					<div class="col-sm-9">
+					<label for="serverList" class="control-label two">서버</label>
+						<select id="serverList" name="file_name" class="form-control">
+							<option value="">선택하세요.</option>
+							<option value="dev">dev</option>
+							<option value="bmt">bmt</option>
+						</select>
+					</div>
+					<!-- <div class = "progress">
 				<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 				</div> -->
-				<label for="indexList">인덱스</label> 
-				<select id="indexList">
-					<option value="indexListOption">선택하세요.</option>
-					<c:forEach var="row" items="${data}" varStatus="status">
-						<option value="${row}" id="${status.index}"><c:out
-								value="${row}" /></option>
-					</c:forEach>
-				</select> 
-				<label for="typeList">타입</label>
-				<select id="typeList">
-					<option value="">선택하세요.</option>
-				</select>
-				<div id = dataAllText>
-					<label for="indexSearch">인덱스</label>
-					<input type="text" id="indexSearch">
-					<label for="typeSearch">타입</label>
-					<input type="text" id="typeSearch">
-					<label for="idSearch">아이디</label>
-					<input type="text" id="idSearch">
-					<div>
-				<div id = dataType>
-				<label for="typeAndOr">검색 조건</label>
-					<select id = typeAndOr>
-						<option value="">선택하세요.</option>
-						<option value="and">and</option>
-						<option value="or">or</option>
-					</select>
-					<!--  <label for="dataCheck">정렬 조건</label>
+					<div class="col-sm-9">
+					<label for="indexList" class="control-label">인덱스</label>
+						<select id="indexList" class="form-control" disabled="disabled">
+							<option value="indexListOption">선택하세요.</option>
+							<c:forEach var="row" items="${data}" varStatus="status">
+								<option value="${row}" id="${status.index}"><c:out
+										value="${row}" /></option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="col-sm-9">
+					<label for="typeList" class="control-label two">타입</label>
+						<select id="typeList" class="form-control">
+							<option value="">선택하세요.</option>
+						</select>
+					</div>
+					<div id=dataAllText>
+					<div class="col-sm-9">
+					<label for="indexSearch" class="control-label">인덱스</label>
+						<input class="form-control" type="text" id="indexSearch"
+							placeholder="인덱스 입력창">
+					</div>
+					<div class="col-sm-9">		
+					<label for="typeSearch" class="control-label two">타입</label>
+						<input class="form-control" type="text" id="typeSearch"
+							placeholder="타입 입력창">
+						</div>
+						<div class="col-sm-10">
+					<label for="idSearch" class="control-label">아이디</label>
+						<input class="form-control" type="text" id="idSearch"
+							placeholder="아이디 입력창">
+						<button id="SearchStart" type="button" class="btn btn-primary">검색</button>
+						<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
+						</div>
+					<div id=dataType>
+					</div>
+					<div class="col-sm-5">
+						<label for="typeAndOr" class="control-label four">검색조건</label>
+							<select id=typeAndOr class="form-control" disabled="disabled">
+								<option value="">선택하세요.</option>
+								<option value="and">and</option>
+								<option value="or">or</option>
+							</select>
+						</div>
+						 <div class="col-sm-5">
+						<label for="sizeData" class="control-label" style="">사이즈</label>
+						<input type="number" id="sizeData" class="form-control size" min="0" value="10">
+						</div>
+						<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
 						<option value="">선택하세요.</option>
 						<option value="ASC">오름차순</option>
 						<option value="DESC">내림차순</option>
 					</select> -->
-				</div>
-					<label for="idKeySearch">키</label>
-					<input type="text" class = "key" id="idKeySearch">
-					<label for="idValueSearch">값</label>
-					<input type="text" class = "value" id="idValueSearch" >
-					<label for="sizeData">사이즈</label>
-					<input type="number" class = "size" id="sizeData" >
-					<button id= "getText" type = "button" class="btn btn-warning">추가</button>
+					<div class="col-sm-12" id = "btn-group">
+						<div class="col-sm-3">
+						<label for="idKeySearch" id="labelKey" class="control-label one">키</label>
+							<input type="text" id="idKeySearch" class="form-control key">
+						</div>
+						<div class="col-sm-4">
+						<label for="idValueSearch" class="control-label one">값</label>
+							<input type="text" id="idValueSearch" class="form-control value">
+							<button id="getText" type="button" class="btn btn-warning">추가</button>
+						</div>
+						<div class="col-sm-12" id="createSearch"></div>
+						<div class="col-sm-4" id="search-Btn">
+						</div>
 					</div>
 				</div>
-				<button id = "SearchStart" type = "button" class="btn btn-primary">검색 </button>
-				<button id = "clearBtn" type = "button" class="btn btn-primary">클리어 </button>
-			</div>
-		</form>
-	</div>
-
-	<div>
-		<div id = 'total'></div>
-		<div  id ='json'>
-		
+				</div>
+			</form>
 		</div>
+		<div class="col-md-8">
+		<div id='total'></div>
+		<div id='json' style="float: left;"></div>
 	</div>
+	</div>
+	
 
 	<script type="text/javascript">  
     //예)
@@ -103,28 +127,12 @@
 	 var sizeData = $('#sizeData');
 	 let typeAndOr = "";
 	 let dataCheck = "";
+	 var totalData = new Map();
+ 	 var searchData = new Map();
 	  
 	 let obj = {};
  $(document).ready(function(){
-	 
-	 /* var sort = $("#select[file_name]>option").sort(function(a,b){
-			return a.value.toLowerCase()>b.value.toLowerCase() ? 1: -1;
-	 });
-	 
-	 $("#select[file_name]>option").empty();
-	 $("#select[file_name]>option").append(sort);
-	 $("#select[file_name]>option:first").attr("selected","selected"); */
-	 
-	 
-	/*  $("#fakeLoader").fakeLoader({
-	
-		 timeToHide:1200,
-		 bgColor:"#f8f8f8",
-		 spinner:"spinner6"
-	 
-	 }); */
-	 
-	 
+
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
 	 
@@ -141,14 +149,13 @@
 	 		$(idValueSearch).val('');
 	 		$(sizeData).val('');
 	 		$('#json').html('');
-	 		$('#total').html('');
+	 		$('#total').remove();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";
 	 		$('#typeList').html('').append(defualt);
 	 		$("input[id^='creKey']").remove();
 	 		$("input[id^='creValue']").remove();
 	 		$("label[for^='creKey']").remove();
     		$("label[for^='creValue']").remove();
-	 			
 	 		return false;
 	 	}
 	 	
@@ -158,7 +165,7 @@
 				config : config
 		 
 		}, (result) => {
-				
+			
 			$('#indexSearch').val(getIndex);
 			$('#typeList').empty();
 			
@@ -168,12 +175,6 @@
 			$('#idValueSearch').val('');
 			$("input[id^='creKey']").val('');
 			$('#json').html('');
-			
-			/* $(window).load(function(){
-			
-				$('.progress-var').jide();
-			}) */
-			
 			
 			var defualt = "<option>"+"선택하세요"+"</option>";
 	 		$('#typeList').append(defualt);
@@ -216,14 +217,12 @@
 	 		
 	 		$('#serverList').change(()=>{
 	 		
-	 		//var prog = '<div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+'</div>';
 	 		var config = $('#serverList option:selected').val();
 	 		var defualt = "<option>"+"선택하세요"+"</option>";	
 	 			$(indexSearch).val('');
 	 			$(typeSearch).val('');
 		 		$(idKeySearch).val('');
 		 		$(idValueSearch).val('');
-		 		$(sizeData).val('');
 		 		$('#json').html('');
 		 		$('#total').html('');
 		 		$('#typeList').html('').append(defualt);
@@ -251,7 +250,7 @@
 				config :config
 			 
 			}, (result) => {
-				
+				$('#indexList').attr('disabled',false);
 				$('#indexList').empty();
 				var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#indexList').append(defualt);
@@ -273,12 +272,6 @@
 	 			typeAndOr = $('#typeAndOr option:selected').val();
 	 		
 	 		}); 
-	 		/*
-	 		$('#dataCheck').change(()=>{
-	 			console.log("zzz")
-	 			dataCheck = $('#dataCheck option:selected').val();
-	 		
-	 		}); */
 	 		
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
 		    var seq = 0;
@@ -288,11 +281,12 @@
 				var creLabelKey = '';
 				var creLabelValue = '';
 				var creInput = '';
+				$('#typeAndOr').attr('disabled',false);
 				
-				creLabelKey = '<div id ="creDiv'+seq+'"><label for="creKey'+seq+'">'+"키"+'</label>';
-				creLabelValue = '<label for="creValue'+seq+'">'+"값"+'</label>';
-				creInput = creLabelKey+'<input type="text" class = "key" id = "creKey'+seq+'">'+creLabelValue+'<input type="text" class="value" id = "creValue'+seq+'">'+'<i class="fas fa-backspace deleteBtn"></i></div>'
-				$('#dataAllText').append(creInput);
+				creLabelKey = '<div class="creDiv" id ="creDiv'+seq+'"><div class="col-sm-3"><label class= "control-label" style="padding-left:20px;" for="creValue'+seq+'">'+"키"+'</label>';
+				creLabelValue = '<div class="col-sm-3"><label class= "control-label" style="padding-left:20px;" for="creValue'+seq+'">'+"값"+'</label>';
+				creInput = creLabelKey+'<input type="text" style="width:170px; padding:0px; margin-left:20px;"class = "form-control key" id = "creKey'+seq+'"></div>'+creLabelValue+'<input type="text" style="width:170px; padding:0px; margin-left:8px;" class="form-control value" id = "creValue'+seq+'">'+'<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i></div></div>'
+				$('#createSearch').append(creInput);
 				
 				console.log("getText click event start!!!!!!!");
 				var creIdKeys = $('#creKey').val();
@@ -311,7 +305,7 @@
 				//추가 버튼을 클릭하였을 때 인풋창에 추가 될 아이콘을 클릭했을 때! 
 				$(".deleteBtn").on("click", function(){
 		    		
-					$(this).parent().remove();
+					$(this).parent().parent().remove();
 			
 			    		seq = seq+1;
 			    	});
@@ -328,7 +322,9 @@
 		 		$("label[for^='creKey']").remove();
 	    		$("label[for^='creValue']").remove();
 	    		$(".deleteBtn").remove();
-		    	
+	    		$('#dataType').css("visibility", "hidden");
+	    		$('#total').hide();
+				$('#json').hide();		    	
 		    });
 		    
 		    	$('#SearchStart').click(()=>{
@@ -354,9 +350,6 @@
 			    var config = {};
 		    	var url = "startSearch";
 		    	
-		    	
-		    	/* console.log(searchType);
-		    	console.log(dataCheck); */
 		    	
 		    	if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
 		    		console.log('NoSearchIndex');
@@ -396,10 +389,8 @@
 		    	}
 		    	
 		    	if(key[0].value != "" && value[0].value != ""){
-		    		  if(typeAndOr == "" && dataCheck == ""){
-		    			alert("검색 조건과 정렬조건을 입력해주시기 바랍니다.");
-		    			return;
-		    		} else if(typeAndOr.value == null && dataCheck.value == null){ 
+		    		 
+		    	 if(typeAndOr.value == null && dataCheck.value == null){ 
 						
 		    			index = indexSearch.value;
 		    			type = typeSearch.value;
@@ -410,7 +401,7 @@
 		    			console.log("searchSize" + searchSize);
 		    		}
 		    			
-		    		}
+		    	}	
 		    	if((indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") 
 		    			&& (key[0].value != "" && value[0].value != "" && searchSize != "")){
 		    		alert("아이디를 지워주시기 바랍니다!!!!");
@@ -452,7 +443,6 @@
 		    	var searchQuery = new Map();
 		    	var ids = new Array();
 		    	var values = new Array();
-		    	var total = new Map();
 		    	for(var i = 0; i<key.length; i++){
 		    		//obj.idkey[i] = key[i].value;
 		    	 	ids[i] = key[i].value;
@@ -489,20 +479,27 @@
 		                			if(data.totalData == null && data.totalData == undefined){
 		                				console.log("idSearch Start");
 		                			}else{
-		                				total = '<div>'+JSON.stringify(data.totalData[0].datas, null, 4)+'</div>'
-			                			console.log(data.totalData[0].datas);			
+		                				
+		                				totalData = $('#total').show();
+		                		    	searchData = $('#json').show();
+		                				totalData = JSON.stringify(data.totalData[0].datas.totalSearchData, null, 4);
+		                				console.log('totaldata???' + totalData);
+		                				searchData = JSON.stringify(data.totalData[0].datas.searchData, null, 4);
+		                				//console.log(total)
+		                				
+		                				/* var total1 = String(data.totalData[0].datas);
+		                				console.log(total1) */
+		                				var labels = '<label class="control-label" style="margin:0px; padding:0px; color:blue;" for="total">totalData : '+totalData+'</label>'
+		                				+'<label class="control-label" style="margin:0px 0px 0px 10px; padding:0px; color:blue;" for="total">searchData : '+searchData+'</label>'
+		                				
 		                			}
-		                	
 		                			
 		                	for(var key in data){
-		                		//console.log('default??' + JSON.stringify(data[key].map, null, 4));
-		                		//console.log('total??' + JSON.stringify(data[key].data, null, 4));
-		                		//console.log('map??' + JSON.stringify(data[key], null, 4));
-		                				
+		                	
 		                	}
 		                	
-                			console.log(total.value)
-		                	$('#total').html(total);
+                			//console.log(total.value)
+		                	$('#total').html(labels);
 			    			var html ='<pre>'+JSON.stringify(data[key], null, 4)+'</pre>'
 							$("#json").html(html); // 타입 리스트에 연결 html 변수기능을 넣어 준다.
 
@@ -510,13 +507,11 @@
 		            });
 		    		
 		    	}); 
- 
-			
  });
 	 
 	</script>
-    
-   
+
+
 </body>
 </html>
 

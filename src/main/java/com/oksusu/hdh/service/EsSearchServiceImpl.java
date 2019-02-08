@@ -65,6 +65,9 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			Map<String, List<Object>> mapList = new HashMap<>();
 			
 
+			if(searchSize == 0) {
+				searchSize = 10;
+			}
 			String json = null ;
 				if( ("".equals(type) && idkey.length == 0 && idvalue.length == 0)) {
 					mapList = repository.onlyOneIndexSearch(index, config, searchSize, total);

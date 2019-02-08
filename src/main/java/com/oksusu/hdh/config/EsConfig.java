@@ -61,10 +61,9 @@ public class EsConfig {
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(bmtHost), bmtPort));
 		
 	}
-//	@Bean("jsonView")
-//	public MappingJackson2JsonView jsonView() {
-//		System.out.println("JSONVIEW");
-//		return new MappingJackson2JsonView();
-//	}
+	@Bean("jsonView")
+	public MappingJackson2JsonView jsonView() {
+		return new MappingJackson2JsonView();
+	}
 	
 }

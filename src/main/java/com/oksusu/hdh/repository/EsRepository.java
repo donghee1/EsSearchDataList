@@ -28,6 +28,7 @@ import org.elasticsearch.percolator.QueryAnalyzer;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder.Order;
 import org.elasticsearch.search.internal.FilteredSearchContext;
 import org.springframework.stereotype.Repository;
 
@@ -113,7 +114,7 @@ public class EsRepository {
 		
 		Map<String, Object> hitsData = new HashMap<>();
 		hitsData.put("totalSearchData", total);
-		hitsData.put("search Data", totals);
+		hitsData.put("searchData", totals);
 		
 		Map<String, Object> totalHitsData = new HashMap<>();
 		totalHitsData.put("datas", hitsData);
@@ -155,8 +156,9 @@ public class EsRepository {
 		Map<String, Object> hitData = new HashMap<>();
 		total = (int) res.getHits().getTotalHits();
 		int totals = res.getHits().getHits().length;
-		hitData.put("Total Search Data", total);
-		hitData.put("Search Data", totals);
+		hitData.put("totalSearchData", total);
+		
+		hitData.put("searchData", totals);
 		
 		Map<String, Object> totalHitsData = new HashMap<>();
 		totalHitsData.put("datas", hitData);
@@ -175,12 +177,10 @@ public class EsRepository {
 			
 			mapData.add(typeMap);
 			
-			
-
 		}
 		list.put("map", mapData);
 		list.put("totalData", totalHits);
-		
+		System.out.println("totalData??? " + totalHits);
 		return list;
 	}
 
@@ -196,7 +196,23 @@ public class EsRepository {
 
 		srb = client.prepareSearch(index).setTypes(type);
 
-		if ("and".equals(searchType)) {
+		if("".equals(searchType)) {
+			System.out.println("this default point!!");
+			for(int i=0; i<idkey.length; i++) {
+				String keyField= idkey[i];
+				String valueField = idvalue[i];
+				if(valueField.indexOf("*") >= 0) {
+					System.out.println("와일드카드 쿼리!!!");
+					bool.must(QueryBuilders.matchAllQuery())
+					.must(QueryBuilders.wildcardQuery(keyField, valueField));
+				} else {
+					bool.must(QueryBuilders.matchAllQuery())
+					.must(QueryBuilders.matchQuery(keyField, valueField));
+				}
+					
+			}
+			
+		}else if ("and".equals(searchType)) {
 			System.out.println("and point");
 			for (int i = 0; i < idkey.length; i++) {
 
@@ -204,8 +220,8 @@ public class EsRepository {
 				String valueField = idvalue[i];
 				if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
-						bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
-							.must(QueryBuilders.termQuery(keyField, valueField));
+						bool.must(QueryBuilders.matchAllQuery())
+							.must(QueryBuilders.wildcardQuery(keyField, valueField));
 					} else {
 						bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.matchQuery(keyField, valueField));
@@ -221,16 +237,14 @@ public class EsRepository {
 				String valueField = idvalue[i];
 				if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
-						bool.should(QueryBuilders.wildcardQuery(keyField, valueField))
-							.must(QueryBuilders.termQuery(keyField, valueField));
+						bool.must(QueryBuilders.matchAllQuery())
+						.should(QueryBuilders.wildcardQuery(keyField, valueField));
 					} else {
 						bool.should(QueryBuilders.boolQuery()
 								.should(QueryBuilders.matchQuery(keyField, valueField)).minimumShouldMatch(1)
 								.must(QueryBuilders.matchAllQuery()));
 						
 						//.should(QueryBuilders.matchQuery(keyField, valueField))
-						
-						
 					}
 				}
 			}
@@ -265,8 +279,8 @@ public class EsRepository {
 		System.out.println("totals"+ totals) ;
 		
 		Map<String, Object> totalData = new HashMap<>();
-		totalData.put("Total Search Data", total);
-		totalData.put("Search Data", totals);
+		totalData.put("TotalSearchData", total);
+		totalData.put("SearchData", totals);
 		
 		Map<String, Object> list = new HashMap<>();
 		list.put("datas",totalData);
@@ -347,8 +361,8 @@ public class EsRepository {
 		int totals = res.getHits().getHits().length;
 		
 		Map<String, Object> hitsData = new HashMap<>();
-		hitsData.put("Total Index Data", total);
-		hitsData.put("Search Data", totals);
+		hitsData.put("TotalSearchData", total);
+		hitsData.put("SearchData", totals);
 		
 		List<Object> totalHitsData = new ArrayList<>();
 		totalHitsData.add(hitsData);
