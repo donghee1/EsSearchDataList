@@ -68,7 +68,7 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			if(searchSize == 0) {
 				searchSize = 10;
 			}
-			String json = null ;
+			//String json = null ;
 				if( ("".equals(type) && idkey.length == 0 && idvalue.length == 0)) {
 					mapList = repository.onlyOneIndexSearch(index, config, searchSize, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
@@ -80,14 +80,19 @@ public  class EsSearchServiceImpl implements EsSearchService {
 					mapList = repository.idSearch(index,type,id, config, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0  && id == null ) {
+					System.out.println("typenosearch");
 					mapList = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, searchSize, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					//keyValue 한개 검색 가능 or 한개이상 검색 가능!
 				}else if( idkey.length > 0 && idvalue.length > 0  && !"".equals(type)) {
-					mapList = repository.keyAndVlaueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
+					System.out.println("keyandvalue");
+					mapList = repository.keyAndValueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				}else {
+				}else if(!"".equals(type) && id == null || idkey == null || idkey.length == 0){ 
+					System.out.println("valueSearch Test!!!!!!");
+					mapList = repository.valueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
 					
+				}else {
 					return null;
 				}
 

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <!-- <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css"> -->
-<link rel="stylesheet" href="./../css/contents.css?ver=3" type="text/css">
+<link rel="stylesheet" href="./../css/contents.css?ver=4" type="text/css">
 <!-- BootStrap CDN -->
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -20,12 +20,8 @@
 <title>엘라스틱 서치</title>
 </head>
 <body>
-	<div class="row">
-		<div class="col-md-4" >
-			<!-- onchange 사용해보기  -->
-			<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
-			<form class="" id="multiForm" action="#">
-				<div class="form-group">
+	<div class="row" id = row>
+		<div class="col-md-4 row" >
 					<div class="col-sm-9">
 					<label for="serverList" class="control-label two">서버</label>
 						<select id="serverList" name="file_name" class="form-control">
@@ -34,9 +30,8 @@
 							<option value="bmt">bmt</option>
 						</select>
 					</div>
-					<!-- <div class = "progress">
-				<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-				</div> -->
+					<!-- onchange 사용해보기  -->
+					<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
 					<div class="col-sm-9">
 					<label for="indexList" class="control-label">인덱스</label>
 						<select id="indexList" class="form-control" disabled="disabled">
@@ -49,11 +44,10 @@
 					</div>
 					<div class="col-sm-9">
 					<label for="typeList" class="control-label two">타입</label>
-						<select id="typeList" class="form-control">
+						<select id="typeList" class="form-control" disabled="disabled">
 							<option value="">선택하세요.</option>
 						</select>
 					</div>
-					<div id=dataAllText>
 					<div class="col-sm-9">
 					<label for="indexSearch" class="control-label">인덱스</label>
 						<input class="form-control" type="text" id="indexSearch"
@@ -71,8 +65,6 @@
 						<button id="SearchStart" type="button" class="btn btn-primary">검색</button>
 						<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
 						</div>
-					<div id=dataType>
-					</div>
 					<div class="col-sm-5">
 						<label for="typeAndOr" class="control-label four">검색조건</label>
 							<select id=typeAndOr class="form-control" disabled="disabled">
@@ -83,7 +75,7 @@
 						</div>
 						 <div class="col-sm-5">
 						<label for="sizeData" class="control-label" style="">사이즈</label>
-						<input type="number" id="sizeData" class="form-control size" min="0" value="10">
+						<input type="number" id="sizeData" class="form-control size" min="1" value="10">
 						</div>
 						<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
@@ -97,7 +89,7 @@
 							<input type="text" id="idKeySearch" class="form-control key">
 						</div>
 						<div class="col-sm-4">
-						<label for="idValueSearch" class="control-label one">값</label>
+						<label for="idValueSearch" id="labelValue" class="control-label one">값</label>
 							<input type="text" id="idValueSearch" class="form-control value">
 							<button id="getText" type="button" class="btn btn-warning">추가</button>
 						</div>
@@ -106,13 +98,11 @@
 						</div>
 					</div>
 				</div>
-				</div>
-			</form>
-		</div>
-		<div class="col-md-8">
 		<div id='total'></div>
-		<div id='json' style="float: left;"></div>
-	</div>
+		<div id = 'json'class="col-md-8">
+		
+		</div>
+		
 	</div>
 	
 
@@ -165,7 +155,7 @@
 				config : config
 		 
 		}, (result) => {
-			
+			$('#typeList').attr('disabled',false);
 			$('#indexSearch').val(getIndex);
 			$('#typeList').empty();
 			
@@ -283,9 +273,9 @@
 				var creInput = '';
 				$('#typeAndOr').attr('disabled',false);
 				
-				creLabelKey = '<div class="creDiv" id ="creDiv'+seq+'"><div class="col-sm-3"><label class= "control-label" style="padding-left:20px;" for="creValue'+seq+'">'+"키"+'</label>';
-				creLabelValue = '<div class="col-sm-3"><label class= "control-label" style="padding-left:20px;" for="creValue'+seq+'">'+"값"+'</label>';
-				creInput = creLabelKey+'<input type="text" style="width:170px; padding:0px; margin-left:20px;"class = "form-control key" id = "creKey'+seq+'"></div>'+creLabelValue+'<input type="text" style="width:170px; padding:0px; margin-left:8px;" class="form-control value" id = "creValue'+seq+'">'+'<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i></div></div>'
+				creLabelKey = '<div class="creDiv" id ="creDiv'+seq+'"><div class="col-sm-3"><label class= "control-label" style="padding-left:30px;" for="creValue'+seq+'">'+"키"+'</label>';
+				creLabelValue = '<div class="col-sm-3"><label class= "control-label" style="padding-left:25px;" for="creValue'+seq+'">'+"값"+'</label>';
+				creInput = creLabelKey+'<input type="text" style="width:170px; padding:0px; margin-left:10px;"class = "form-control key" id = "creKey'+seq+'"></div>'+creLabelValue+'<input type="text" style="width:170px; padding:0px; margin-left:2px;" class="form-control value" id = "creValue'+seq+'">'+'<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i></div></div>'
 				$('#createSearch').append(creInput);
 				
 				console.log("getText click event start!!!!!!!");
@@ -322,10 +312,37 @@
 		 		$("label[for^='creKey']").remove();
 	    		$("label[for^='creValue']").remove();
 	    		$(".deleteBtn").remove();
-	    		$('#dataType').css("visibility", "hidden");
 	    		$('#total').hide();
-				$('#json').hide();		    	
+				$('#json').hide();		
+				$('#typeAndOr').attr('disabled', true);
 		    });
+		    
+		    
+		    $('#sizeData').focusout(()=>{
+		    	
+		    	console.log('this point!!!')
+		    	var data = $('#sizeData').val();
+		    	var regexp = /^[0-9]*$/
+
+		    	console.log('data?? ' + data);
+		    	
+		    	if( !regexp.test(data) ) {
+
+		    		alert("숫자만 입력하세요");
+
+		    		$('#sizeData').focus();
+		    		$('#sizeData').val('10');
+		    		
+		    	}
+		    	console.log(data)
+		    	if(data == '0'){
+		    		alert('0이상으로 입력해 주시기 바랍니다.')
+		    		$('#sizeData').focus();
+		    		$('#sizeData').val('10');
+		    	}
+
+		    });
+		    
 		    
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
@@ -388,7 +405,7 @@
 	    			config = $('#serverList option:selected').val();
 		    	}
 		    	
-		    	if(key[0].value != "" && value[0].value != ""){
+		    	if(key[0].value != "" || value[0].value != ""){
 		    		 
 		    	 if(typeAndOr.value == null && dataCheck.value == null){ 
 						
@@ -407,7 +424,13 @@
 		    		alert("아이디를 지워주시기 바랍니다!!!!");
 		    		return false;
 		    	}
-		    	
+		    	if(('#sizeData').value === '' || ('#sizeData').value === null){
+		    		
+		    		alert('사이즈를 입력해 주시기 바랍니다.');
+		    		$('#sizeData').focus();
+		    		$('#sizeData').val('1');
+		    		
+		    	}
 		    	
 		    		
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
@@ -422,10 +445,10 @@
 		    	if(key.length == 1 && value.length == 1) {
 		    		
 		    		//초기 디폴트 input의 key와 value 중 한개씩만 들어 갈 때의 조건식 키값O 밸류값X or 키값X 밸류값O
-		    		if((key[0].value == "" && value[0].value != "") || (key[0].value != "" && value[0].value == "")){
+		    	/* 	if((key[0].value == "" && value[0].value != "") || (key[0].value != "" && value[0].value == "")){
 		    			alert("값을 입력해주시기 바랍니다.");
 		    			return;
-		    		}
+		    		} */
 		    	}else{ //key 배열의 변수가 1개이고 밸류 배열의 변수가 한개가 아닐 때!!
 		    		
 			    	for(var i = 0; i<key.length; i++){

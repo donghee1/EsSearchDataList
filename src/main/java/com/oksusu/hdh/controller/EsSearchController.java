@@ -104,11 +104,8 @@ public class EsSearchController {
 	public Map<String, List<Object>> startSearch(String index, String type, String id, String[] idkey
 			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize, Integer total)throws Exception{
 		
-		List<Map<String, Object>> list = new ArrayList<>();
 		Map<String, List<Object>> data = new HashMap<>();
 		//String json = null;
-		
-		ModelAndView mv = new ModelAndView(jsonView);
 		
 		if(index.length() == 0) {
 			System.out.println("index Null!! check Error!!");
@@ -119,7 +116,6 @@ public class EsSearchController {
 						, config, searchType, searchSize, total);
 				
 			}
-			mv.addObject(data);
 			
 			
 		}

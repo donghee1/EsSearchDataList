@@ -30,9 +30,8 @@
 	padding:0px;
 	box-sizing: content-box;
 	display: block;
-	width: auto;
-	position: fixed;
-	top: 338px;
+	width: 545px;
+	position: unset;
 }
 .col-xs-6{
 	padding:0px;
@@ -42,7 +41,7 @@
 	padding:0px;
 	padding-left: 5px;
 	box-sizing: content-box;
-	width: 33%;
+	width: 30%;
 }
 
 .col-md-8{
@@ -50,24 +49,29 @@
 	width: 72%;
 	box-sizing: border-box;
 	float: inherit;
-	margin-left: 530px;
+	margin-left: 540px;
+	position: absolute;
+	top:25px;
 }
 
 label{
 	margin:10px;
 	padding-top:7px;
 	padding-left:5px;
+	padding-right:10px;
 	float:left;
 	font-size: 12px;
+	
 }
 
 pre {
-	width: 1390px;
+	width: 1370px;
+	overflow: scroll;
+	height: 1080px;
 }
 
 #sizeData{
 	width: 66px;
-	margin-left: 1px;
 }
 
 #idKeySearch{
@@ -75,13 +79,16 @@ pre {
 }
 
 #idValueSearch{
-	margin-left: -4px;
+	margin-left: 1px;
+}
+
+#labelValue{
+	margin-left : 29px;
 }
 
 #getText{
 	margin-bottom: 3px;
 	margin-left: 3px;
-	margin-top: 7px;
 }
 #search-Btn{
 	margin:5px;
@@ -93,27 +100,29 @@ pre {
 	top:380px;
 }
 #json{
-	float: left;	
-	width: auto;
+	height: 1070px;
+	
 }
 
 #total{
-	float: left;
-	position: relative;
 	margin:5px;
-	right: 115px;
 	width: 260px;
+	float: left;
 	
+}
+#clearBtn{
+	margin-left: 0px;
 }
 .two{
 	margin-right: 20px;
 }
 .four{
-	margin-left: 14px;
+	margin-left: 25px;
+	margin-right: 0px;
 }
 .one{
-	margin-right: 20px;
-	margin-left: 25px;
+	margin-right: 10px;
+	margin-left: 35px;
 }
 
 .btn-primary{
@@ -122,7 +131,9 @@ pre {
 	margin-top: 5px;
 }
 
-
+#row{
+	width: 1920px;
+}
 
 
 /* @charset "UTF-8";
