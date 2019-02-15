@@ -69,29 +69,23 @@ public  class EsSearchServiceImpl implements EsSearchService {
 				searchSize = 10;
 			}
 			//String json = null ;
-				if( ("".equals(type) && idkey.length == 0 && idvalue.length == 0)) {
-					mapList = repository.onlyOneIndexSearch(index, config, searchSize, total);
-					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-					
-				}else if( type != null && "".equals(id) && idkey.length == 0 && idvalue.length == 0) {
-					mapList = repository.indexAndTypeSearch(index, type, config, searchSize, total);
+				if (("".equals(type) && idkey.length == 0 )) {
+					mapList = repository.onlyOneIndexSearch(index, type, config, searchSize, total, idvalue);
+				}else if( !"".equals(type) && "".equals(id) && idkey.length == 0) {
+					mapList = repository.indexAndTypeSearch(index, idvalue, type, config, searchSize, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 ) {
 					mapList = repository.idSearch(index,type,id, config, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0  && id == null ) {
-					System.out.println("typenosearch");
+				}else if( "".equals(type) && idkey.length > 0 && idvalue.length > 0) {
+					System.out.println("인덱스 키밸류!!! ");
 					mapList = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, searchSize, total);
+					System.out.println("serviceimpl!!!"+mapList.toString());
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					//keyValue 한개 검색 가능 or 한개이상 검색 가능!
 				}else if( idkey.length > 0 && idvalue.length > 0  && !"".equals(type)) {
-					System.out.println("keyandvalue");
 					mapList = repository.keyAndValueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-				}else if(!"".equals(type) && id == null || idkey == null || idkey.length == 0){ 
-					System.out.println("valueSearch Test!!!!!!");
-					mapList = repository.valueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total);
-					
 				}else {
 					return null;
 				}

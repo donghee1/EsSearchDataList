@@ -523,7 +523,7 @@
 		                	
                 			//console.log(total.value)
 		                	$('#total').html(labels);
-			    			var html ='<pre>'+JSON.stringify(data[key], null, 4)+'</pre>'
+			    			var html ='<div>'+JSON.stringify(data[key], null, 4)+'</div>'
 							$("#json").html(html); // 타입 리스트에 연결 html 변수기능을 넣어 준다.
 
 		                }

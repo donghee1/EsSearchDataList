@@ -94,24 +94,35 @@ public class EsRepository {
 
 	}
 
-	public Map<String, List<Object>> onlyOneIndexSearch(String index, String config, Integer searchSize, Integer total) {
+	public Map<String, List<Object>> onlyOneIndexSearch(String index, String type, String config, Integer searchSize, Integer total, String[] idvalue) {
 
 	Map<String, List<Object>> mapList = new HashMap<>();
 	
 		SearchResponse onlyIndex = null;
+		String valueField;
+		
+		System.out.println("data!!!!!" + idvalue.length);
+		
 		if (index != null && searchSize == null) {
-
 			onlyIndex = client.prepareSearch(index).get();
 
 		} else if (index != null && searchSize > 0) {
-
 			onlyIndex = client.prepareSearch(index).setFrom(0).setSize(searchSize).get();
+		
+		}
+		
+		if(idvalue.length > 0) {
+			for(int i = 0; i < idvalue.length; i++) {
+				valueField = idvalue[i];
+				if(valueField != null) {	
+					onlyIndex = client.prepareSearch(index).setQuery(QueryBuilders.moreLikeThisQuery(idvalue))
+							.setQuery(QueryBuilders.queryStringQuery(valueField)).setFrom(0).setSize(searchSize).get();	
+				}
+					
+			}	
 		}
 		total = (int) onlyIndex.getHits().getTotalHits();
 		int totals = onlyIndex.getHits().getHits().length;
-		
-		//totalData.add(total);
-		//searchData.add(totals);
 		
 		Map<String, Object> hitsData = new HashMap<>();
 		hitsData.put("totalSearchData", total);
@@ -141,7 +152,7 @@ public class EsRepository {
 	}
 
 	// 인덱스와 타입을 검색하여 결과값을 도출하는 메서드 입니다.
-	public Map<String, List<Object>> indexAndTypeSearch(String index, String type, String config, Integer searchSize, Integer total)
+	public Map<String, List<Object>> indexAndTypeSearch(String index, String[] idvalue, String type, String config, Integer searchSize, Integer total)
 			throws Exception {
 
 		Map<String, List<Object>> list = new HashMap<>();
@@ -151,9 +162,20 @@ public class EsRepository {
 		if (index != null && type != null && searchSize == null) {
 			res = client.prepareSearch(index).setTypes(type).setFrom(0).get();
 
-		} else if (index != null && type != null && searchSize != null) {
+		} else if (index != null && type != null && searchSize != null && idvalue.length == 0) {
 			res = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize).get();
+		
+		} else if(idvalue.length >= 1) {
+			for(int i = 0; i < idvalue.length; i++) {
+				String valueField = idvalue[i];
+				if(valueField != null) {	
+					res = client.prepareSearch(index).setQuery(QueryBuilders.moreLikeThisQuery(idvalue))
+							.setQuery(QueryBuilders.queryStringQuery(valueField)).setFrom(0).setSize(searchSize).get();	
+				}
+					
+			}	
 		}
+		
 		Map<String, Object> hitData = new HashMap<>();
 		total = (int) res.getHits().getTotalHits();
 		int totals = res.getHits().getHits().length;
@@ -181,7 +203,6 @@ public class EsRepository {
 		}
 		list.put("map", mapData);
 		list.put("totalData", totalHits);
-		System.out.println("totalData??? " + totalHits);
 		return list;
 	}
 
@@ -201,23 +222,27 @@ public class EsRepository {
 		
 		
 		if("".equals(searchType)) {
-			System.out.println("this default point!!");
 			for(int i=0; i<idkey.length; i++) {
 				String keyField= idkey[i];
 				String valueField = idvalue[i];
+				if(idvalue.length == 0) {
 				if(valueField.indexOf("*") >= 0) {
-					System.out.println("와일드카드 쿼리!!!");
 					bool.must(QueryBuilders.matchAllQuery())
 					.must(QueryBuilders.wildcardQuery(keyField, valueField));
 				} else {
 					bool.must(QueryBuilders.matchAllQuery())
 					.must(QueryBuilders.matchQuery(keyField, valueField));
 				}
+				
+				}else {
+					bool.must(QueryBuilders.matchAllQuery())
+					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+					
+				}
 					
 			}
 			
 		}else if ("and".equals(searchType)) {
-			System.out.println("and point");
 			for (int i = 0; i < idkey.length; i++) {
 
 				String keyField = idkey[i];
@@ -234,7 +259,6 @@ public class EsRepository {
 				}
 			}
 		}else if ("or".equals(searchType)) {
-			System.out.println("or point");
 			for (int i = 0; i < idkey.length; i++) {
 
 				String keyField = idkey[i];
@@ -290,10 +314,8 @@ public class EsRepository {
 		list.put("datas",totalData);
 		data2.add(list);
 		
-		System.out.println("test data" + data2.size());
 		keyValue.put("map", data);
 		keyValue.put("totalData", data2);
-		System.out.println("keyValue" + keyValue);
 		
 		return keyValue;
 
@@ -303,13 +325,36 @@ public class EsRepository {
 			String config, String searchType, Integer searchSize, Integer total) {
 
 		Map<String, List<Object>> data = new HashMap<>();
-
+		List<Object> dataList = new ArrayList<>();
+		
+		System.out.println("repository");
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
 		srb = client.prepareSearch(index);
+		
+		System.out.println("searchType!!?" + searchType.toString());
 
-		if ("and".equals(searchType)) {
+		if("".equals(searchType)) {
+			System.out.println("repository22222222");
+			for(int i=0; i<idkey.length; i++) {
+				String keyField= idkey[i];
+				String valueField = idvalue[i];
+				if(keyField != null) {
+				if(valueField.indexOf("*") >= 0) {
+					bool.must(QueryBuilders.matchAllQuery())
+					.must(QueryBuilders.wildcardQuery(keyField, valueField));
+				} else {
+					System.out.println("this point!!!!");
+					bool.must(QueryBuilders.matchAllQuery())
+					.must(QueryBuilders.matchQuery(keyField, valueField));
+				}
+				
+				}
+					
+			}
+			
+		}else if ("and".equals(searchType)) {
 			for (int i = 0; i < idkey.length; i++) {
 
 				String keyField = idkey[i];
@@ -323,11 +368,7 @@ public class EsRepository {
 							.must(QueryBuilders.matchQuery(keyField, valueField));
 
 					}
-				}else {
-						System.out.println("test 1번!!");
-						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
-				}
+			}
 			}
 		}else if ("or".equals(searchType)) {
 			for (int i = 0; i < idkey.length; i++) {
@@ -345,48 +386,49 @@ public class EsRepository {
 						
 						//.should(QueryBuilders.matchQuery(keyField, valueField))
 						
-						
-						System.out.println("뭔데 값이 없는 값인데!" +bool);
 					}
-				}else {
-						System.out.println("test 1번!!");
-						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 				}
 			}
 
 		}
 		
-		SearchResponse res = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize)
+		SearchResponse res = srb.setQuery(bool).setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize)
 				.get();
-
-		total = (int) res.getHits().getTotalHits();
-		int totals = res.getHits().getHits().length;
 		
-		Map<String, Object> hitsData = new HashMap<>();
-		hitsData.put("totalSearchData", total);
-		hitsData.put("searchData", totals);
-		
-		List<Object> totalHitsData = new ArrayList<>();
-		totalHitsData.add(hitsData);
+		System.out.println("repository3333333" + res.toString());
 		
 		
 		List<Object> mapData = new ArrayList<>();
 		for (SearchHit hit : res.getHits().getHits()) {
 			Map<String, Object> map = new LinkedHashMap<>();
+			
 			map.put("_index", hit.getIndex());
 			map.put("_type", hit.getType());
 			map.put("_Id", hit.getId());
 			map.put("_source", hit.getSourceAsMap());
-
+			
 			mapData.add(map);
 		}
 
-		data.put("totalData", totalHitsData);
+		total = (int) res.getHits().getTotalHits();
+		int totals = res.getHits().getHits().length;
+		System.out.println("totals"+ totals) ;
+		
+		Map<String, Object> totalData = new HashMap<>();
+		totalData.put("totalSearchData", total);
+		totalData.put("searchData", totals);
+		
+		Map<String, Object> list = new HashMap<>();
+		list.put("datas",totalData);
+		dataList.add(list);
+		
 		data.put("map", mapData);
+		data.put("totalData", dataList);
 		
 		return data;
-	}
+		}
+
+	
 
 	public Map<String, List<Object>> idSearch(String index, String type, String id, String config, Integer total) throws Exception {
 
@@ -397,7 +439,6 @@ public class EsRepository {
 		GetRequestBuilder req;
 		SearchRequestBuilder srb;
 		req = client.prepareGet(index, type, id);
-		System.out.println("req???" + req.toString());
 		bool.must(QueryBuilders.matchAllQuery());
 		srb = client.prepareSearch(index).setTypes(type);
 		SearchResponse srs = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).get();
@@ -408,7 +449,6 @@ public class EsRepository {
 		//idData가 널이 아니면 1 널이면 0 값은 무조건 1개
 		int totals; // 검색 결과 값
 		
-		System.out.println("total???" + total);
 		if(idData != null) {
 			totals = 1;
 			srs = srb.setSize(totals).get();
@@ -442,63 +482,5 @@ public class EsRepository {
 		return dataList;
 	}
 
-	public Map<String, List<Object>> valueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, String searchType, Integer searchSize, Integer total) {
-		
-		Map<String, List<Object>> data = new HashMap<>();
-		BoolQueryBuilder bool = new BoolQueryBuilder();
-		QueryBuilders qb; 
-		SearchRequestBuilder srb = client.prepareSearch(index).setTypes(type);
-		
-		QueryBuilders.moreLikeThisQuery(idvalue);
-		System.out.println("여가 거가??");
-		if(idvalue != null) {
-			System.out.println("test valueSearch!!!!");
-			for (int i = 0; i < idvalue.length; i++) {
-				String valueField = idvalue[i];
-				if (valueField != null) {
-						System.out.println("test 1번!!");
-						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
-				}
-			}
-		}
-		srb.setQuery(bool).setFrom(0).setSize(searchSize);	
-		SearchResponse res = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize)
-				.get();
-		
-		System.out.println("res값은 무엇인고!!!?" + res.toString());
-		
-		total = (int) res.getHits().getTotalHits();
-		int totals = res.getHits().getHits().length;
-		
-		Map<String, Object> hitsData = new HashMap<>();
-		hitsData.put("totalSearchData", total);
-		hitsData.put("searchData", totals);
-		
-		Map<String, Object> list = new HashMap<>();
-		list.put("datas",hitsData);
-		
-		List<Object> totalHitsData = new ArrayList<>();
-		totalHitsData.add(list);
-		
-		
-		List<Object> mapData = new ArrayList<>();
-		for (SearchHit hit : res.getHits().getHits()) {
-			Map<String, Object> map = new LinkedHashMap<>();
-			map.put("_index", hit.getIndex());
-			map.put("_type", hit.getType());
-			map.put("_Id", hit.getId());
-			map.put("_source", hit.getSourceAsMap());
-
-			mapData.add(map);
-		}
-
-		data.put("totalData", totalHitsData);
-		data.put("map", mapData);
-		
-		
-		return data;
-	}
 	
 }
