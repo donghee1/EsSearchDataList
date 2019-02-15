@@ -31,6 +31,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder.Order;
 import org.elasticsearch.search.internal.FilteredSearchContext;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.stereotype.Repository;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
@@ -216,7 +217,11 @@ public class EsRepository {
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
-		srb = client.prepareSearch(index).setTypes(type);
+		
+		
+		// 아래 이런식으로 정렬 조건 만들기!!!!!!!!!!!
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		srb = client.prepareSearch(index).setTypes(type).setSource(new SearchSourceBuilder().sort(""));
 
 		//여기부터 적용하자!!!!!!!!!!
 		
@@ -286,6 +291,7 @@ public class EsRepository {
 		}
 		
 		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
+		
 		// System.out.println("keyAndValue" + keyAndValue);
 		// 검색 결과의 값을 가지고 옴
 		
