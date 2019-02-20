@@ -52,6 +52,7 @@
 	margin-left: 540px;
 	position: absolute;
 	top:25px;
+	overflow: scroll;
 }
 
 label{
@@ -79,11 +80,11 @@ pre {
 }
 
 #idValueSearch{
-	margin-left: 1px;
+	margin-left: 10px;
 }
 
 #labelValue{
-	margin-left : 29px;
+	margin-left : 20px;
 }
 
 #getText{

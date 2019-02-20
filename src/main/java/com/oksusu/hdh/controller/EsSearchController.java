@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,6 +93,7 @@ public class EsSearchController {
 		
 		typeList = service.typeListMappings(getIndex, config);
 	
+	
 		return typeList;
 		
 	}
@@ -102,7 +104,7 @@ public class EsSearchController {
 	@PostMapping("/startSearch")
 	@ResponseBody
 	public Map<String, List<Object>> startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType, Integer searchSize, Integer total)throws Exception{
+			, String[] idvalue, String config, String searchType, String sortType, String sortData, Integer searchSize, Integer total)throws Exception{
 		
 		Map<String, List<Object>> data = new HashMap<>();
 		//String json = null;
@@ -113,9 +115,10 @@ public class EsSearchController {
 		}else {
 			if(searchSize == null || searchSize >= 0) {
 				data = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, searchSize, total);
+						, config, searchType, searchSize, total, sortType, sortData);
 				
 			}
+			
 			
 			
 		}

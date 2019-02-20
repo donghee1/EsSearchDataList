@@ -12,8 +12,9 @@ public interface EsSearchService {
 	public List<String> typeListMappings(String getIndex, String config) throws Exception;
 
 	public Map<String, List<Object>> elSearch(String index, String type, String id, String[] idkey, String[] idvalue, String config,
-			String searchType, Integer searchSize, Integer total) throws Exception;
+			String searchType, Integer searchSize, Integer total, String sortType, String sortData) throws Exception;
 
 	public void dataType(EsSearchVO vo) throws Exception;
 
+	
 }
