@@ -171,6 +171,13 @@ public class EsRepository {
 		Map<String, List<Object>> list = new HashMap<>();
 		SearchRequestBuilder req = null;
 
+			System.out.println("======================");
+			System.out.println(index);
+			System.out.println(type);
+			System.out.println(searchSize);
+			System.out.println(sortType);
+			System.out.println(sortData);
+			
 			req = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
 			String valueField;
 		if(idkey.length == 0) {
@@ -242,105 +249,109 @@ public class EsRepository {
 
 		System.out.println("start keyandvalue");
 		
-		// 아래 이런식으로 정렬 조건 만들기!!!!!!!!!!!
-		srb = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
-		
-		if("".equals(searchType)) {
-			System.out.println("searchType defualt!!!");
-			for(int i=0; i<idkey.length; i++) {
-				 keyField= idkey[i];
-				 valueField = idvalue[i];
-				if(keyField != null) {
-					if(valueField.indexOf("*") >= 0) {
-						bool.must(QueryBuilders.matchAllQuery())
-						.must(QueryBuilders.wildcardQuery(keyField, valueField));
-					} else {
-						System.out.println("defualt data search!!");
-						bool.must(QueryBuilders.matchAllQuery())
-						.must(QueryBuilders.matchQuery(keyField, valueField));
-					}
-				
-				}else if(idkey[0] == "") {
-					//밸류값만 검색할 때
-					System.out.println("밸류값만 검색하자!!!");
-					bool.must(QueryBuilders.matchAllQuery())
-					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
-					
-				}
-					
-			}
-			
-		}else if ("and".equals(searchType)) {
-			System.out.println("searchType AND!!!");
-			for (int i = 0; i < idkey.length; i++) {
-
-				 keyField = idkey[i];
-				 valueField = idvalue[i];
-				if (keyField != null) {
-					if (valueField.indexOf("*") >= 0) {
-						bool.must(QueryBuilders.matchAllQuery())
+		if(!"".equals(index) || !"".equals(type)) {
+			if("".equals(searchType)) {
+				System.out.println("searchType defualt!!!");
+				for(int i=0; i<idkey.length; i++) {
+					 keyField= idkey[i];
+					 valueField = idvalue[i];
+					if(keyField != null) {
+						if(valueField.indexOf("*") >= 0) {
+							bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.wildcardQuery(keyField, valueField));
-					} else {
-						bool.must(QueryBuilders.matchAllQuery())
+						} else {
+							System.out.println("defualt data search!!");
+							bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.matchQuery(keyField, valueField));
-
-					}
-				}else if(idkey[0] == "") {
-					//밸류값만 검색할 때
-					System.out.println("밸류값만 검색하자!!!");
-					bool.must(QueryBuilders.matchAllQuery())
-					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						}
 					
-				}
-			}
-		}else if ("or".equals(searchType)) {
-			System.out.println("searchType OR!!!");
-			for (int i = 0; i < idkey.length; i++) {
-
-				 keyField = idkey[i];
-				 valueField = idvalue[i];
-				if (keyField != null) {
-					if (valueField.indexOf("*") >= 0) {
+					}else if(idkey[0] == "") {
+						//밸류값만 검색할 때
+						System.out.println("밸류값만 검색하자!!!");
 						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.wildcardQuery(keyField, valueField));
-					} else {
-						bool.should(QueryBuilders.boolQuery()
-								.should(QueryBuilders.matchQuery(keyField, valueField)).minimumShouldMatch(1)
-								.must(QueryBuilders.matchAllQuery()));
+						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 						
-						//.should(QueryBuilders.matchQuery(keyField, valueField))
 					}
-				}else if(idkey[0] == "") {
-					//밸류값만 검색할 때
-					System.out.println("밸류값만 검색하자!!!");
-					bool.must(QueryBuilders.matchAllQuery())
-					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
-					
+						
 				}
-			}
+				
+			}else if ("and".equals(searchType)) {
+				System.out.println("searchType AND!!!");
+				for (int i = 0; i < idkey.length; i++) {
 
+					 keyField = idkey[i];
+					 valueField = idvalue[i];
+					if (keyField != null) {
+						if (valueField.indexOf("*") >= 0) {
+							bool.must(QueryBuilders.matchAllQuery())
+								.must(QueryBuilders.wildcardQuery(keyField, valueField));
+						} else {
+							bool.must(QueryBuilders.matchAllQuery())
+								.must(QueryBuilders.matchQuery(keyField, valueField));
+
+						}
+					}else if(idkey[0] == "") {
+						//밸류값만 검색할 때
+						System.out.println("밸류값만 검색하자!!!");
+						bool.must(QueryBuilders.matchAllQuery())
+						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						
+					}
+				}
+			}else if ("or".equals(searchType)) {
+				System.out.println("searchType OR!!!");
+				for (int i = 0; i < idkey.length; i++) {
+
+					 keyField = idkey[i];
+					 valueField = idvalue[i];
+					if (keyField != null) {
+						if (valueField.indexOf("*") >= 0) {
+							bool.must(QueryBuilders.matchAllQuery())
+							.should(QueryBuilders.wildcardQuery(keyField, valueField));
+						} else {
+							bool.should(QueryBuilders.boolQuery()
+									.should(QueryBuilders.matchQuery(keyField, valueField)).minimumShouldMatch(1)
+									.must(QueryBuilders.matchAllQuery()));
+							
+							//.should(QueryBuilders.matchQuery(keyField, valueField))
+						}
+					}else if(idkey[0] == "") {
+						//밸류값만 검색할 때
+						System.out.println("밸류값만 검색하자!!!");
+						bool.must(QueryBuilders.matchAllQuery())
+						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						
+					}
+				}
+
+			}
+				
 		}
-		
+			
 			srb.setQuery(bool);
 			
-			if(!"".equals(sortType)) {
-				for(int i = 0; i < idvalue.length; i++) {
-					valueField = idvalue[i];
+			if(!"".equals(searchType)) {
+			
+				if(!"".equals(sortType)) {
+					for(int i = 0; i < idvalue.length; i++) {
+						valueField = idvalue[i];
+					}
+					System.out.println("start Sort!");
+						if("DESC".equals(sortType)) {
+							System.out.println("DESC!!!!!");
+							srb.addSort(sortData, SortOrder.DESC);
+						}else if("ASC".equals(sortType)) {
+							System.out.println("ASC");
+							srb.addSort(sortData, SortOrder.ASC);
+						}else if("".equals(sortType)) {
+							System.out.println("next!!!");
+					}	
 				}
-				System.out.println("start Sort!");
-					if("DESC".equals(sortType)) {
-						System.out.println("DESC!!!!!");
-						srb.addSort(sortData, SortOrder.DESC);
-					}else if("ASC".equals(sortType)) {
-						System.out.println("ASC");
-						srb.addSort(sortData, SortOrder.ASC);
-					}else if("".equals(sortType)) {
-						System.out.println("next!!!");
-				}	
 			}
-
+			
+			srb = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
 		
-		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize).get();
+		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
 		
 		// System.out.println("keyAndValue" + keyAndValue);
 		// 검색 결과의 값을 가지고 옴
@@ -372,6 +383,9 @@ public class EsRepository {
 		
 		keyValue.put("data", data);
 		keyValue.put("totalData", data2);
+		
+		
+		System.out.println("End keyAndValue Search!!!" + keyValue.toString());
 		
 		return keyValue;
 

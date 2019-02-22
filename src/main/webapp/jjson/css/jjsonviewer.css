@@ -4,7 +4,6 @@
     font-family: monospace;
     padding-left: 0;
     margin-left: 20px;
-    overflow: auto;
 }
 .jjson-container,
 .jjson-container ul{
@@ -79,7 +78,7 @@
     top: 1px;
 }
 
-.jjson-container li .collapsed ~ .close:before {
+.jjson-container li .collapsed ~ .closed:before {
     content: "... ";
     color: #999;
 }

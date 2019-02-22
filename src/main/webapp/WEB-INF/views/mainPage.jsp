@@ -6,15 +6,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+	crossorigin="anonymous">
 <!-- <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css"> -->
-<link rel="stylesheet" href="./../css/contents.css?ver=7" type="text/css">
-<link rel="stylesheet" href="./../jjson/css/jjsonviewer.css">
+<link rel="stylesheet" href="./../css/contents.css?ver=9"
+	type="text/css">
+<link rel="stylesheet" href="./../jjson/css/jjsonviewer.css?">
 <!-- BootStrap CDN -->
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	crossorigin="anonymous"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="./../jjson/js/jjsonviewer.js"></script>
 <!-- <script src="src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.min.js"></script>
 <link rel="stylesheet" href="/src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.css">
@@ -22,103 +31,116 @@
 <title>엘라스틱 서치</title>
 </head>
 <body>
-	<div class="row" id = row>
-		<div class="col-md-4 row" >
-					<div class="col-sm-9">
-					<label for="serverList" class="control-label two">서버</label>
-						<select id="serverList" name="file_name" class="form-control">
-							<option value="">선택하세요.</option>
-							<option value="dev">dev</option>
-							<option value="bmt">bmt</option>
-						</select>
-					</div>
-					<!-- onchange 사용해보기  -->
-					<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
-					<!--  <div class="col-sm-9">
+	<div class="row" id=row>
+		<div class="col-md-4 row">
+			<div class="col-sm-9">
+				<label for="serverList" class="control-label">인덱스</label> <input
+					class="form-control" type="text" id="serverList"
+					placeholder="선택하세요." list="serverSearch">
+				<datalist id="serverSearch">
+					<option value="선택해주세요." />
+					<option value="dev" />
+					<option value="bmt" />
+				</datalist>
+			</div>
+			<!-- <div class="col-sm-9">
+				<label for="serverList" class="control-label two">서버</label> 
+				<select id="serverList" name="file_name" class="form-control">
+					<option value="">선택하세요.</option>
+					<option value="dev">dev</option>
+					<option value="bmt">bmt</option>
+				</select>
+			</div> -->
+			<!-- onchange 사용해보기  -->
+			<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
+			<!--  <div class="col-sm-9">
 					<label for="indexList" class="control-label">인덱스</label>
 						<select id="indexList" class="form-control" disabled="disabled">
 							<option value="indexListOption">선택하세요.</option>
 						</select>
 					</div> -->
-					<!-- <div class="col-sm-9">
+			<!-- <div class="col-sm-9">
 					<label for="typeList" class="control-label two">타입</label>
 						<select id="typeList" class="form-control" disabled="disabled">
 							<option value="">선택하세요.</option>
 						</select>
 					</div> -->
-					<div class="col-sm-9">
-					<label for="indexList" class="control-label">인덱스</label>
-						<input class="form-control" type="text" id="indexList" placeholder="선택하세요." list = "indexsearch" disabled="disabled">
-						<datalist id = "indexsearch">
-						<option value = "reset"/> 
-						</datalist>
-					</div>
-					<div class="col-sm-9">		
-					<label for="typeList" class="control-label two">타입</label>
-						<input class="form-control" type="text" id="typeList" placeholder="타입 입력창" list="typeSearch" disabled="disabled">
-						<datalist id = "typeSearch">
-						</datalist>
-						</div>
-						<div class="col-sm-10">
-					<label for="idSearch" class="control-label">아이디</label>
-						<input class="form-control" type="text" id="idSearch"
-							placeholder="아이디 입력창" disabled="disabled">
-						<button id="SearchStart" type="button" class="btn btn-primary">검색</button>
-						<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
-						</div>
-					<div class="col-sm-5">
-						<label for="typeAndOr" class="control-label four">검색조건</label>
-							<select id=typeAndOr class="form-control" disabled="disabled">
-								<option value="">선택하세요.</option>
-								<option value="and">and</option>
-								<option value="or">or</option>
-							</select>
-						</div>
-						 <div class="col-sm-5">
-						<label for="sizeData" class="control-label" style="">사이즈</label>
-						<input type="number" id="sizeData" class="form-control size" min="1" value="10">
-						</div>
-						<div class="col-sm-5">
-						<label for="sortType" class="control-label four" style="">정렬조건</label>
-						<select id = "sortType" class="form-control">
-								<option value="">선택하세요.</option>
-								<option value="DESC">DESC</option>
-								<option value="ASC">ASC</option>
-							</select>
-						</div>
-						<div class="col-sm-5">
-						<label for="sortData" class="control-label" style="">정렬값</label>
-						<input id = "sortData" type="text" class="form-control" disabled="disabled">
-						</div>
-						<!--  <label for="dataCheck">정렬 조건</label>
+			<div class="col-sm-9">
+				<label for="indexList" class="control-label">인덱스</label> <input
+					class="form-control" type="text" id="indexList"
+					placeholder="선택하세요." list="indexsearch" disabled="disabled">
+				<datalist id="indexsearch">
+					<option value="reset" />
+
+				</datalist>
+			</div>
+			<div class="col-sm-9">
+				<label for="typeList" class="control-label two">타입</label> <input
+					class="form-control" type="text" id="typeList" placeholder="타입 입력창"
+					list="typeSearch" disabled="disabled">
+				<datalist id="typeSearch">
+				</datalist>
+			</div>
+			<div class="col-sm-10">
+				<label for="idSearch" class="control-label">아이디</label> <input
+					class="form-control" type="text" id="idSearch"
+					placeholder="아이디 입력창" disabled="disabled">
+				<button id="SearchStart" type="button" class="btn btn-primary">검색</button>
+				<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
+			</div>
+			<div class="col-sm-5">
+				<label for="typeAndOr" class="control-label four">검색조건</label> <select
+					id=typeAndOr class="form-control" disabled="disabled">
+					<option value="">선택하세요.</option>
+					<option value="and">and</option>
+					<option value="or">or</option>
+				</select>
+			</div>
+			<div class="col-sm-5">
+				<label for="sizeData" class="control-label" style="">사이즈</label> <input
+					type="number" id="sizeData" class="form-control size" min="1"
+					value="10">
+			</div>
+			<div class="col-sm-5">
+				<label for="sortType" class="control-label four" style="">정렬조건</label>
+				<select id="sortType" class="form-control">
+					<option value="">선택하세요.</option>
+					<option value="DESC">DESC</option>
+					<option value="ASC">ASC</option>
+				</select>
+			</div>
+			<div class="col-sm-5">
+				<label for="sortData" class="control-label" style="">정렬값</label> <input
+					id="sortData" type="text" class="form-control" disabled="disabled">
+			</div>
+			<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
 						<option value="">선택하세요.</option>
 						<option value="ASC">오름차순</option>
 						<option value="DESC">내림차순</option>
 					</select> -->
-					<div class="col-sm-12" id = "btn-group">
-						<div class="col-sm-3">
-						<label for="idKeySearch" id="labelKey" class="control-label one">키</label>
-							<input type="text" id="idKeySearch" class="form-control datakey">
-						</div>
-						<div class="col-sm-4">
-						<label for="idValueSearch" id="labelValue" class="control-label one">값</label>
-							<input type="text" id="idValueSearch" class="form-control datavalue">
-							<button id="getText" type="button" class="btn btn-warning">추가</button>
-						</div>
-						<div class="col-sm-12" id="createSearch"></div>
-						<div class="col-sm-4" id="search-Btn">
-						</div>
-					</div>
+			<div class="col-sm-12" id="btn-group">
+				<div class="col-sm-3">
+					<label for="idKeySearch" id="labelKey" class="control-label one">키</label>
+					<input type="text" id="idKeySearch" class="form-control datakey">
 				</div>
-		<div id='total'></div>
-		<div id ='json' class="col-md-8 json">
+				<div class="col-sm-4">
+					<label for="idValueSearch" id="labelValue"
+						class="control-label one">값</label> <input type="text"
+						id="idValueSearch" class="form-control datavalue">
+					<button id="getText" type="button" class="btn btn-warning">추가</button>
+				</div>
+				<div class="col-sm-12" id="createSearch"></div>
+				<div class="col-sm-4" id="search-Btn"></div>
+			</div>
 		</div>
-		
-		
-		
+		<div id='total'></div>
+		<div id='json' class="col-md-8 json"></div>
+
+
+
 	</div>
-	
+
 
 	<script type="text/javascript">  
     //예)
@@ -134,78 +156,75 @@
 	 var totalData = new Map();
  	 var searchData = new Map();
 	 let obj = {};
+	 var typesData = "";
+	 var aaa="a"
  $(document).ready(function(){
 
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
-	 
+	 	var aaa = "1"
 	 	var getIndex = {}; //추가 
 	 	var config = {};
 	 	getIndex = $('#indexList').val(); // 인덱스
 	 	config = $('#serverList').val();
 	 	$('#typeList').val('');
-	 	$('#typeSearch').empty()
-	 		
-	 		if(!getIndex.length == 0){
+	 	$('#indexList').val('');
+	 	$('#typeSearch').empty();
+	 	$('<datalist>').children().remove();
+	 		if(getIndex.length !== 0){
 	 		
 	 			$.post(`${location.origin}/typeList`, {
 	 				
 					getIndex : getIndex, //서버에 보낼 변수명
 					config : config
-			 
 			}, (result) => {
+				console.log(aaa)
+				typesData = result;
 				$('#typeList').attr('disabled',false);
 				$('#indexList').val(getIndex);
 				$('#typeList').empty();
-				
+				$('#typeList').html('');
+				$('#typeSearch').html('');
 				// 물어보자 분기처리 데이터 리스트 값이 틀렸을 경우
 				
-				console.log("type" + result)
-				
-				$('#typeList').change(()=>{
-					var typeData = $('#typeList').val();
-					console.log("typeData" + typeData)
-					
-					if(!result.includes(typeData)){
-			 				alert("타입의 값이 틀립니다. 다시 입력해주시기 바랍니다.")
-			 				$('#typeList').val('');
-			 				$('#typeList').focus();
-			 				return;
-			 		}
-				})
-				
-				// 인풋창의 데이터를 초기화 해준다.
-				$('#typeList').val('');
-				$('#idKeySearch').val('');
-				$('#idValueSearch').val('');
-				$("input[id^='creKey']").val('');
-				$('#json').html('');
+				console.log("resultData ::: " + typesData)
 				
 				var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#typeList').append(defualt);
 				$('#typeList').html("").append(defualt);
-					for(var i = 0; i < result.length; i++){
-						var html ="<option>"+result[i]+"</option>";
+					for(var i = 0; i < typesData.length; i++){
+						var html ="<option>"+typesData[i]+"</option>";
 						
-					$("#typeSearch").append(html); // 타입 리스트에 연결 html 변수기능을 넣어 준다.	
-						
+					$("#typeSearch").append(html);  // 타입 리스트에 연결 html 변수기능을 넣어 준다.	
 						}
 				
-				var getType = $('#typeList option:selected').val();
-				
-				
 			}, 'json');
+	 			
 	 		}
 	 	
 		 
 	 	
 	 });
 	
-	 		$('#typeList').change(()=>{
-	 			var typeDatas = $('#typeList').val();
-	 			$('#idSearch').attr('disabled',false);
-	 			
-	 		});
+	  $('#typeList').change(()=>{
+		 	var selectType = $('#typeList').val();
+			$('#idSearch').attr('disabled',false);
+			
+			if(selectType == ""){
+				$('#typeList').focus();
+			}else{
+			console.log('data : '+typesData);
+				if(typesData.includes(selectType)){
+					var result1 = typesData;
+				}else{
+					alert('타입 입력값이 틀렸습니다. 다시 입력해 주세요.')
+				}
+			}
+			console.log("typeData" + selectType);
+			console.log("typeChangeAfter ::: " + typesData);
+		
+		}); 
+	 		
 	 		
 	 		$('#idList').change(() => {
 	 			
@@ -219,6 +238,8 @@
 	 		$('#serverList').change(()=>{
 	 		
 	 		var config = $('#serverList').val();
+	 			$('#indexList').val('');
+	 			$('#typeList').val('');
 		 		$('#json').html('');
 		 		$('#total').html('');
 		 		$('#indexsearch').empty()
@@ -342,13 +363,16 @@
 		    	$('#idSearch').val('');
 		    	$(idKeySearch).val('');
 		    	$(idValueSearch).val('');
+		    	$('#sortType').val('');
+		    	$('#sortType').attr('disabled',true);
+		    	$('#sortData').val('');
 		    	$("input[id^='creKey']").val('').remove();
 		 		$("input[id^='creValue']").val('').remove();
 		 		$("label[for^='creKey']").remove();
 	    		$("label[for^='creValue']").remove();
 	    		$(".deleteBtn").remove();
-	    		$('#total').hide();
-				$('#json').hide();		
+	    		$('#total').html('');
+				$('#json').html('');		
 				$('#typeAndOr').attr('disabled', true);
 				$('#sortData').attr('disabled', true);
 				$('#idSearch').attr('disabled', true);
@@ -361,7 +385,6 @@
 		    	var data = $('#sizeData').val();
 		    	var regexp = /^[0-9]*$/
 
-		    	console.log('data?? ' + data);
 		    	
 		    	if( !regexp.test(data) ) {
 
@@ -380,7 +403,6 @@
 
 		    });
 		    
-		    
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
 		    		    - 인덱스 값이 없음 if 문으로
@@ -388,7 +410,6 @@
 		    		    - KeyValue 체크
 		    		    1)키가 없거나 밸류가 없거나 (경고창 띄움);
 		    	*/
-		    	
 				var key = document.getElementsByClassName('datakey');
 		    	var value = document.getElementsByClassName('datavalue');
 		    	var indexSearch = document.getElementById('indexList');
@@ -484,12 +505,7 @@
 				    	}
 		    		} */
 		    		
-		    		
-		    	
-		    	 console.log('!!!!' + sortType)
-		    	 
-		    	 console.log('!' + key.getE)
-		    	 console.log('!' + value.length)
+				console.log("searchStart!!!")		    	
 		    	if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
 		    		console.log('NoSearchIndex');
 		    		alert("Index를 입력해 주시기 바랍니다");

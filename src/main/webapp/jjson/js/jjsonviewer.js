@@ -58,11 +58,11 @@
 	function createElement(key, value, type, expanderClasses) {
 		var klass = 'object',
         	open = '{',
-        	close = '}';
+        	closed = '}';
 		if ($.isArray(value)) {
 			klass = 'array';
       		open = '[';
-      		close = ']';
+      		closed = ']';
 		}
 		if(value === null) {
 			return '<li><span class="key">"' + encode(key) + '": </span><span class="null">"' + encode(value) + '"</span></li>';
@@ -70,7 +70,7 @@
 		if(type == 'object') {
 			var object = '<li><span class="'+ expanderClasses +'"></span><span class="key">"' + encode(key) + '": </span> <span class="open">' + open + '</span> <ul class="' + klass + '">';
 			object = object + json2html(value, expanderClasses);
-			return object + '</ul><span class="close">' + close + '</span></li>';
+			return object + '</ul><span class="closed">' + closed + '</span></li>';
 		}
 		if(type == 'number' || type == 'boolean') {
 			return '<li><span class="key">"' + encode(key) + '": </span><span class="'+ type + '">' + encode(value) + '</span></li>';
