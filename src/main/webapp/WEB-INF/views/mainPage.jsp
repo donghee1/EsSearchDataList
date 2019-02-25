@@ -15,7 +15,7 @@
 	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
 	crossorigin="anonymous">
 <!-- <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css"> -->
-<link rel="stylesheet" href="./../css/contents.css?ver=9"
+<link rel="stylesheet" href="./../css/contents.css?ver=10"
 	type="text/css">
 <link rel="stylesheet" href="./../jjson/css/jjsonviewer.css?">
 <!-- BootStrap CDN -->
@@ -36,7 +36,7 @@
 			<div class="col-sm-9">
 				<label for="serverList" class="control-label two">서버</label> <input
 					class="form-control" type="text" id="serverList"
-					placeholder="선택하세요." list="serverSearch">
+					placeholder="선택하세요." list="serverSearch" autocomplete="off">
 				<datalist id="serverSearch">
 					<option value="선택해주세요." />
 					<option value="dev" />
@@ -68,7 +68,7 @@
 			<div class="col-sm-9">
 				<label for="indexList" class="control-label">인덱스</label> <input
 					class="form-control" type="text" id="indexList"
-					placeholder="선택하세요." list="indexsearch" disabled="disabled">
+					placeholder="선택하세요." list="indexsearch" disabled="disabled" autocomplete="off">
 				<datalist id="indexsearch">
 					<option value="reset" />
 
@@ -77,7 +77,7 @@
 			<div class="col-sm-9">
 				<label for="typeList" class="control-label two">타입</label> <input
 					class="form-control" type="text" id="typeList" placeholder="타입 입력창"
-					list="typeSearch" disabled="disabled">
+					list="typeSearch" disabled="disabled" autocomplete="off">
 				<datalist id="typeSearch">
 				</datalist>
 			</div>
@@ -85,7 +85,7 @@
 				<label for="idSearch" class="control-label">아이디</label> <input
 					class="form-control" type="text" id="idSearch"
 					placeholder="아이디 입력창" disabled="disabled">
-				<button id="SearchStart" type="button" class="btn btn-primary">검색</button>
+				<button id="SearchStart" type="button" class="btn btn-primary" onkeydown="mykeydown()">검색</button>
 				<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
 			</div>
 			<div class="col-sm-5">
@@ -130,7 +130,7 @@
 						id="idValueSearch" class="form-control datavalue">
 					<button id="getText" type="button" class="btn btn-warning">추가</button>
 				</div>
-				<div class="col-sm-12" id="createSearch"></div>
+				<div class="col-sm-12" id="creteSearch"></div>
 				<div class="col-sm-4" id="search-Btn"></div>
 			</div>
 		</div>
@@ -162,7 +162,6 @@
 
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
-	 	var aaa = "1"
 	 	var getIndex = {}; //추가 
 	 	var config = {};
 	 	getIndex = $('#indexList').val(); // 인덱스
@@ -170,7 +169,6 @@
 	 	$('#typeList').val('');
 	 	$('#indexList').val('');
 	 	$('#typeSearch').empty();
-	 	$('<datalist>').children().remove();
 	 		if(getIndex.length !== 0){
 	 		
 	 			$.post(`${location.origin}/typeList`, {
@@ -183,7 +181,7 @@
 				$('#typeList').attr('disabled',false);
 				$('#indexList').val(getIndex);
 				$('#typeList').empty();
-				$('#typeList').html('');
+				$('#typeList').val('');
 				$('#typeSearch').html('');
 				// 물어보자 분기처리 데이터 리스트 값이 틀렸을 경우
 				
@@ -236,24 +234,13 @@
 	 		
 	 		});
 	 		
+	 		
+	 		
 	 		$('#serverList').change(()=>{
 	 		
 	 		var config = $('#serverList').val();
 	 		
 	 		var serverData = $('#serverSearch option').index($('#serverSearch option:selected'))
-	 		
-	 	
-	 		/* for(var i=0; i <serverData.length; i++){
-	 			
-	 			console.log("333?")
-	 				console.log(serverData)	
-	 			if(serverData == config){
-	 				
-	 				console.log("성공인가요!?")
-	 			}
-	 			
-	 		} */
-	 		
 	 		
 	 		console.log('????')
 	 		console.log("????? :::" + serverData);	
@@ -263,6 +250,8 @@
 		 		$('#json').html('');
 		 		$('#total').html('');
 		 		$('#indexsearch').empty()
+		 		$('#indexList').attr('disabled', true);
+		 		$('#typeList').attr('disabled', true);
 		 		
 		 		if(config === "reset") {
 		 		alert("다시 선택해 주시기 바랍니다.");
@@ -382,6 +371,7 @@
 		    	$(idKeySearch).val('');
 		    	$(idValueSearch).val('');
 		    	$('#sortType').val('');
+		    	$('#sortType').attr('disabled',true);
 		    	$('#sortData').val('');
 		    	$("input[id^='creKey']").val('').remove();
 		 		$("input[id^='creValue']").val('').remove();
@@ -436,6 +426,11 @@
 		    	}
 		    });
 		    
+		    	function mykeydown(event){
+		    		var keydown = document.getElementById('SearchStart')
+		    		alert("키보드" + event.keyCode);
+		    	}
+		    	
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
 		    		    - 인덱스 값이 없음 if 문으로
@@ -443,6 +438,7 @@
 		    		    - KeyValue 체크
 		    		    1)키가 없거나 밸류가 없거나 (경고창 띄움);
 		    	*/
+		    	
 				var key = document.getElementsByClassName('datakey');
 		    	var value = document.getElementsByClassName('datavalue');
 		    	var indexSearch = document.getElementById('indexList');
@@ -629,6 +625,7 @@
 		    		}
 		    		
 		    	}
+		    	
 		    		
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
 		    	// 반대의 경우를 생각해야 함.
