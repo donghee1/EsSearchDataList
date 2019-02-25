@@ -34,7 +34,7 @@
 	<div class="row" id=row>
 		<div class="col-md-4 row">
 			<div class="col-sm-9">
-				<label for="serverList" class="control-label">인덱스</label> <input
+				<label for="serverList" class="control-label two">서버</label> <input
 					class="form-control" type="text" id="serverList"
 					placeholder="선택하세요." list="serverSearch">
 				<datalist id="serverSearch">
@@ -202,12 +202,13 @@
 	 			
 	 		}
 	 	
-		 
-	 	
 	 });
 	
 	  $('#typeList').change(()=>{
 		 	var selectType = $('#typeList').val();
+		 	
+		 	console.log("selectType :: " + selectType);
+		 	console.log("typeData?? :: " + typeData)
 			$('#idSearch').attr('disabled',false);
 			
 			if(selectType == ""){
@@ -238,6 +239,25 @@
 	 		$('#serverList').change(()=>{
 	 		
 	 		var config = $('#serverList').val();
+	 		
+	 		var serverData = $('#serverSearch option').index($('#serverSearch option:selected'))
+	 		
+	 	
+	 		/* for(var i=0; i <serverData.length; i++){
+	 			
+	 			console.log("333?")
+	 				console.log(serverData)	
+	 			if(serverData == config){
+	 				
+	 				console.log("성공인가요!?")
+	 			}
+	 			
+	 		} */
+	 		
+	 		
+	 		console.log('????')
+	 		console.log("????? :::" + serverData);	
+	 		
 	 			$('#indexList').val('');
 	 			$('#typeList').val('');
 		 		$('#json').html('');
@@ -267,8 +287,6 @@
 		 		$('#indexList').append(defualt);
 				
 		 		console.log("serverList result" + result)
-		 		
-		 		
 		 		
 		 		$('#indexList').change(()=>{
 		 			var indexData = $('#indexList').val();
@@ -364,7 +382,6 @@
 		    	$(idKeySearch).val('');
 		    	$(idValueSearch).val('');
 		    	$('#sortType').val('');
-		    	$('#sortType').attr('disabled',true);
 		    	$('#sortData').val('');
 		    	$("input[id^='creKey']").val('').remove();
 		 		$("input[id^='creValue']").val('').remove();
@@ -401,6 +418,22 @@
 		    		$('#sizeData').val('10');
 		    	}
 
+		    });
+		    
+		    $('#sortType').change(()=>{
+		    	
+		    	var indexData = $('#indexList').val();
+		    	var typeDatas = $('#typeList').val();
+		    	var sortData = $('#sortData').val();
+		    	
+		    	
+		    	if(indexData == null || indexData == ""){
+		    		
+		    		alert("!인덱스 값을 입력해 주시기 바랍니다!");
+		    		$('#sortType').val('');
+		    		$('#sortData').attr('disabled', true);
+		    		$('#indexList').focus;
+		    	}
 		    });
 		    
 		    	$('#SearchStart').click(()=>{
@@ -588,6 +621,14 @@
 		    		
 		    	}
 		    	
+		    	if($('#sortType').val() != ""){
+		    		if($('#indexList').val() != "" && $('#sortData').val() == ""){
+		    			alert("정렬값을 입력해주시기 바랍니다 정렬값은 key값이 기준입니다.1");
+			   			$('#sortData').focus();
+			   			return false;
+		    		}
+		    		
+		    	}
 		    		
 		    	// key 배열의 변수가 1개이고 밸류 배열의 변수가 한개 일 때!! 
 		    	// 반대의 경우를 생각해야 함.

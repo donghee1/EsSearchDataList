@@ -244,6 +244,15 @@ public class EsRepository {
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 		
+		if(index == null) {
+			System.out.println("Error!");
+			return null;
+		}else if (index != null && type != null) {
+			srb = client.prepareSearch(index).setTypes(type);	
+		}
+		
+				
+		
 		String keyField;
 		String valueField;
 
