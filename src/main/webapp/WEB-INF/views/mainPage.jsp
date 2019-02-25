@@ -204,9 +204,6 @@
 	
 	  $('#typeList').change(()=>{
 		 	var selectType = $('#typeList').val();
-		 	
-		 	console.log("selectType :: " + selectType);
-		 	console.log("typeData?? :: " + typeData)
 			$('#idSearch').attr('disabled',false);
 			
 			if(selectType == ""){

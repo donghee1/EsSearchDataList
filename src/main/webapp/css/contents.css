@@ -6,7 +6,6 @@
 	display:inline-block;
 	margin-top:7px;
 }
-/* 왜 안먹히는지 모르겠다...ㅡ*/
 .form-group{
 	position: fixed;
 	top : 30px;
@@ -30,7 +29,7 @@
 	padding:0px;
 	box-sizing: content-box;
 	display: block;
-	width: 545px;
+	width: 560px;
 	position: unset;
 }
 .col-xs-6{
@@ -49,7 +48,7 @@
 	width: 72%;
 	box-sizing: border-box;
 	float: inherit;
-	margin-left: 540px;
+	margin-left: 565px;
 	position: absolute;
 	top:25px;
 	overflow: scroll;
