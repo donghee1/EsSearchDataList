@@ -139,6 +139,7 @@
 	 	$('#indexList').val('');
 	 	$('#typeSearch').empty();
 	 	$('#typeList').attr('disabled',true);
+	 	$('#idSearch').attr('disabled',true);
 	 		if(getIndex.length !== 0){
 	 			$.post(`${location.origin}/typeList`, {
 					getIndex : getIndex, //서버에 보낼 변수명
@@ -213,15 +214,11 @@
 		 		$('#indexList').attr('disabled',true);
 		 		$('#typeList').attr('disabled',true);
 		 		
-		 		if(config === "reset") {
-		 		alert("다시 선택해 주시기 바랍니다.");
+		 		if(config === "") {
 		 		$('#indexList').val('')
-		 		$(sizeData).val('')
+		 		$('#indexList').attr('disabled',true);
 		 		$('#json').html('')
-		 		$("input[id^='creKey']").remove()
-		 		$("input[id^='creValue']").remove()
-		 		$("label[for^='creKey']").remove()
-	    		$("label[for^='creValue']").remove()
+		 		$('.keyValClone').remove();
 		 		return false;
 		 	}
 	 			
@@ -295,6 +292,10 @@
 				keyValClone.append(deleteBtn);
 				
 				$('#createSearch').append(keyValClone);
+				
+				/* if(deleteBtn === undefined || $('.deleteBtn')length() == 0){
+					$('#typeAndOr').attr('disabled', true);
+				} */
 				
 				/* //동적태그에 이벤트를 걸어줄 때 -> 1. 이벤트, 2.동적태그 아이디, 3. 동작 함
 				$(document).on("click","creKey", function(){
@@ -474,27 +475,33 @@
 				    	}
 		    		} */
 		    		
-				console.log("searchStart!!!")		    	
-		    	if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
-		    		console.log('NoSearchIndex');
-		    		alert("Index를 입력해 주시기 바랍니다");
-		    		return;
-		    		
-		    	}else{
-		    		
-		    		console.log("인덱스1");
-		    			index = indexSearch.value;
-		    			
-		    			type = typeSearch.value;
-		    			
-		    			config = $('#serverList').val();
-		    			
-		    			searchSize = $('#sizeData').val();
-		    			
-		    			sortType = $('#sortType').val();
-		    			
-		    			sortData = $('#sortData').val();
-		    	}
+				console.log("searchStart!!!")
+
+				if($('#serverList').val() == ""){
+					alert("server를 입력해 주시기 바랍니다");
+				}else{
+					if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
+			    		console.log('NoSearchIndex');
+			    		alert("index를 입력해 주시기 바랍니다");
+			    		return;
+			    		
+			    	}else{
+			    		
+			    		console.log("인덱스1");
+			    			index = indexSearch.value;
+			    			
+			    			type = typeSearch.value;
+			    			
+			    			config = $('#serverList').val();
+			    			
+			    			searchSize = $('#sizeData').val();
+			    			
+			    			sortType = $('#sortType').val();
+			    			
+			    			sortData = $('#sortData').val();
+			    	}	
+				}
+		    	
 		    	
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value == "" ) {
 				    //		console.log("idSearch Start!!!!");
@@ -670,7 +677,12 @@
 		
 		$(this).parent().remove();
 
- 		seq = seq+1;
+		var data = $(".deleteBtn").length;
+		
+		if(data === 0){
+			$('#typeAndOr').attr('disabled',true);
+		}
+		
  	});
 	</script>
 	
