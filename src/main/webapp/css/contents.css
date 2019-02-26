@@ -1,284 +1,32 @@
-.nonpadding{
-	padding : 0;
+.inputtest{
+	width: 150px;
+	display: inline-block;
 }
-.form-control{
-	width:170px;
-	display:inline-block;
-	margin-top:7px;
+.labeltest{
+	width: 50px;
+	margin: 10px;
 }
-.form-group{
-	position: fixed;
-	top : 30px;
-}
-.col-sm-3{
-	padding:0px;
-	width: auto;
-}
-.col-sm-4{
-	padding:0px;
-	width: auto;
-}
-.col-sm-8{
-	width: 60%;
-}
-.col-sm-5{
-	width: auto;
-	padding:0px;
-}
-.col-sm-12{
-	padding:0px;
-	box-sizing: content-box;
-	display: block;
-	width: 560px;
-	position: unset;
-}
-.col-xs-6{
-	padding:0px;
-	width: 45%;
-}
-.col-md-4{
-	padding:0px;
-	padding-left: 5px;
-	box-sizing: content-box;
-	width: 30%;
-}
-
-.col-md-8{
-	padding:0px;
-	width: 72%;
-	box-sizing: border-box;
-	float: inherit;
-	margin-left: 565px;
-	position: absolute;
-	top:25px;
-	overflow: scroll;
-}
-
-label{
-	margin:10px;
-	padding-top:7px;
-	padding-left:5px;
-	padding-right:10px;
-	float:left;
-	font-size: 12px;
-	
-}
-
-pre {
-	width: 1370px;
-	overflow: scroll;
-	height: 1080px;
-}
-
-#sizeData{
-	width: 66px;
-}
-
-#idKeySearch{
-	margin-left: 11px;
-}
-
-#idValueSearch{
+.btntest{
 	margin-left: 10px;
-}
-
-#labelValue{
-	margin-left : 20px;
-}
-
-#getText{
-	margin-bottom: 3px;
-	margin-left: 3px;
-}
-#search-Btn{
-	margin:5px;
-	margin-left:235px;
-	float: left;
-}
-#createSearch{
-	width: auto;
-	top:380px;
-}
-#json{
-	height: 1070px;
 	
 }
-
-#total{
-	margin:5px;
-	width: 260px;
-	float: left;
-	
+.nonepadding{
+	padding : 0px;
 }
-#clearBtn{
+
+.nonemargin{
+	margin : 0px;
 	margin-left: 0px;
-}
-.two{
-	margin-right: 20px;
-}
-.four{
-	margin-left: 25px;
 	margin-right: 0px;
 }
-.one{
-	margin-right: 10px;
-	margin-left: 35px;
+
+.searchResult{
+	height: 100%;
+	overflow:scroll;
+	border: 1px solid black;
+}
+.nonepaddingright{
+	padding-right : 0px;
 }
 
-.btn-primary{
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 5px;
-}
-
-#row{
-	width: 1920px;
-}
-
-
-/* @charset "UTF-8";
-
-	
-	 html{
-	
-	margin : auto;
-	height: 700px;
-	}
-	
-	.container{
-	margin: 40px 40px 40px 10px;
-	padding-left: 5px;
-	width:620px;
-	}
-
-	body {
-    margin: 0;
-    display: inline-block;
-    height: 800px;
-    width: 700px;
-	}
-	
-	#btn-group{
-	width:620px;
-	height: 300px;
-	}
-	
-	
-	label{
-	padding-top: 10px;
-	margin-top : 10px;
-	margin-left: 0px;
-	padding-left: 0px;
-	font-size: 12px;
-	float: left;
-	text-align: left;
-	}
-	
-	.control-label {
-	text-align: left;
-	width : 90px;
-	}
-	
-	select{
-	margin:0px;
-	
-	}
-	
-	.col-sm-2 {
-	margin-top: 5px;
-	padding-right: 10px;
-	margin-left:0px;
-	padding-left:0px;
-	float: left;
-	text-align: left;
-	}
-	
-	.col-sm-3{
-	padding:0px;
-	
-	}
-	
-	.col-sm-10{
-	padding:0px;
-	
-	}
-	
-	.form-group {
-	
-	margin: 20px;
-	padding-left: 5px;
-	width:620px;
-	height: 400px;
-	float: left;
-	
-	}
-	
-	.form-inline {
-		width : auto;
-	}
-	
-	.form-control {
-	width: 150px;
-	padding: 3px;
-	margin: 3px;
-	}
-	
-
-	
-	#sizeData{
-	width: 100px;
-	}
-	
-	#idKeySearch{
-	width: 170px;
-	padding: 10px;
-	border: 1px;
-	margin: 10px;
-	
-	}
-	
-	#idValueSearch{
-	width: 170px;
-	padding: 10px;
-	border: 1px;
-	margin: 10px;
-	}
-	
-	#getText {
-	padding-top:5px; 
-	margin-top: 10px;
-	}
-	
-	#btn-group {
-	
-	height: 120px;
-	margin-top: 0px;
-	}
-	
-	.creDiv {
-	width : 620px;
-	height: 120px;
-	}
-	
-	.container-fluid{
-	
-	margin-top: 70px;
-	} 
-	
-	#dataAllText{
-	float: left;
-	}
-	
-	#search-Btn{
-	
-	margin-left: 75px;
-	}
-	
-	
-	
-	label {
-	
-	padding : 5px;
-	margin-right : 5px;
-	
-	} */
+html, body{height: 100%; overflow: hidden;}

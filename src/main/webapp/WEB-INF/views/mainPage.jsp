@@ -28,90 +28,63 @@
 <!-- <script src="src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.min.js"></script>
 <link rel="stylesheet" href="/src/main/webapp/WEB-INF/views/fakeLoader/fakeLoader.css">
  -->
+
 <title>엘라스틱 서치</title>
 </head>
 <body>
-	<div class="row" id=row>
-		<div class="col-md-4 row">
-			<div class="col-sm-9">
-				<label for="serverList" class="control-label two">서버</label> <input
-					class="form-control" type="text" id="serverList"
+		<div class="col-md-4 row nonemargin nonepadding">
+			<div class="col-sm-12">
+				<label for="serverList" class="control-label labeltest">서버</label> <input
+					class="form-control inputtest" type="text" id="serverList"
 					placeholder="선택하세요." list="serverSearch" autocomplete="off">
 				<datalist id="serverSearch">
-					<option value="선택해주세요." />
 					<option value="dev" />
 					<option value="bmt" />
 				</datalist>
 			</div>
-			<!-- <div class="col-sm-9">
-				<label for="serverList" class="control-label two">서버</label> 
-				<select id="serverList" name="file_name" class="form-control">
-					<option value="">선택하세요.</option>
-					<option value="dev">dev</option>
-					<option value="bmt">bmt</option>
-				</select>
-			</div> -->
-			<!-- onchange 사용해보기  -->
-			<!-- 포이치문에 인덱스 값을 생성하여 각 리스트마다 색인을 넣어주고 그 값으로 이벤트로 발생시킬 때 varStatus 사용하자!!! -->
-			<!--  <div class="col-sm-9">
-					<label for="indexList" class="control-label">인덱스</label>
-						<select id="indexList" class="form-control" disabled="disabled">
-							<option value="indexListOption">선택하세요.</option>
-						</select>
-					</div> -->
-			<!-- <div class="col-sm-9">
-					<label for="typeList" class="control-label two">타입</label>
-						<select id="typeList" class="form-control" disabled="disabled">
-							<option value="">선택하세요.</option>
-						</select>
-					</div> -->
-			<div class="col-sm-9">
-				<label for="indexList" class="control-label">인덱스</label> <input
-					class="form-control" type="text" id="indexList"
+			<div class="col-sm-12 ">
+				<label for="indexList" class="control-label labeltest">인덱스</label> 
+				<input
+					class="form-control inputtest" type="text" id="indexList"
 					placeholder="선택하세요." list="indexsearch" disabled="disabled" autocomplete="off">
 				<datalist id="indexsearch">
 					<option value="reset" />
-
 				</datalist>
 			</div>
-			<div class="col-sm-9">
-				<label for="typeList" class="control-label two">타입</label> <input
-					class="form-control" type="text" id="typeList" placeholder="타입 입력창"
+			<div class="col-sm-12 ">
+				<label for="typeList" class="control-label labeltest">타입</label> <input
+					class="form-control inputtest" type="text" id="typeList" placeholder="타입 입력창"
 					list="typeSearch" disabled="disabled" autocomplete="off">
 				<datalist id="typeSearch">
 				</datalist>
 			</div>
-			<div class="col-sm-10">
-				<label for="idSearch" class="control-label">아이디</label> <input
-					class="form-control" type="text" id="idSearch"
+			<div class="col-sm-12 ">
+				<label for="idSearch" class="control-label labeltest">아이디</label> <input
+					class="form-control inputtest" type="text" id="idSearch"
 					placeholder="아이디 입력창" disabled="disabled">
-				<button id="SearchStart" type="button" class="btn btn-primary" onkeydown="mykeydown()">검색</button>
-				<button id="clearBtn" type="button" class="btn btn-primary">클리어</button>
+				<button id="SearchStart" type="button" class="btn btn-primary btntest">검색</button>
+				<button id="clearBtn" type="button" class="btn btn-primary btntest">클리어</button>
 			</div>
-			<div class="col-sm-5">
-				<label for="typeAndOr" class="control-label four">검색조건</label> <select
-					id=typeAndOr class="form-control" disabled="disabled">
+			<div class="col-sm-12 ">
+				<label for="typeAndOr" class="control-label labeltest">검색조건</label> <select
+					id=typeAndOr class="form-control inputtest" disabled="disabled">
 					<option value="">선택하세요.</option>
 					<option value="and">and</option>
 					<option value="or">or</option>
 				</select>
-			</div>
-			<div class="col-sm-5">
-				<label for="sizeData" class="control-label" style="">사이즈</label> <input
-					type="number" id="sizeData" class="form-control size" min="1"
+				<label for="sizeData" class="control-label labeltest" style="">사이즈</label> <input
+					type="number" id="sizeData" class="form-control size inputtest" min="1"
 					value="10">
 			</div>
-			<div class="col-sm-5">
-				<label for="sortType" class="control-label four" style="">정렬조건</label>
-				<select id="sortType" class="form-control">
+			<div class="col-sm-12 ">
+				<label for="sortType" class="control-label labeltest" style="">정렬조건</label>
+				<select id="sortType" class="form-control inputtest">
 					<option value="">선택하세요.</option>
 					<option value="DESC">DESC</option>
 					<option value="ASC">ASC</option>
 				</select>
-			</div>
-			<div class="col-sm-5">
-				<label for="sortData" class="control-label" style="">정렬값</label> <input
-					id="sortData" type="text" class="form-control" disabled="disabled">
+				<label for="sortData" class="control-label labeltest" style="">정렬값</label> <input
+					id="sortData" type="text" class="form-control inputtest" disabled="disabled">
 			</div>
 			<!--  <label for="dataCheck">정렬 조건</label>
 					<select id = dataCheck>
@@ -119,27 +92,23 @@
 						<option value="ASC">오름차순</option>
 						<option value="DESC">내림차순</option>
 					</select> -->
-			<div class="col-sm-12" id="btn-group">
-				<div class="col-sm-3">
-					<label for="idKeySearch" id="labelKey" class="control-label one">키</label>
-					<input type="text" id="idKeySearch" class="form-control datakey">
+				<div class="col-sm-12 " id='clonetest'>
+					<label for="idKeySearch"  class="control-label labeltest ">키</label>
+					<input type="text" class="form-control datakey inputtest">
+					<label for="idValueSearch" class="control-label labeltest">값</label>
+					<input type="text"class="form-control datavalue inputtest">
+					<button id="getText" type="button" class="btn btn-warning btntest">추가</button>
 				</div>
-				<div class="col-sm-4">
-					<label for="idValueSearch" id="labelValue"
-						class="control-label one">값</label> <input type="text"
-						id="idValueSearch" class="form-control datavalue">
-					<button id="getText" type="button" class="btn btn-warning">추가</button>
-				</div>
-				<div class="col-sm-12" id="creteSearch"></div>
+				<div id="createSearch"></div>
 				<div class="col-sm-4" id="search-Btn"></div>
-			</div>
 		</div>
-		<div id='total'></div>
-		<div id='json' class="col-md-8 json"></div>
+		<div class= "col-md-8 row nonepadding searchResult nonemargin" >
+			<div class="col-md-12" id='total'></div>
+			<div id='json' class="col-md-12 json"></div>
+		</div>
 
 
 
-	</div>
 
 
 	<script type="text/javascript">  
@@ -169,10 +138,9 @@
 	 	$('#typeList').val('');
 	 	$('#indexList').val('');
 	 	$('#typeSearch').empty();
+	 	$('#typeList').attr('disabled',true);
 	 		if(getIndex.length !== 0){
-	 		
 	 			$.post(`${location.origin}/typeList`, {
-	 				
 					getIndex : getIndex, //서버에 보낼 변수명
 					config : config
 			}, (result) => {
@@ -192,7 +160,6 @@
 				$('#typeList').html("").append(defualt);
 					for(var i = 0; i < typesData.length; i++){
 						var html ="<option>"+typesData[i]+"</option>";
-						
 					$("#typeSearch").append(html);  // 타입 리스트에 연결 html 변수기능을 넣어 준다.	
 						}
 				
@@ -238,17 +205,13 @@
 	 		var config = $('#serverList').val();
 	 		
 	 		var serverData = $('#serverSearch option').index($('#serverSearch option:selected'))
-	 		
-	 		console.log('????')
-	 		console.log("????? :::" + serverData);	
-	 		
 	 			$('#indexList').val('');
 	 			$('#typeList').val('');
 		 		$('#json').html('');
 		 		$('#total').html('');
 		 		$('#indexsearch').empty()
-		 		$('#indexList').attr('disabled', true);
-		 		$('#typeList').attr('disabled', true);
+		 		$('#indexList').attr('disabled',true);
+		 		$('#typeList').attr('disabled',true);
 		 		
 		 		if(config === "reset") {
 		 		alert("다시 선택해 주시기 바랍니다.");
@@ -320,46 +283,30 @@
 	 			}
 	 		
 	 		});
-	 			
-	 			
 	 		
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
-		    var seq = 0;
 		    $('#getText').click(()=>{
-				
-				console.log('클릭!');
-				var creLabelKey = '';
-				var creLabelValue = '';
-				var creInput = '';
 				$('#typeAndOr').attr('disabled',false);
+				var keyValClone = $('#clonetest').clone(); //클론
+				keyValClone.find("button").remove();
+				keyValClone.removeAttr("id");
+				keyValClone.addClass("keyValClone");
+				var deleteBtn = '<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i>';
+				keyValClone.append(deleteBtn);
 				
-				creLabelKey = '<div class="creDiv" id ="creDiv'+seq+'"><div class="col-sm-3"><label class= "control-label" style="padding-left:30px;" for="creValue'+seq+'">'+"키"+'</label>';
-				creLabelValue = '<div class="col-sm-3"><label class= "control-label" style="padding-left:15px;" for="creValue'+seq+'">'+"값"+'</label>';
-				creInput = creLabelKey+'<input type="text" style="width:170px; padding:6px 12px; margin-left:10px;"class = "form-control key" id = "creKey'+seq+'"></div>'+creLabelValue+'<input type="text" style="width:170px; padding:6px 12px; margin-left:11px;" class="form-control value" id = "creValue'+seq+'">'+'<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i></div></div>'
-				$('#createSearch').append(creInput);
-				
-				console.log("getText click event start!!!!!!!");
-				var creIdKeys = $('#creKey').val();
-				console.log(creIdKeys);
-				console.log("getText click event start!!!!!!!");
-				var creValues = $('#creValue').val();
-				console.log(creValues);
+				$('#createSearch').append(keyValClone);
 				
 				/* //동적태그에 이벤트를 걸어줄 때 -> 1. 이벤트, 2.동적태그 아이디, 3. 동작 함
 				$(document).on("click","creKey", function(){
 				}) */
-				seq = seq+1;	
 				//히든으로 뷰를append 하는 방법을 찾아보자
 				//$('#dddd').val("add");
 
 				//추가 버튼을 클릭하였을 때 인풋창에 추가 될 아이콘을 클릭했을 때! 
-				$(".deleteBtn").on("click", function(){
-		    		
-					$(this).parent().parent().remove();
-			
-			    		seq = seq+1;
-			    	});
+				
 			});
+		    
+		   
 		    
 		    $('#clearBtn').click(()=>{
 		    
@@ -370,16 +317,12 @@
 		    	$('#sortType').val('');
 		    	$('#sortType').attr('disabled',true);
 		    	$('#sortData').val('');
-		    	$("input[id^='creKey']").val('').remove();
-		 		$("input[id^='creValue']").val('').remove();
-		 		$("label[for^='creKey']").remove();
-	    		$("label[for^='creValue']").remove();
-	    		$(".deleteBtn").remove();
 	    		$('#total').html('');
 				$('#json').html('');		
 				$('#typeAndOr').attr('disabled', true);
 				$('#sortData').attr('disabled', true);
 				$('#idSearch').attr('disabled', true);
+				$('.keyValClone').remove();
 		    });
 		    
 		    
@@ -721,8 +664,16 @@
 		    		
 		    	}); 
  });
-	 
+	
+ 
+ $(document).on("click",".deleteBtn", function(){
+		
+		$(this).parent().remove();
+
+ 		seq = seq+1;
+ 	});
 	</script>
+	
 
 
 </body>
