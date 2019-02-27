@@ -34,9 +34,8 @@
 <body>
 		<div class="col-md-4 row nonemargin nonepadding">
 			<div class="col-sm-12">
-				<label for="serverList" class="control-label labeltest">서버</label> <input
-					class="form-control inputtest" type="text" id="serverList"
-					placeholder="선택하세요." list="serverSearch" autocomplete="off">
+				<label for="serverList" class="control-label labeltest">서버</label> 
+				<input class="form-control inputtest" type="text" id="serverList" placeholder="선택하세요." list="serverSearch"  autocomplete="off"/>
 				<datalist id="serverSearch">
 					<option value="dev" />
 					<option value="bmt" />
@@ -62,7 +61,7 @@
 				<label for="idSearch" class="control-label labeltest">아이디</label> <input
 					class="form-control inputtest" type="text" id="idSearch"
 					placeholder="아이디 입력창" disabled="disabled">
-				<button id="SearchStart" type="button" class="btn btn-primary btntest">검색</button>
+				<button id="SearchStart" type="button" class="btn btn-primary btntest" >검색</button>
 				<button id="clearBtn" type="button" class="btn btn-primary btntest">클리어</button>
 			</div>
 			<div class="col-sm-12 ">
@@ -126,9 +125,18 @@
  	 var searchData = new Map();
 	 let obj = {};
 	 var typesData = "";
+	 var indexsData = "";
 	 var aaa="a"
  $(document).ready(function(){
 
+	 // 인풋창에 엔터키 적용하기!
+	 $('input').keyup(()=>{
+		
+		if(event.keyCode == 13) {
+			$('#SearchStart').trigger('click');
+		}
+	 });
+	 
 	//index selectbox 데이터를 변경할 때
 	 $('#indexList').change(() => {	
 	 	var getIndex = {}; //추가 
@@ -140,12 +148,31 @@
 	 	$('#typeSearch').empty();
 	 	$('#typeList').attr('disabled',true);
 	 	$('#idSearch').attr('disabled',true);
-	 		if(getIndex.length !== 0){
+	 	
+	 	// 인덱스 데이터 값이 6자리 이하 일 때 밸리데이션
+	 	if(getIndex.length < 6){
+	 		alert("인덱스의 값은 6자리 이상입니다.");
+	 		$('#indexList').val("");
+	 		return false;
+	 	}
+	 	// 인덱스리스트 데이터와 인덱스 데이터 비교후 맞는지 확인하는 밸리데이션 
+	 	if(indexData.includes(getIndex)){
+			console.log("test!!!1")
+		}else{
+			console.log("test!!!2")
+			alert("인덱스 값이 다릅니다. 다시 입력해 주시기 바랍니다.")
+			$('#indexList').val('');
+			$('#indexList').focus();
+			$('#typeList').attr('disabled',true);
+			return false;
+		}
+	 		
+	 	if(getIndex.length !== 0){
 	 			$.post(`${location.origin}/typeList`, {
 					getIndex : getIndex, //서버에 보낼 변수명
 					config : config
-			}, (result) => {
-				console.log(aaa)
+		
+	 			}, (result) => {
 				typesData = result;
 				$('#typeList').attr('disabled',false);
 				$('#indexList').val(getIndex);
@@ -182,6 +209,10 @@
 					var result1 = typesData;
 				}else{
 					alert('타입 입력값이 틀렸습니다. 다시 입력해 주세요.')
+					$('#typeList').val("");
+					$('#idSearch').attr('disabled',true);
+					$('#typeLIst').focus();
+					return false;
 				}
 			}
 			console.log("typeData" + selectType);
@@ -214,6 +245,19 @@
 		 		$('#indexList').attr('disabled',true);
 		 		$('#typeList').attr('disabled',true);
 		 		
+		 		var serverData1 = "dev";
+				var serverData2 = "bmt";
+				
+				if(config === serverData1 || config === serverData2){
+						//서버 텍스트 값 밸리데이션 처리!!!!					
+				}else{
+					alert('서버 입력값이 틀렸습니다. 다시 입력해 주세요.')
+					$('#serverList').val("");
+					$('#serverList').focus();
+					return false;
+				}
+		 		
+		 		// 정규식을 변수에 담아 비교하여 dev 나 bmt가 아니면 오류창을 띄우자 
 		 		if(config === "") {
 		 		$('#indexList').val('')
 		 		$('#indexList').attr('disabled',true);
@@ -227,6 +271,7 @@
 				config :config
 			 
 			}, (result) => {
+				indexData = result;
 				$('#indexList').attr('disabled',false);
 				$('#indexList').empty();
 				var defualt = "<option>"+"선택하세요"+"</option>";
@@ -234,7 +279,11 @@
 				
 		 		console.log("serverList result" + result)
 		 		
-		 		$('#indexList').change(()=>{
+		 		
+		 		
+		 		
+		 		//****아래내용 뺴자!!!
+		 		/* $('#indexList').change(()=>{
 		 			var indexData = $('#indexList').val();
 		 		
 		 			if(indexData.length == 0 || indexData == ""){
@@ -248,7 +297,7 @@
 		 					return;
 		 					
 		 				}
-		 		});
+		 		}); */
 		 		
 		 		
 		 		
@@ -366,11 +415,6 @@
 		    		$('#indexList').focus;
 		    	}
 		    });
-		    
-		    	function mykeydown(event){
-		    		var keydown = document.getElementById('SearchStart')
-		    		alert("키보드" + event.keyCode);
-		    	}
 		    	
 		    	$('#SearchStart').click(()=>{
 		    		/* 1. 밸리데이션 체크
@@ -684,6 +728,10 @@
 		}
 		
  	});
+ 
+
+ 
+
 	</script>
 	
 
