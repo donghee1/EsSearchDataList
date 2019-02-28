@@ -70,27 +70,22 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			}
 			//String json = null ;
 				if ("".equals(type) && idkey.length == 0 && idvalue.length >= 0) {
-					System.out.println("onlyone");
 					mapList = repository.onlyOneIndexSearch(index, type, config, searchSize, total, idkey, idvalue, sortType, sortData);
 				
 				}else if( !"".equals(type) && "".equals(id) && idkey.length == 0 && idvalue.length >= 0) {
-					System.out.println("typesearch");
 					mapList = repository.indexAndTypeSearch(index, idkey, idvalue, type, config, searchSize, total, sortType,sortData);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				
 				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 ) {
-					System.out.println("idsearch");
 					mapList = repository.idSearch(index,type,id, config, total);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				
 				}else if( "".equals(type) && idkey[0] != "" && idvalue[0] != "") {
-					System.out.println("인덱스 키밸류!!! ");
 					mapList = repository.indexAndKeyValueSearch(index, idkey, idvalue, config, searchType, searchSize, total, sortType,sortData);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 					//keyValue 한개 검색 가능 or 한개이상 검색 가능!
 				
 				}else if( idkey[0] != "" && idvalue[0] != ""  && !"".equals(type) && "".equals(id)) {
-					System.out.println("키앤드밸류서치!!!");
 					mapList = repository.keyAndValueSearch(index, type, idkey, idvalue, config, searchType, searchSize, total, sortType,sortData);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				

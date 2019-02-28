@@ -123,6 +123,7 @@
 	 let dataCheck = "";
 	 var totalData = new Map();
  	 var searchData = new Map();
+ 	 let searchDatas = "";
 	 let obj = {};
 	 var typesData = "";
 	 var indexsData = "";
@@ -157,9 +158,8 @@
 	 	}
 	 	// 인덱스리스트 데이터와 인덱스 데이터 비교후 맞는지 확인하는 밸리데이션 
 	 	if(indexData.includes(getIndex)){
-			console.log("test!!!1")
-		}else{
-			console.log("test!!!2")
+				// indexListData 와 인덱스 인풋창 데이터가 있는지 일일이 대입해 보는 로 
+	 	}else{
 			alert("인덱스 값이 다릅니다. 다시 입력해 주시기 바랍니다.")
 			$('#indexList').val('');
 			$('#indexList').focus();
@@ -180,8 +180,6 @@
 				$('#typeList').val('');
 				$('#typeSearch').html('');
 				// 물어보자 분기처리 데이터 리스트 값이 틀렸을 경우
-				
-				console.log("resultData ::: " + typesData)
 				
 				var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#typeList').append(defualt);
@@ -204,7 +202,6 @@
 			if(selectType == ""){
 				$('#typeList').focus();
 			}else{
-			console.log('data : '+typesData);
 				if(typesData.includes(selectType)){
 					var result1 = typesData;
 				}else{
@@ -215,8 +212,6 @@
 					return false;
 				}
 			}
-			console.log("typeData" + selectType);
-			console.log("typeChangeAfter ::: " + typesData);
 		
 		}); 
 	 		
@@ -276,30 +271,6 @@
 				$('#indexList').empty();
 				var defualt = "<option>"+"선택하세요"+"</option>";
 		 		$('#indexList').append(defualt);
-				
-		 		console.log("serverList result" + result)
-		 		
-		 		
-		 		
-		 		
-		 		//****아래내용 뺴자!!!
-		 		/* $('#indexList').change(()=>{
-		 			var indexData = $('#indexList').val();
-		 		
-		 			if(indexData.length == 0 || indexData == ""){
-						$('#indexList').val('');
-						$('#indexList').focus();
-						return false;
-				 	}else if(!result.includes(indexData)){
-		 					alert("인덱값이 틀립니다. 다시 입력바랍니다.")
-		 					$('#indexList').val('');
-		 					$('#indexList').focus();
-		 					return;
-		 					
-		 				}
-		 		}); */
-		 		
-		 		
 		 		
 				for(var i = 0; i < result.length; i++){
 					
@@ -337,6 +308,8 @@
 				keyValClone.find("button").remove();
 				keyValClone.removeAttr("id");
 				keyValClone.addClass("keyValClone");
+				$(this).parent().html("<input>").val('');
+				//키밸류를 추가했을 때 같이 나오는 이미지 (x표시)
 				var deleteBtn = '<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i>';
 				keyValClone.append(deleteBtn);
 				
@@ -356,8 +329,6 @@
 				
 			});
 		    
-		   
-		    
 		    $('#clearBtn').click(()=>{
 		    
 		    	console.log("clean click")
@@ -373,6 +344,9 @@
 				$('#sortData').attr('disabled', true);
 				$('#idSearch').attr('disabled', true);
 				$('.keyValClone').remove();
+				$("#typeAndOr").val('')
+				$('.datakey').val('')
+				$('.datavalue').val('')
 		    });
 		    
 		    
@@ -391,7 +365,6 @@
 		    		$('#sizeData').val('10');
 		    		
 		    	}
-		    	console.log(data)
 		    	if(data == '0'){
 		    		alert('0이상으로 입력해 주시기 바랍니다.')
 		    		$('#sizeData').focus();
@@ -406,10 +379,11 @@
 		    	var typeDatas = $('#typeList').val();
 		    	var sortData = $('#sortData').val();
 		    	
+		    	$('#sortData').focus();
 		    	
 		    	if(indexData == null || indexData == ""){
 		    		
-		    		alert("!인덱스 값을 입력해 주시기 바랍니다!");
+		    		alert("인덱스 값을 입력해 주시기 바랍니다!");
 		    		$('#sortType').val('');
 		    		$('#sortData').attr('disabled', true);
 		    		$('#indexList').focus;
@@ -519,19 +493,15 @@
 				    	}
 		    		} */
 		    		
-				console.log("searchStart!!!")
-
 				if($('#serverList').val() == ""){
 					alert("server를 입력해 주시기 바랍니다");
 				}else{
 					if(indexSearch.value == "" || typeSearch.value == "" && indexSearch.value == null || typeSearch.value == null){
-			    		console.log('NoSearchIndex');
 			    		alert("index를 입력해 주시기 바랍니다");
 			    		return;
 			    		
 			    	}else{
 			    		
-			    		console.log("인덱스1");
 			    			index = indexSearch.value;
 			    			
 			    			type = typeSearch.value;
@@ -550,11 +520,9 @@
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value == "" ) {
 				    //		console.log("idSearch Start!!!!");
 				    
-				    		console.log("인덱스2");
 				    		index = indexSearch.value;
 			    			
 			    			type = typeSearch.value;
-			    			console.log('type값?' + type);
 			    			
 			    			searchSize = $('#sizeData').val();
 			    			
@@ -567,7 +535,6 @@
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") {
 		    //		console.log("idSearch Start!!!!");
 		    
-		    		console.log("인덱스3");
 		    		index = indexSearch.value;
 	    			
 	    			type = typeSearch.value;
@@ -578,7 +545,6 @@
 		    	}
 		    	
 		    	if(key[0].value != "" || value[0].value != ""){
-		    		console.log("인덱스4"); 
 		    		
 		    	 if(typeAndOr.value == null && dataCheck.value == null){ 
 		    		 console.log("인덱스5");
@@ -589,19 +555,16 @@
 		    			searchSize = $('#sizeData').val();
 		    			sortType = $('#sortType').val();
 		    			sortData = $('#sortData').val();
-		    			
-		    			console.log("searchSize" + searchSize);
+		    			console.log("인덱스6?");
 		    		}
 		    			
 		    	}	
 		    	if((indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") 
 		    			&& (key[0].value != "" && value[0].value != "" && searchSize != "")){
-		    		console.log("인덱스6");
 		    		alert("아이디를 지워주시기 바랍니다!!!!");
 		    		return false;
 		    	}
 		    	if(('#sizeData').value === '' || ('#sizeData').value === null){
-		    		console.log("인덱스7");
 		    		alert('사이즈를 입력해 주시기 바랍니다.');
 		    		$('#sizeData').focus();
 		    		$('#sizeData').val('10');
@@ -628,22 +591,18 @@
 		    	//	     true 일때 if문을 추가하여 디폴트 input의 키 밸류의 값이 한개씩만 들어갔을 때 조건식을 달아 주었다.
 		    	
 		    	if(key.length == 1 && value.length == 1) {
-		    		console.log("인덱스8");
-		    		console.log("key!" + key.length)
 		    		//초기 디폴트 input의 key와 value 중 한개씩만 들어 갈 때의 조건식 키값O 밸류값X or 키값X 밸류값O
 		    	 /* 	if((key[0].value == "" && value[0].value != "") || (key[0].value != "" && value[0].value == "")){
 		    			alert("값을 입력해주시기 바랍니다.");
 		    			return;
 		    		}  */
 		    	}else{ //key 배열의 변수가 1개이고 밸류 배열의 변수가 한개가 아닐 때!!
-		    		console.log("인덱스9");
-		    		console.log("key!!!" + key.length)
 			    	for(var i = 0; i<key.length; i++){
 			    		//key[i]밸류 값이 공백이거나 밸류[i]의 밸류값 값이 공백일 때
 			    		//반대의 경우를 생각해야 함
 			    		// -> 여기서 반대는 key가 포문을 돌기떄문에 전체 값이 잡히고 그 값의 밸류값이 입력이 됬을 때.
 			    		 if(key[i].value == "" || value[i].value == ""){
-			    			alert("kkk값을 입력해주시기 바랍니다.");
+			    			alert("값을 입력해주시기 바랍니다.");
 			    			return ;
 			    		} 	
 			    		
@@ -684,7 +643,17 @@
 		                			JSON.stringify : stringify 메소드는 json 객체를 string 객체로 변환시켜 줍니다. 
 		                			+JSON.stringify(data, null, 4)
 		                			*/ 
-		                			console.log(data)
+		                			console.log("data???" + data.data[0])
+		                			
+		                			if(data.data[0] == null || data.data[0] == ""){
+		                				alert("값이 틀립니다. 다시 입력해주시기 바랍니다.")
+		                			}
+		                			
+		                			if(data == null || data == ""){
+		                				alert("데이터 입력이 잘못 되었습니다. 다시 입력해 주시기 바랍니다.");
+		                			}
+		                			
+		                			
 		                			if(data.totalData == null && data.totalData == undefined){
 		                				console.log("idSearch Start");
 		                			}else{
@@ -692,8 +661,10 @@
 		                				totalData = JSON.stringify(data.totalData[0].datas.totalSearchData, null, 4);
 		                				console.log('totaldata???' + totalData);
 		                				searchData = JSON.stringify(data.totalData[0].datas.searchData, null, 4);
-		                				//console.log(total)
 		                				
+		                				searchDatas = JSON.stringify(data.data, null, 4);
+		                				console.log("testData " + searchDatas)
+		                				console.log("testData2" + data.data);
 		                				/* var total1 = String(data.totalData[0].datas);
 		                				console.log(total1) */
 		                				var labels = '<label class="control-label" style="margin:0px; padding:0px; color:blue;" for="total">totalData : '+totalData+'</label>'
@@ -701,14 +672,17 @@
 		                				
 		                			}
 		                			
-		                	for(var key in data){
-		                	
-		                	}
-		                	
+		                			if(data.data == "" || data.data == null){
+		                				console.log("dddddd")
+		                				$("#json").html("")
+		                			}else{
+		                				$("#json").jJsonViewer(searchDatas); // 타입 리스트에 연결 html 변수기능을 넣어 준다.			
+		                			}
+		                			
                 			//console.log(total.value)
 		                	$('#total').html(labels);
 			    			//var html ='<pre>'+JSON.stringify(data[key], null, 4)+'</pre>'
-							$("#json").jJsonViewer(data); // 타입 리스트에 연결 html 변수기능을 넣어 준다.
+							
 							
 		                }
 		            });
@@ -717,6 +691,7 @@
  });
 	
  
+ // 키밸류값을 추가할 때 오른쪽에 나오는 x이미지를 클릭할 때 이벤트.
  $(document).on("click",".deleteBtn", function(){
 		
 		$(this).parent().remove();
@@ -738,29 +713,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

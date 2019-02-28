@@ -102,9 +102,6 @@ public class EsRepository {
 
 	Map<String, List<Object>> mapList = new HashMap<>();
 	
-		System.out.println("onlyindex!!! start");
-	
-		
 		SearchRequestBuilder req = client.prepareSearch(index).setFrom(0).setSize(searchSize);
 		
 		String valueField;
@@ -160,6 +157,12 @@ public class EsRepository {
 		mapList.put("data", mapData);
 		mapList.put("totalData", totalData);
 		
+
+		if(mapList.get("data").size() == 0) {
+			System.out.println("final Data??" + mapList.toString());
+			return null;
+		}
+		
 		return mapList;
 
 	}
@@ -171,13 +174,6 @@ public class EsRepository {
 		Map<String, List<Object>> list = new HashMap<>();
 		SearchRequestBuilder req = null;
 
-			System.out.println("======================");
-			System.out.println(index);
-			System.out.println(type);
-			System.out.println(searchSize);
-			System.out.println(sortType);
-			System.out.println(sortData);
-			
 			req = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
 			String valueField;
 		if(idkey.length == 0) {
@@ -191,7 +187,6 @@ public class EsRepository {
 		
 		System.out.println("sortType" + sortType);
 		if(!"".equals(sortType)){
-			System.out.println("sort Start!!!");
 			for(int i = 0; i < idvalue.length; i++) {
 				valueField = idvalue[i];
 		}
@@ -231,6 +226,13 @@ public class EsRepository {
 		}
 		list.put("data", mapData);
 		list.put("totalData", totalHits);
+		
+
+		if(list.get("data").size() == 0) {
+			System.out.println("final Data??" + list.toString());
+			return null;
+		}
+		
 		return list;
 	}
 
@@ -256,11 +258,8 @@ public class EsRepository {
 		String keyField;
 		String valueField;
 
-		System.out.println("start keyandvalue");
-		
 		if(!"".equals(index) || !"".equals(type)) {
 			if("".equals(searchType)) {
-				System.out.println("searchType defualt!!!");
 				for(int i=0; i<idkey.length; i++) {
 					 keyField= idkey[i];
 					 valueField = idvalue[i];
@@ -276,7 +275,6 @@ public class EsRepository {
 					
 					}else if(idkey[0] == "") {
 						//밸류값만 검색할 때
-						System.out.println("밸류값만 검색하자!!!");
 						bool.must(QueryBuilders.matchAllQuery())
 						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 						
@@ -285,7 +283,6 @@ public class EsRepository {
 				}
 				
 			}else if ("and".equals(searchType)) {
-				System.out.println("searchType AND!!!");
 				for (int i = 0; i < idkey.length; i++) {
 
 					 keyField = idkey[i];
@@ -301,14 +298,12 @@ public class EsRepository {
 						}
 					}else if(idkey[0] == "") {
 						//밸류값만 검색할 때
-						System.out.println("밸류값만 검색하자!!!");
 						bool.must(QueryBuilders.matchAllQuery())
 						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 						
 					}
 				}
 			}else if ("or".equals(searchType)) {
-				System.out.println("searchType OR!!!");
 				for (int i = 0; i < idkey.length; i++) {
 
 					 keyField = idkey[i];
@@ -326,7 +321,6 @@ public class EsRepository {
 						}
 					}else if(idkey[0] == "") {
 						//밸류값만 검색할 때
-						System.out.println("밸류값만 검색하자!!!");
 						bool.must(QueryBuilders.matchAllQuery())
 						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 						
@@ -337,8 +331,6 @@ public class EsRepository {
 				
 		}
 			
-			srb.setQuery(bool);
-			
 			if(!"".equals(searchType)) {
 			
 				if(!"".equals(sortType)) {
@@ -347,18 +339,15 @@ public class EsRepository {
 					}
 					System.out.println("start Sort!");
 						if("DESC".equals(sortType)) {
-							System.out.println("DESC!!!!!");
 							srb.addSort(sortData, SortOrder.DESC);
 						}else if("ASC".equals(sortType)) {
-							System.out.println("ASC");
 							srb.addSort(sortData, SortOrder.ASC);
 						}else if("".equals(sortType)) {
-							System.out.println("next!!!");
 					}	
 				}
 			}
 			
-			srb = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
+			srb = client.prepareSearch(index).setTypes(type).setQuery(bool).setFrom(0).setSize(searchSize);
 		
 		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
 		
@@ -380,7 +369,6 @@ public class EsRepository {
 		 
 		total = (int) keyAndValue.getHits().getTotalHits();
 		int totals = keyAndValue.getHits().getHits().length;
-		System.out.println("totals"+ totals) ;
 		
 		Map<String, Object> totalData = new HashMap<>();
 		totalData.put("totalSearchData", total);
@@ -392,9 +380,12 @@ public class EsRepository {
 		
 		keyValue.put("data", data);
 		keyValue.put("totalData", data2);
+
+		if(keyValue.get("data").size() == 0) {
+			System.out.println("final Data??" + keyValue.toString());
+			return null;
+		}
 		
-		
-		System.out.println("End keyAndValue Search!!!" + keyValue.toString());
 		
 		return keyValue;
 
@@ -420,13 +411,11 @@ public class EsRepository {
 				}else if("ASC".equals(sortType)) {
 					srb.addSort(sortData, SortOrder.ASC);
 				}else if("".equals(sortType)) {
-					System.out.println("next!!!");
 				}
 			}	
 		}
 
 		if("".equals(searchType)) {
-			System.out.println("repository22222222");
 			for(int i=0; i<idkey.length; i++) {
 				String keyField= idkey[i];
 				String valueField = idvalue[i];
@@ -435,14 +424,12 @@ public class EsRepository {
 						bool.must(QueryBuilders.matchAllQuery())
 						.must(QueryBuilders.wildcardQuery(keyField, valueField));
 					} else {
-						System.out.println("this point!!!!");
 						bool.must(QueryBuilders.matchAllQuery())
 						.must(QueryBuilders.matchQuery(keyField, valueField));
 					}
 				
 				} else if(idkey[0] == "") {
 						//밸류값만 검색할 때
-						System.out.println("밸류값만 검색하자!!!");
 						bool.must(QueryBuilders.matchAllQuery())
 						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 				}
@@ -484,7 +471,6 @@ public class EsRepository {
 					}
 				}else if(idkey[0] == "") {
 					//밸류값만 검색할 때
-					System.out.println("밸류값만 검색하자!!!");
 					bool.must(QueryBuilders.matchAllQuery())
 					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
 					
@@ -510,7 +496,6 @@ public class EsRepository {
 
 		total = (int) res.getHits().getTotalHits();
 		int totals = res.getHits().getHits().length;
-		System.out.println("totals"+ totals) ;
 		
 		Map<String, Object> totalData = new HashMap<>();
 		totalData.put("totalSearchData", total);
@@ -522,6 +507,18 @@ public class EsRepository {
 		
 		data.put("data", mapData);
 		data.put("totalData", dataList);
+		
+		System.out.println("?????" + data.get("data").size());
+		
+		
+		
+		if(data.get("data").size() == 0) {
+			System.out.println("final Data??" + data.toString());
+			System.out.println("hahahaha" + mapData.size());
+			
+			data.put("data", mapData);
+		}
+		
 		
 		return data;
 		}
@@ -576,6 +573,11 @@ public class EsRepository {
 		
 		dataList.put("totalData", totalHitsData);
 		dataList.put("data", mapData);
+		
+		if(dataList.get("data").size() == 0) {
+			System.out.println("final Data??" + dataList.toString());
+			return null;
+		}
 		
 		return dataList;
 	}
