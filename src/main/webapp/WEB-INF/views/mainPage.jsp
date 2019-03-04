@@ -15,7 +15,7 @@
 	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
 	crossorigin="anonymous">
 <!-- <link rel="stylesheet" type="text/css" href="chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/jsonview-core.css"> -->
-<link rel="stylesheet" href="./../css/contents.css?ver=10"
+<link rel="stylesheet" href="./../css/contents.css?ver=11"
 	type="text/css">
 <link rel="stylesheet" href="./../jjson/css/jjsonviewer.css?">
 <!-- BootStrap CDN -->
@@ -35,7 +35,8 @@
 		<div class="col-md-4 row nonemargin nonepadding">
 			<div class="col-sm-12">
 				<label for="serverList" class="control-label labeltest">서버</label> 
-				<input class="form-control inputtest" type="text" id="serverList" placeholder="선택하세요." list="serverSearch"  autocomplete="off"/>
+				<input class="form-control inputtest" type="text" id="serverList" placeholder="선택하세요." 
+				list="serverSearch"  autocomplete="off"/>
 				<datalist id="serverSearch">
 					<option value="dev" />
 					<option value="bmt" />
@@ -230,8 +231,10 @@
 	 		$('#serverList').change(()=>{
 	 		
 	 		var config = $('#serverList').val();
-	 		
-	 		var serverData = $('#serverSearch option').index($('#serverSearch option:selected'))
+
+	 		var serverData = $('#serverSearch');
+	 		var serverData1 = "dev";
+			var serverData2 = "bmt";	
 	 			$('#indexList').val('');
 	 			$('#typeList').val('');
 		 		$('#json').html('');
@@ -240,8 +243,7 @@
 		 		$('#indexList').attr('disabled',true);
 		 		$('#typeList').attr('disabled',true);
 		 		
-		 		var serverData1 = "dev";
-				var serverData2 = "bmt";
+		 		
 				
 				if(config === serverData1 || config === serverData2){
 						//서버 텍스트 값 밸리데이션 처리!!!!					
@@ -285,7 +287,6 @@
 	 		});
 		      
 	 		$('#typeAndOr').change(()=>{
-	 			console.log("ddd")
 	 			typeAndOr = $('#typeAndOr option:selected').val();
 	 		
 	 		}); 
@@ -304,11 +305,13 @@
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
 		    $('#getText').click(()=>{
 				$('#typeAndOr').attr('disabled',false);
+				$('#typeAndOr').val('and');
 				var keyValClone = $('#clonetest').clone(); //클론
 				keyValClone.find("button").remove();
+				keyValClone.find("input").val('');
 				keyValClone.removeAttr("id");
 				keyValClone.addClass("keyValClone");
-				$(this).parent().html("<input>").val('');
+				//$(this).parent().html("<input>").val('');
 				//키밸류를 추가했을 때 같이 나오는 이미지 (x표시)
 				var deleteBtn = '<i class="fas fa-backspace deleteBtn" style="padding-top:15px; margin-left:15px;"></i>';
 				keyValClone.append(deleteBtn);
@@ -331,12 +334,10 @@
 		    
 		    $('#clearBtn').click(()=>{
 		    
-		    	console.log("clean click")
 		    	$('#idSearch').val('');
 		    	$(idKeySearch).val('');
 		    	$(idValueSearch).val('');
 		    	$('#sortType').val('');
-		    	$('#sortType').attr('disabled',true);
 		    	$('#sortData').val('');
 	    		$('#total').html('');
 				$('#json').html('');		
@@ -352,7 +353,6 @@
 		    
 		    $('#sizeData').focusout(()=>{
 		    	
-		    	console.log('this point!!!')
 		    	var data = $('#sizeData').val();
 		    	var regexp = /^[0-9]*$/
 
@@ -547,7 +547,6 @@
 		    	if(key[0].value != "" || value[0].value != ""){
 		    		
 		    	 if(typeAndOr.value == null && dataCheck.value == null){ 
-		    		 console.log("인덱스5");
 		    			index = indexSearch.value;
 		    			type = typeSearch.value;
 		    			sortType = $('#dataCheck option:selected').val();
@@ -555,7 +554,6 @@
 		    			searchSize = $('#sizeData').val();
 		    			sortType = $('#sortType').val();
 		    			sortData = $('#sortData').val();
-		    			console.log("인덱스6?");
 		    		}
 		    			
 		    	}	
@@ -643,7 +641,6 @@
 		                			JSON.stringify : stringify 메소드는 json 객체를 string 객체로 변환시켜 줍니다. 
 		                			+JSON.stringify(data, null, 4)
 		                			*/ 
-		                			console.log("data???" + data.data[0])
 		                			
 		                			if(data.data[0] == null || data.data[0] == ""){
 		                				alert("값이 틀립니다. 다시 입력해주시기 바랍니다.")
@@ -655,16 +652,12 @@
 		                			
 		                			
 		                			if(data.totalData == null && data.totalData == undefined){
-		                				console.log("idSearch Start");
 		                			}else{
 		                				
 		                				totalData = JSON.stringify(data.totalData[0].datas.totalSearchData, null, 4);
-		                				console.log('totaldata???' + totalData);
 		                				searchData = JSON.stringify(data.totalData[0].datas.searchData, null, 4);
 		                				
 		                				searchDatas = JSON.stringify(data.data, null, 4);
-		                				console.log("testData " + searchDatas)
-		                				console.log("testData2" + data.data);
 		                				/* var total1 = String(data.totalData[0].datas);
 		                				console.log(total1) */
 		                				var labels = '<label class="control-label" style="margin:0px; padding:0px; color:blue;" for="total">totalData : '+totalData+'</label>'
@@ -673,8 +666,9 @@
 		                			}
 		                			
 		                			if(data.data == "" || data.data == null){
-		                				console.log("dddddd")
 		                				$("#json").html("")
+		                				// 토탈값도 없앨라면!!!
+		                				//$('#total').html("");			
 		                			}else{
 		                				$("#json").jJsonViewer(searchDatas); // 타입 리스트에 연결 html 변수기능을 넣어 준다.			
 		                			}

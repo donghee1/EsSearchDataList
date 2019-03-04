@@ -28,6 +28,7 @@ import org.elasticsearch.index.search.MultiMatchQuery.QueryBuilder;
 import org.elasticsearch.percolator.QueryAnalyzer;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.SearchSortValues;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder.Order;
 import org.elasticsearch.search.internal.FilteredSearchContext;
@@ -98,7 +99,8 @@ public class EsRepository {
 
 	}
 
-	public Map<String, List<Object>> onlyOneIndexSearch(String index, String type, String config, Integer searchSize, Integer total, String[] idkey, String[] idvalue, String sortType, String sortData) {
+	public Map<String, List<Object>> onlyOneIndexSearch(String index, String type, String config, Integer searchSize, 
+			Integer total, String[] idkey, String[] idvalue, String sortType, String sortData) throws Exception{
 
 	Map<String, List<Object>> mapList = new HashMap<>();
 	
@@ -159,8 +161,7 @@ public class EsRepository {
 		
 
 		if(mapList.get("data").size() == 0) {
-			System.out.println("final Data??" + mapList.toString());
-			return null;
+			mapList.put("data", mapData);
 		}
 		
 		return mapList;
@@ -168,8 +169,8 @@ public class EsRepository {
 	}
 
 	// 인덱스와 타입을 검색하여 결과값을 도출하는 메서드 입니다.
-	public Map<String, List<Object>> indexAndTypeSearch(String index, String[] idkey, String[] idvalue, String type, String config, Integer searchSize, Integer total, String sortType, String sortData)
-			throws Exception {
+	public Map<String, List<Object>> indexAndTypeSearch(String index, String[] idkey, String[] idvalue, String type, String config, 
+			Integer searchSize, Integer total, String sortType, String sortData) throws Exception {
 
 		Map<String, List<Object>> list = new HashMap<>();
 		SearchRequestBuilder req = null;
@@ -185,7 +186,6 @@ public class EsRepository {
 			}
 		}
 		
-		System.out.println("sortType" + sortType);
 		if(!"".equals(sortType)){
 			for(int i = 0; i < idvalue.length; i++) {
 				valueField = idvalue[i];
@@ -229,8 +229,7 @@ public class EsRepository {
 		
 
 		if(list.get("data").size() == 0) {
-			System.out.println("final Data??" + list.toString());
-			return null;
+			list.put("data", mapData);
 		}
 		
 		return list;
@@ -238,7 +237,7 @@ public class EsRepository {
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
 	public Map<String, List<Object>> keyAndValueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData) {
+			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData) throws Exception {
 		
 		
 		Map<String, List<Object>> keyValue = new HashMap<>();
@@ -268,7 +267,6 @@ public class EsRepository {
 							bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.wildcardQuery(keyField, valueField));
 						} else {
-							System.out.println("defualt data search!!");
 							bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.matchQuery(keyField, valueField));
 						}
@@ -337,7 +335,6 @@ public class EsRepository {
 					for(int i = 0; i < idvalue.length; i++) {
 						valueField = idvalue[i];
 					}
-					System.out.println("start Sort!");
 						if("DESC".equals(sortType)) {
 							srb.addSort(sortData, SortOrder.DESC);
 						}else if("ASC".equals(sortType)) {
@@ -359,6 +356,7 @@ public class EsRepository {
 		for (SearchHit hit : keyAndValue.getHits().getHits()) {
 			Map<String, Object> map = new LinkedHashMap<>();
 			
+
 			map.put("_index", hit.getIndex());
 			map.put("_type", hit.getType());
 			map.put("_Id", hit.getId());
@@ -382,8 +380,7 @@ public class EsRepository {
 		keyValue.put("totalData", data2);
 
 		if(keyValue.get("data").size() == 0) {
-			System.out.println("final Data??" + keyValue.toString());
-			return null;
+			keyValue.put("data", data);
 		}
 		
 		
@@ -392,19 +389,17 @@ public class EsRepository {
 	}
 
 	public Map<String, List<Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData) {
+			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData)throws Exception {
 
 		Map<String, List<Object>> data = new HashMap<>();
 		List<Object> dataList = new ArrayList<>();
 		
-		System.out.println("indexAndKeyValueSearch");
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
 		srb = client.prepareSearch(index);
 		
 		if(!"".equals(sortType)) {
-			System.out.println("start Sort!");
 			for(int i = 0; i < idvalue.length; i++) {
 				if("DESC".equals(sortType)) {
 					srb.addSort(sortData, SortOrder.DESC);
@@ -508,14 +503,10 @@ public class EsRepository {
 		data.put("data", mapData);
 		data.put("totalData", dataList);
 		
-		System.out.println("?????" + data.get("data").size());
 		
 		
 		
 		if(data.get("data").size() == 0) {
-			System.out.println("final Data??" + data.toString());
-			System.out.println("hahahaha" + mapData.size());
-			
 			data.put("data", mapData);
 		}
 		
@@ -575,8 +566,8 @@ public class EsRepository {
 		dataList.put("data", mapData);
 		
 		if(dataList.get("data").size() == 0) {
-			System.out.println("final Data??" + dataList.toString());
-			return null;
+			
+			dataList.put("data", mapData);
 		}
 		
 		return dataList;
