@@ -77,7 +77,8 @@ public  class EsSearchServiceImpl implements EsSearchService {
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				
 				}else if (!"".equals(type) && !"".equals(id) && idkey.length == 0 && idvalue.length == 0 ) {
-					mapList = repository.idSearch(index,type,id, config, total);
+					System.out.println("아이디값이 왜 안될까요?");
+					mapList = repository.idSearch(index,type,id, config, total, searchSize);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				
 				}else if( "".equals(type) && idkey[0] != "" && idvalue[0] != "") {

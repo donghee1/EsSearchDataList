@@ -200,9 +200,11 @@
 		 	var selectType = $('#typeList').val();
 			$('#idSearch').attr('disabled',false);
 			
-			if(selectType == ""){
+			if(selectType == "" || selectType == null){
 				$('#typeList').focus();
+				$('#idSearch').attr('disabled',true);
 			}else{
+				$('#idSearch').attr('disabled',false);
 				if(typesData.includes(selectType)){
 					var result1 = typesData;
 				}else{
@@ -212,6 +214,7 @@
 					$('#typeLIst').focus();
 					return false;
 				}
+				
 			}
 		
 		}); 
@@ -333,7 +336,14 @@
 			});
 		    
 		    $('#clearBtn').click(()=>{
-		    
+		    	
+		    	var typeData = $('#typeList').val();
+		    	if(typeData === null || typeData === ""){
+		    		$('#idSearch').attr('disabled', true);
+		    	}else{
+		    		$('#idSearch').attr('disabled', false);		    		
+		    	}
+		    	
 		    	$('#idSearch').val('');
 		    	$(idKeySearch).val('');
 		    	$(idValueSearch).val('');
@@ -343,7 +353,6 @@
 				$('#json').html('');		
 				$('#typeAndOr').attr('disabled', true);
 				$('#sortData').attr('disabled', true);
-				$('#idSearch').attr('disabled', true);
 				$('.keyValClone').remove();
 				$("#typeAndOr").val('')
 				$('.datakey').val('')
@@ -370,6 +379,12 @@
 		    		$('#sizeData').focus();
 		    		$('#sizeData').val('10');
 		    	}
+		    	
+		    	if(data == "" || data == null){
+		    		alert('사이즈 값을 입력해 주시기 바랍니다. 기본값을 10입니다.')
+		    		$('#sizeData').focus();
+		    		$('#sizeData').val('10');
+		    	}
 
 		    });
 		    
@@ -388,6 +403,19 @@
 		    		$('#sortData').attr('disabled', true);
 		    		$('#indexList').focus;
 		    	}
+		    });
+		    
+		    
+		    $('#searchSize').change(()=>{
+		    	
+		    	console.log("searchSize point!!!");
+		    	var size = $("#searchSize").val();
+		    	console.log("size???" + size);
+		    	if(size == null || size == ""){
+		    		
+					size = $('#searchSize').val('10');		    		
+		    	}
+		    	
 		    });
 		    	
 		    	$('#SearchStart').click(()=>{
@@ -509,6 +537,7 @@
 			    			config = $('#serverList').val();
 			    			
 			    			searchSize = $('#sizeData').val();
+			    			console.log("searchSize???" + searchSize)
 			    			
 			    			sortType = $('#sortType').val();
 			    			
@@ -525,7 +554,7 @@
 			    			type = typeSearch.value;
 			    			
 			    			searchSize = $('#sizeData').val();
-			    			
+			    			console.log("아니??" + searchSize);
 			    			config = $('#serverList').val();
 			    			
 			    			sortType = $('#sortType').val();
@@ -533,7 +562,7 @@
 				    	}
 		    	 
 		    	if(indexSearch.value != "" && typeSearch.value != "" && idSearch.value != "") {
-		    //		console.log("idSearch Start!!!!");
+		    		console.log("idSearch Start!!!!");
 		    
 		    		index = indexSearch.value;
 	    			
@@ -542,6 +571,11 @@
 	    			id = idSearch.value;
 	    			
 	    			config = $('#serverList').val();
+	    			
+	    			searchSize = $('#sizeData').val();
+	    			console.log("searchSize??? " + searchSize);
+	    			
+	    			
 		    	}
 		    	
 		    	if(key[0].value != "" || value[0].value != ""){
@@ -562,16 +596,17 @@
 		    		alert("아이디를 지워주시기 바랍니다!!!!");
 		    		return false;
 		    	}
-		    	if(('#sizeData').value === '' || ('#sizeData').value === null){
+		    	if(searchSize == '' || searchSize == null){
+		    		console.log('searchSize???' + searchSize)
 		    		alert('사이즈를 입력해 주시기 바랍니다.');
 		    		$('#sizeData').focus();
-		    		$('#sizeData').val('10');
+		    		
 		    		
 		    	}
 		    	
 		    	if($('#sortType').val() != ""){
 		    		if($('#indexList').val() != "" && $('#sortData').val() == ""){
-		    			alert("정렬값을 입력해주시기 바랍니다 정렬값은 key값이 기준입니다.1");
+		    			alert("정렬값을 입력해주시기 바랍니다 정렬값은 key값이 기준입니다.");
 			   			$('#sortData').focus();
 			   			return false;
 		    		}

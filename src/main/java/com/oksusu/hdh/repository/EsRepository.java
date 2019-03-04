@@ -104,11 +104,13 @@ public class EsRepository {
 
 	Map<String, List<Object>> mapList = new HashMap<>();
 	
+		System.out.println("온리원인덱스!!!!");
 		SearchRequestBuilder req = client.prepareSearch(index).setFrom(0).setSize(searchSize);
 		
 		String valueField;
 		
 		if(idvalue.length > 0) {
+			System.out.println("여기 안찍히지?");
 			for(int i = 0; i < idvalue.length; i++) {
 				valueField = idvalue[i];
 				if(valueField != null) {
@@ -117,6 +119,8 @@ public class EsRepository {
 				
 				}	
 			}	
+		}else {
+			req.setQuery(QueryBuilders.matchAllQuery());
 		}
 		
 		if(!"".equals(sortType)) {
@@ -130,6 +134,8 @@ public class EsRepository {
 			}
 			
 		}
+		
+		
 		
 		SearchResponse onlyIndex = req.get();
 		
@@ -172,18 +178,22 @@ public class EsRepository {
 	public Map<String, List<Object>> indexAndTypeSearch(String index, String[] idkey, String[] idvalue, String type, String config, 
 			Integer searchSize, Integer total, String sortType, String sortData) throws Exception {
 
+		System.out.println("인덱스 및 타입 결과창!!! ");
 		Map<String, List<Object>> list = new HashMap<>();
 		SearchRequestBuilder req = null;
 
 			req = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
 			String valueField;
-		if(idkey.length == 0) {
+		if(idvalue.length != 0) {
 			for(int i = 0; i < idvalue.length; i++) {
 				valueField = idvalue[i];
 				req.setQuery(QueryBuilders.moreLikeThisQuery(idvalue))
 				.setQuery(QueryBuilders.queryStringQuery(valueField)).setFrom(0).setSize(searchSize);
 				
 			}
+		}else {
+				System.out.println("밸류값이 없을 때!");
+				req.setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(searchSize);
 		}
 		
 		if(!"".equals(sortType)){
@@ -516,8 +526,9 @@ public class EsRepository {
 
 	
 
-	public Map<String, List<Object>> idSearch(String index, String type, String id, String config, Integer total) throws Exception {
+	public Map<String, List<Object>> idSearch(String index, String type, String id, String config, Integer total, Integer searchSize) throws Exception {
 
+		System.out.println("searchSize??" + searchSize);
 		Map<String, List<Object>> dataList = new HashMap<>();
 		Map<String, Object> map = new LinkedHashMap<>();
 		List<Object> mapData = new ArrayList<>();
@@ -527,7 +538,7 @@ public class EsRepository {
 		req = client.prepareGet(index, type, id);
 		bool.must(QueryBuilders.matchAllQuery());
 		srb = client.prepareSearch(index).setTypes(type);
-		SearchResponse srs = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).get();
+		SearchResponse srs = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize).get();
 		
 		GetResponse res1 = req.get();
 		
