@@ -94,9 +94,9 @@
 					</select> -->
 				<div class="col-sm-12 " id='clonetest'>
 					<label for="idKeySearch"  class="control-label labeltest ">키</label>
-					<input type="text" class="form-control datakey inputtest">
+					<input type="text" class="form-control datakey inputtest" name = "searchKey">
 					<label for="idValueSearch" class="control-label labeltest">값</label>
-					<input type="text"class="form-control datavalue inputtest">
+					<input type="text"class="form-control datavalue inputtest" name = "searchValue">
 					<button id="getText" type="button" class="btn btn-warning btntest">추가</button>
 				</div>
 				<div id="createSearch"></div>
@@ -128,9 +128,12 @@
 	 let obj = {};
 	 var typesData = "";
 	 var indexsData = "";
-	 var aaa="a"
+	 var key = document.getElementsByClassName('datakey');
+ 	 var value = document.getElementsByClassName('datavalue');
+ 
  $(document).ready(function(){
 
+	 
 	 // 인풋창에 엔터키 적용하기!
 	 $('input').keyup(()=>{
 		
@@ -170,7 +173,7 @@
 	 		
 	 	if(getIndex.length !== 0){
 	 			$.post(`${location.origin}/typeList`, {
-					getIndex : getIndex, //서버에 보낼 변수명
+					index : getIndex, //서버에 보낼 변수명
 					config : config
 		
 	 			}, (result) => {
@@ -307,6 +310,7 @@
 	 		
 	 		// **** 추가 버튼의 인풋창 추가 기능!!!!!
 		    $('#getText').click(()=>{
+		    	
 				$('#typeAndOr').attr('disabled',false);
 				$('#typeAndOr').val('and');
 				var keyValClone = $('#clonetest').clone(); //클론
@@ -357,6 +361,7 @@
 				$("#typeAndOr").val('')
 				$('.datakey').val('')
 				$('.datavalue').val('')
+				$('#sizeData').val('10')
 		    });
 		    
 		    
@@ -426,8 +431,6 @@
 		    		    1)키가 없거나 밸류가 없거나 (경고창 띄움);
 		    	*/
 		    	
-				var key = document.getElementsByClassName('datakey');
-		    	var value = document.getElementsByClassName('datavalue');
 		    	var indexSearch = document.getElementById('indexList');
 		    	var typeSearch =  document.getElementById('typeList');
 		    	var idSearch = document.getElementById('idSearch');
@@ -641,34 +644,41 @@
 			    		
 			    	}
 		    	}
-		    	
 		    	var searchQuery = new Map();
 		    	var ids = new Array();
-		    	var values = new Array();
+		    	var values = [];
+		    	
+		    	$("input[name='searchValue']").each(function(i){
+		    		values.push($(this).val());
+		    	})
+		    	
 		    	for(var i = 0; i<key.length; i++){
 		    		//obj.idkey[i] = key[i].value;
-		    	 	ids[i] = key[i].value;
-		    	// 	console.log("key" + key[i].value);
-		    	 	values[i] = value[i].value;
-		    	//	console.log("value" + value[i].value);
-		    		
-		    	} 
+		    	 	ids.push(key[i].value);
+		    	 	console.log("key ::: " + ids);
+		    	//	values.push(value[i].value);
+		    	}
+		    	
+			var allValue ={ "index" : index,
+            				"type" : type,
+            	  			"id" : id,
+            	  			"idkey" : ids, 
+			  		  		"idvalue" : values,
+			  		  		"config" : config,
+			  		  		"searchType" : searchType,
+			  		  		"sortType" : sortType,
+			  		  		"searchSize" : searchSize,
+			  		  		"sortData" : sortData }
+		    	
+		    	var Json = JSON.stringify(allValue);
+		    	console.log(Json);
 		    	
 		    		$.ajax({
 		                url :'/startSearch',
 		                type :'POST',
-		                data :{index : index,
-		                	  type : type,
-		                	  id : id,
-		                	  idkey : ids, 
-          			  		  idvalue : values,
-          			  		  config : config,
-          			  		  searchType : searchType,
-          			  		  sortType : sortType,
-          			  		  searchSize : searchSize,
-          			  		  sortData : sortData},
-          			  		  
+		                data :Json,
 		                dataType : 'json',
+		                contentType : "application/json; charset=UTF-8",
 		                traditional : true,
 		                success : function(data){
 		                			//제이슨 이쁘게 출력하기
@@ -678,7 +688,7 @@
 		                			*/ 
 		                			
 		                			if(data.data[0] == null || data.data[0] == ""){
-		                				alert("값이 틀립니다. 다시 입력해주시기 바랍니다.")
+		                				alert("없는 값이거나, 매치가 잘못됬습니다. 다시 입력해주시기 바랍니다.")
 		                			}
 		                			
 		                			if(data == null || data == ""){
@@ -705,6 +715,7 @@
 		                				// 토탈값도 없앨라면!!!
 		                				//$('#total').html("");			
 		                			}else{
+		                				//로딩중 처리 해야할 로직 위치 
 		                				$("#json").jJsonViewer(searchDatas); // 타입 리스트에 연결 html 변수기능을 넣어 준다.			
 		                			}
 		                			
@@ -728,11 +739,14 @@
 		var data = $(".deleteBtn").length;
 		
 		if(data === 0){
+			$('#typeAndOr').val('');
 			$('#typeAndOr').attr('disabled',true);
 		}
 		
  	});
  
+
+	
 
  
 

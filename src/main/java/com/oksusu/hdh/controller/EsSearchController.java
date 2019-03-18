@@ -1,26 +1,27 @@
 package com.oksusu.hdh.controller;
 
-
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.oksusu.hdh.config.EsConfig;
 import com.oksusu.hdh.domain.EsSearchVO;
 import com.oksusu.hdh.service.EsSearchService;
 
@@ -31,17 +32,11 @@ public class EsSearchController {
 	@Resource
 	private EsSearchService service;
 	
-	@Resource
-	private MappingJackson2JsonView jsonView;
-	
 	
 	@GetMapping("/")
-	public ModelAndView MainPage(Model model) {
+	public ModelAndView MainPage() {
 		
-		ModelAndView mv = new ModelAndView(jsonView);
-		
-		//mv.addObject(jsonView);
-		mv.setView(jsonView);
+		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/mainPage");
 		return mv;
 	}
@@ -49,17 +44,20 @@ public class EsSearchController {
 	
 	@GetMapping("/checkServer")
 	@ResponseBody
-	public List<String> checkServer(String config) throws Exception {
+	public List<String> checkServerList(EsSearchVO vo, @RequestParam Map<String, Object> listMap) throws Exception {
 
 		List<String> result = null;
-		String index = null;
-		EsSearchVO vo = new EsSearchVO();
-		vo.setConfig(config);
+		vo.setConfig((String) listMap.get("config"));
+		System.out.println("??" + vo.getConfig());
+		
+		String config = vo.getConfig();
+		
+		
 		//data type 정의!! 
 		service.dataType(vo);
 		
-		if(config != null) {
-			result = service.searchIndexList(index, config);
+		if(vo.getConfig() != null) {
+			result = service.searchIndexList(vo, config);
 			
 		}else {
 			System.out.println("server check Error!!!!!");
@@ -69,29 +67,18 @@ public class EsSearchController {
 		return result;
 	}
 	
-	@GetMapping("/list")
-	public List<String> startIndexList(String index, String config)throws Exception {
-	
-		//***********연구필요!
-		//MappingJackson2JsonView mv = new MappingJackson2JsonView();
-
-		List<String> list = new ArrayList<>();
-		
-		list = service.searchIndexList(index, config);
-		
-		//System.out.println("final dataList!!!" + list.toString());
-		
-		return list;
-	}
-	
-	
 	@PostMapping("/typeList")
 	@ResponseBody
-	public List<String> startTypeList(String getIndex, String config)throws Exception{
+	public List<String> startTypeList(EsSearchVO vo, @RequestParam Map<String, Object> listMap)throws Exception{
 		
 		List<String> typeList = new ArrayList<>();	
 		
-		typeList = service.typeListMappings(getIndex, config);
+		vo.setIndex((String) listMap.get("index"));
+		System.out.println("???" + vo.getIndex());
+		
+		vo.setConfig((String) listMap.get("config"));
+		
+		typeList = service.typeListMappings(vo);
 	
 	
 		return typeList;
@@ -103,27 +90,52 @@ public class EsSearchController {
 	// 
 	@PostMapping("/startSearch")
 	@ResponseBody
-	public Map<String, List<Object>> startSearch(String index, String type, String id, String[] idkey
-			, String[] idvalue, String config, String searchType, String sortType, String sortData, Integer searchSize, Integer total)throws Exception{
+	@SuppressWarnings("unchecked")
+	public Map<String, List<Object>> startSearch(@RequestBody Map<String, Object> listMap)throws Exception{
 		
+		System.out.println("startsearch!!!!");
+		EsSearchVO vo = new EsSearchVO();
+		
+		List<String> idvalue = (List<String>) listMap.get("idvalue");
+		
+		List<String> idkey = (List<String>) listMap.get("idkey");
+		
+		String sizeData = (String) listMap.get("searchSize");
+		int searchSize = Integer.parseInt(sizeData);
+		String sortData = (String) listMap.get("sortData");
+		vo.setConfig((String)listMap.get("config"));
+		vo.setIndex((String)listMap.get("index"));
+		vo.setType((String)listMap.get("type"));
+		vo.setId((String)listMap.get("id"));
+		vo.setSortType((String)listMap.get("sortType"));
+		vo.setSearchType((String) listMap.get("searchType"));
+		System.out.println("searchSize??" + searchSize);
+		System.out.println("sizeData??" + sizeData);
+		System.out.println("sortdata??" + sortData);
+		
+		System.out.println("???" + vo.toString());
 		Map<String, List<Object>> data = new HashMap<>();
 		//String json = null;
 		
-		if(index.length() == 0) {
+		if(listMap.size() == 0) {
 			System.out.println("index Null!! check Error!!");
 			return null;
 		}else {
-			if(searchSize == null || searchSize >= 0) {
-				data = service.elSearch(index, type, id, idkey, idvalue
-						, config, searchType, searchSize, total, sortType, sortData);
+			if(searchSize == 0 || searchSize >= 0) {
+				data = service.elSearch(idkey, idvalue, searchSize, sortData, vo);
 				
 			}
-			
-			
-			
 		}
+		
+		System.out.println("???!!" + data.toString());
+		
 		return data;
 	}
+	
+//	@InitBinder
+//	public void initBinder(WebDataBinder binder) {
+//	   binder.registerCustomEditor(String[].class, new StringArrayPropertyEditor(null));
+//	}
 	
 	
 		

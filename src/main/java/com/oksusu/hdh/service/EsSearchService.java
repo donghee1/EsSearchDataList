@@ -7,14 +7,16 @@ import com.oksusu.hdh.domain.EsSearchVO;
 
 public interface EsSearchService {
 
-	public List<String> searchIndexList(String index, String config) throws Exception;
+	public List<String> searchIndexList(EsSearchVO vo, String config) throws Exception;
 
-	public List<String> typeListMappings(String getIndex, String config) throws Exception;
+	public List<String> typeListMappings(EsSearchVO vo) throws Exception;
 
-	public Map<String, List<Object>> elSearch(String index, String type, String id, String[] idkey, String[] idvalue, String config,
-			String searchType, Integer searchSize, Integer total, String sortType, String sortData) throws Exception;
-
+	public Map<String, List<Object>> elSearch(List<String> idkey, List<String> idvalue,
+			int searchSize, String sortData, EsSearchVO vo) throws Exception;
+	
 	public void dataType(EsSearchVO vo) throws Exception;
+
+	
 
 	
 }

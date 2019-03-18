@@ -56,7 +56,7 @@ public class EsRepository {
 	private Client bmt;
 
 	@Resource
-	private EsConfig cofig;
+	private EsConfig cofig; //수정 / 빈 확인
 
 	public Client changeClient(EsSearchVO vo) throws Exception {
 
@@ -68,7 +68,7 @@ public class EsRepository {
 		return client;
 	}
 
-	public List<String> searchIndexList(String index, String config) throws Exception {
+	public List<String> searchIndexList(EsSearchVO vo, String config) throws Exception {
 
 		List<String> list = new ArrayList<>();
 
@@ -79,16 +79,18 @@ public class EsRepository {
 		return list;
 	}
 
-	public List<String> typeListMappings(String getIndex, String config) throws Exception {
+	public List<String> typeListMappings(EsSearchVO vo) throws Exception {
 
 		List<String> typeList = new ArrayList<>();
 		GetMappingsResponse res = null;
-		res = client.admin().indices().getMappings(new GetMappingsRequest().indices(getIndex.toString())).get();
+		res = client.admin().indices().getMappings(new GetMappingsRequest().indices(vo.getIndex().toString())).get();
 
-		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(getIndex);
-		// System.out.println("immutableopenmap" + mapping.toString());
+		ImmutableOpenMap<String, MappingMetaData> mapping = res.getMappings().get(vo.getIndex());
+		 //System.out.println("immutableopenmap" + mapping.toString());
+		 //System.out.println("res2222????" + res.toString());
 		for (ObjectObjectCursor<String, MappingMetaData> c : mapping) {
 			if (c != null) {
+				//System.out.println("if문!" +c.toString());
 				typeList.add(c.key);
 			}
 		}
@@ -99,23 +101,26 @@ public class EsRepository {
 
 	}
 
-	public Map<String, List<Object>> onlyOneIndexSearch(String index, String type, String config, Integer searchSize, 
-			Integer total, String[] idkey, String[] idvalue, String sortType, String sortData) throws Exception{
+	public Map<String, List<Object>> onlyOneIndexSearch(EsSearchVO vo, int searchSize, List<String> idkey,
+			List<String> idvalue, String sortData) throws Exception{
 
-	Map<String, List<Object>> mapList = new HashMap<>();
-	
-		System.out.println("온리원인덱스!!!!");
-		SearchRequestBuilder req = client.prepareSearch(index).setFrom(0).setSize(searchSize);
+		Map<String, List<Object>> oneIndexList = new HashMap<>();
+		
+		
+		System.out.println("repository" + vo.toString());
+		
+		SearchRequestBuilder req = client.prepareSearch(vo.getIndex()).setFrom(0).setSize(searchSize);
 		
 		String valueField;
+	//	String keyField;
 		
-		if(idvalue.length > 0) {
-			System.out.println("여기 안찍히지?");
-			for(int i = 0; i < idvalue.length; i++) {
-				valueField = idvalue[i];
+		if(idvalue.get(0) != "") {
+			for(int i = 0; i < idvalue.size(); i++) {
+				
+				valueField = idvalue.get(i);
 				if(valueField != null) {
-						req.setQuery(QueryBuilders.moreLikeThisQuery(idvalue))
-								.setQuery(QueryBuilders.queryStringQuery(valueField));	
+						req.setQuery(QueryBuilders.rangeQuery(valueField))
+								.setQuery(QueryBuilders.queryStringQuery(valueField)).setQuery(QueryBuilders.simpleQueryStringQuery(valueField));	
 				
 				}	
 			}	
@@ -123,13 +128,13 @@ public class EsRepository {
 			req.setQuery(QueryBuilders.matchAllQuery());
 		}
 		
-		if(!"".equals(sortType)) {
-			for(int i = 0; i < idvalue.length; i++) {
-				valueField = idvalue[i];
+		if(!"".equals(vo.getSortType())) {
+			for(int i = 0; i < idvalue.size(); i++) {
+				valueField = idvalue.get(i);
 			}
-			if("DESC".equals(sortType)) {
+			if("DESC".equals(vo.getSortType())) {
 				req.addSort(sortData, SortOrder.DESC);
-			}else if("ASC".equals(sortType)) {
+			}else if("ASC".equals(vo.getSortType())) {
 				req.addSort(sortData, SortOrder.ASC);
 			}
 			
@@ -139,7 +144,7 @@ public class EsRepository {
 		
 		SearchResponse onlyIndex = req.get();
 		
-		total = (int) onlyIndex.getHits().getTotalHits();
+		int total = (int) onlyIndex.getHits().getTotalHits();
 		int totals = onlyIndex.getHits().getHits().length;
 		
 		Map<String, Object> hitsData = new HashMap<>();
@@ -162,55 +167,49 @@ public class EsRepository {
 			
 			mapData.add(map);
 		}
-		mapList.put("data", mapData);
-		mapList.put("totalData", totalData);
+		oneIndexList.put("data", mapData);
+		oneIndexList.put("totalData", totalData);
 		
 
-		if(mapList.get("data").size() == 0) {
-			mapList.put("data", mapData);
+		if(oneIndexList.get("data").size() == 0) {
+			oneIndexList.put("data", mapData);
 		}
 		
-		return mapList;
+		return oneIndexList;
 
 	}
 
 	// 인덱스와 타입을 검색하여 결과값을 도출하는 메서드 입니다.
-	public Map<String, List<Object>> indexAndTypeSearch(String index, String[] idkey, String[] idvalue, String type, String config, 
-			Integer searchSize, Integer total, String sortType, String sortData) throws Exception {
+	public Map<String, List<Object>> indexAndTypeSearch(EsSearchVO vo, List<String> idkey, List<String> idvalue,
+			int searchSize, String sortData) throws Exception {
 
-		System.out.println("인덱스 및 타입 결과창!!! ");
-		Map<String, List<Object>> list = new HashMap<>();
+		Map<String, List<Object>> dataList = new HashMap<>();
 		SearchRequestBuilder req = null;
 
-			req = client.prepareSearch(index).setTypes(type).setFrom(0).setSize(searchSize);
+		System.out.println("tyepSearh!!!!" + vo.toString());
+			req = client.prepareSearch(vo.getIndex()).setTypes(vo.getType()).setFrom(0).setSize(searchSize);
 			String valueField;
-		if(idvalue.length != 0) {
-			for(int i = 0; i < idvalue.length; i++) {
-				valueField = idvalue[i];
-				req.setQuery(QueryBuilders.moreLikeThisQuery(idvalue))
-				.setQuery(QueryBuilders.queryStringQuery(valueField)).setFrom(0).setSize(searchSize);
+		if(idvalue.get(0) != "") {
+			for(int i = 0; i < idvalue.size(); i++) {
+				valueField = idvalue.get(i);
+				req.setQuery(QueryBuilders.queryStringQuery(valueField))
+				.setQuery(QueryBuilders.simpleQueryStringQuery(valueField)).setFrom(0).setSize(searchSize);
 				
 			}
 		}else {
-				System.out.println("밸류값이 없을 때!");
 				req.setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(searchSize);
 		}
 		
-		if(!"".equals(sortType)){
-			for(int i = 0; i < idvalue.length; i++) {
-				valueField = idvalue[i];
-		}
-			if("DESC".equals(sortType)) {
+			if("DESC".equals(vo.getSortType())) {
 				req.addSort(sortData, SortOrder.DESC);	
-			}else if("ASC".equals(sortType)) {
+			}else if("ASC".equals(vo.getSortType())) {
 				req.addSort(sortData, SortOrder.ASC);
 		}
-	}
 		
 		SearchResponse res = req.get();
 		
 		Map<String, Object> hitData = new HashMap<>();
-		total = (int) res.getHits().getTotalHits();
+		long total = res.getHits().getTotalHits();
 		int totals = res.getHits().getHits().length;
 		hitData.put("totalSearchData", total);
 		
@@ -234,44 +233,42 @@ public class EsRepository {
 			mapData.add(typeMap);
 			
 		}
-		list.put("data", mapData);
-		list.put("totalData", totalHits);
+		dataList.put("data", mapData);
+		dataList.put("totalData", totalHits);
 		
 
-		if(list.get("data").size() == 0) {
-			list.put("data", mapData);
+		if(dataList.get("data").size() == 0) {
+			dataList.put("data", mapData);
 		}
 		
-		return list;
+		return dataList;
 	}
 
 	// documents field 값을 도출하는 (key & Value) 기능입니다.
-	public Map<String, List<Object>> keyAndValueSearch(String index, String type, String[] idkey, String[] idvalue,
-			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData) throws Exception {
+	public Map<String, List<Object>> keyAndValueSearch(EsSearchVO vo, List<String> idkey, List<String> idvalue,
+			int searchSize, String sortData) throws Exception {
 		
-		
-		Map<String, List<Object>> keyValue = new HashMap<>();
+		Map<String, List<Object>> keyValueList = new HashMap<>();
 
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 		
-		if(index == null) {
+		if(vo.getIndex() == null) {
 			System.out.println("Error!");
 			return null;
-		}else if (index != null && type != null) {
-			srb = client.prepareSearch(index).setTypes(type);	
+		}else if (!"".equals(vo.getIndex()) && !"".equals(vo.getType())) {
+			srb = client.prepareSearch(vo.getIndex()).setTypes(vo.getType());
 		}
 		
-				
-		
 		String keyField;
-		String valueField;
+		String valueField = null;
 
-		if(!"".equals(index) || !"".equals(type)) {
-			if("".equals(searchType)) {
-				for(int i=0; i<idkey.length; i++) {
-					 keyField= idkey[i];
-					 valueField = idvalue[i];
+		if(!"".equals(vo.getIndex()) || !"".equals(vo.getType())) {
+			if("".equals(vo.getSearchType())) {
+				for(int i=0; i<idkey.size(); i++) {
+					 keyField= idkey.get(i);
+					 valueField = idvalue.get(i);
+					 
 					if(keyField != null) {
 						if(valueField.indexOf("*") >= 0) {
 							bool.must(QueryBuilders.matchAllQuery())
@@ -279,22 +276,24 @@ public class EsRepository {
 						} else {
 							bool.must(QueryBuilders.matchAllQuery())
 							.must(QueryBuilders.matchQuery(keyField, valueField));
+							
 						}
 					
-					}else if(idkey[0] == "") {
+					}else if(idkey.get(0) == "") {
 						//밸류값만 검색할 때
 						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						.must(QueryBuilders.queryStringQuery(valueField))
+						.must(QueryBuilders.simpleQueryStringQuery(valueField));
 						
 					}
 						
 				}
 				
-			}else if ("and".equals(searchType)) {
-				for (int i = 0; i < idkey.length; i++) {
-
-					 keyField = idkey[i];
-					 valueField = idvalue[i];
+			}else if ("and".equals(vo.getSearchType())) {
+				for (int i = 0; i < idkey.size(); i++) {
+					System.out.println("테스트 중입니다.");
+					 keyField = idkey.get(i);
+					 valueField = idvalue.get(i);
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
 							bool.must(QueryBuilders.matchAllQuery())
@@ -304,33 +303,35 @@ public class EsRepository {
 								.must(QueryBuilders.matchQuery(keyField, valueField));
 
 						}
-					}else if(idkey[0] == "") {
+					}else if(idkey.get(0) == "") {
 						//밸류값만 검색할 때
 						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						.must(QueryBuilders.queryStringQuery(valueField))
+						.must(QueryBuilders.simpleQueryStringQuery(valueField));
 						
 					}
 				}
-			}else if ("or".equals(searchType)) {
-				for (int i = 0; i < idkey.length; i++) {
-
-					 keyField = idkey[i];
-					 valueField = idvalue[i];
+			}else if ("or".equals(vo.getSearchType())) {
+				for (int i = 0; i < idkey.size(); i++) {
+					 keyField = idkey.get(i);
+					 valueField = idvalue.get(i);
 					if (keyField != null) {
 						if (valueField.indexOf("*") >= 0) {
 							bool.must(QueryBuilders.matchAllQuery())
 							.should(QueryBuilders.wildcardQuery(keyField, valueField));
 						} else {
+							System.out.println("or 구간 입니다.");
 							bool.should(QueryBuilders.boolQuery()
 									.should(QueryBuilders.matchQuery(keyField, valueField)).minimumShouldMatch(1)
-									.must(QueryBuilders.matchAllQuery()));
+									.must(QueryBuilders.matchAllQuery()).should(QueryBuilders.simpleQueryStringQuery(valueField)));
 							
 							//.should(QueryBuilders.matchQuery(keyField, valueField))
 						}
-					}else if(idkey[0] == "") {
+					}else if(idkey.get(i) == "") {
 						//밸류값만 검색할 때
 						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						.must(QueryBuilders.queryStringQuery(valueField))
+						.should(QueryBuilders.simpleQueryStringQuery(valueField));
 						
 					}
 				}
@@ -338,32 +339,26 @@ public class EsRepository {
 			}
 				
 		}
-			
-			if(!"".equals(searchType)) {
-			
-				if(!"".equals(sortType)) {
-					for(int i = 0; i < idvalue.length; i++) {
-						valueField = idvalue[i];
-					}
-						if("DESC".equals(sortType)) {
-							srb.addSort(sortData, SortOrder.DESC);
-						}else if("ASC".equals(sortType)) {
-							srb.addSort(sortData, SortOrder.ASC);
-						}else if("".equals(sortType)) {
-					}	
+		
+		srb = client.prepareSearch(vo.getIndex()).setTypes(vo.getType()).setQuery(bool).setFrom(0).setSize(searchSize);
+		
+		if(!"".equals(vo.getSortType())) {
+				if("DESC".equals(vo.getSortType())) {
+					srb.addSort(sortData, SortOrder.DESC);
+				}else if("ASC".equals(vo.getSortType())) {
+					srb.addSort(sortData, SortOrder.ASC);
+				}else if("".equals(vo.getSortType())) {
 				}
-			}
-			
-			srb = client.prepareSearch(index).setTypes(type).setQuery(bool).setFrom(0).setSize(searchSize);
+		}
+
 		
-		SearchResponse keyAndValue = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
-		
+		SearchResponse keyAndValueList = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).get();
 		// System.out.println("keyAndValue" + keyAndValue);
 		// 검색 결과의 값을 가지고 옴
 		
 		List<Object> data = new ArrayList<>();
 		List<Object> data2 = new ArrayList<>();
-		for (SearchHit hit : keyAndValue.getHits().getHits()) {
+		for (SearchHit hit : keyAndValueList.getHits().getHits()) {
 			Map<String, Object> map = new LinkedHashMap<>();
 			
 
@@ -375,8 +370,8 @@ public class EsRepository {
 			data.add(map);
 		}
 		 
-		total = (int) keyAndValue.getHits().getTotalHits();
-		int totals = keyAndValue.getHits().getHits().length;
+		long total = keyAndValueList.getHits().getTotalHits();
+		int totals = keyAndValueList.getHits().getHits().length;
 		
 		Map<String, Object> totalData = new HashMap<>();
 		totalData.put("totalSearchData", total);
@@ -386,44 +381,44 @@ public class EsRepository {
 		list.put("datas",totalData);
 		data2.add(list);
 		
-		keyValue.put("data", data);
-		keyValue.put("totalData", data2);
+		keyValueList.put("data", data);
+		keyValueList.put("totalData", data2);
 
-		if(keyValue.get("data").size() == 0) {
-			keyValue.put("data", data);
+		if(keyValueList.get("data").size() == 0) {
+			keyValueList.put("data", data);
 		}
 		
-		
-		return keyValue;
+		return keyValueList;
 
 	}
 
-	public Map<String, List<Object>> indexAndKeyValueSearch(String index, String[] idkey, String[] idvalue,
-			String config, String searchType, Integer searchSize, Integer total, String sortType, String sortData)throws Exception {
+	public Map<String, List<Object>> indexAndKeyValueSearch(EsSearchVO vo, List<String> idkey
+			, List<String> idvalue, int searchSize, String sortData)throws Exception {
 
+		System.out.println("리포지토리" + idvalue.get(0));
 		Map<String, List<Object>> data = new HashMap<>();
 		List<Object> dataList = new ArrayList<>();
 		
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		SearchRequestBuilder srb = null;
 
-		srb = client.prepareSearch(index);
+		srb = client.prepareSearch(vo.getIndex());
 		
-		if(!"".equals(sortType)) {
-			for(int i = 0; i < idvalue.length; i++) {
-				if("DESC".equals(sortType)) {
+		if(!"".equals(vo.getSortType())) {
+			for(int i = 0; i < idvalue.size(); i++) {
+				if("DESC".equals(vo.getSortType())) {
 					srb.addSort(sortData, SortOrder.DESC);
-				}else if("ASC".equals(sortType)) {
+				}else if("ASC".equals(vo.getSortType())) {
 					srb.addSort(sortData, SortOrder.ASC);
-				}else if("".equals(sortType)) {
+				}else if("".equals(vo.getSortType())) {
 				}
 			}	
 		}
 
-		if("".equals(searchType)) {
-			for(int i=0; i<idkey.length; i++) {
-				String keyField= idkey[i];
-				String valueField = idvalue[i];
+		if("".equals(vo.getSearchType())) {
+			for(int i=0; i<idkey.size(); i++) {
+				String keyField= idkey.get(i);
+				String valueField = idvalue.get(i);
 				if(keyField != null) {
 					if(valueField.indexOf("*") >= 0) {
 						bool.must(QueryBuilders.matchAllQuery())
@@ -433,19 +428,20 @@ public class EsRepository {
 						.must(QueryBuilders.matchQuery(keyField, valueField));
 					}
 				
-				} else if(idkey[0] == "") {
+				} else if(idkey.get(i) == "") {
 						//밸류값만 검색할 때
 						bool.must(QueryBuilders.matchAllQuery())
-						.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+						.must(QueryBuilders.queryStringQuery(valueField))
+						.must(QueryBuilders.simpleQueryStringQuery(valueField));
 				}
 					
 			}
 			
-		}else if ("and".equals(searchType)) {
-			for (int i = 0; i < idkey.length; i++) {
+		}else if ("and".equals(vo.getSearchType())) {
+			for (int i = 0; i < idkey.size(); i++) {
 
-				String keyField = idkey[i];
-				String valueField = idvalue[i];
+				String keyField = idkey.get(i);
+				String valueField = idvalue.get(i);
 				if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
 						bool.must(QueryBuilders.wildcardQuery(keyField, valueField))
@@ -457,11 +453,11 @@ public class EsRepository {
 					}
 			}
 			}
-		}else if ("or".equals(searchType)) {
-			for (int i = 0; i < idkey.length; i++) {
+		}else if ("or".equals(vo.getSearchType())) {
+			for (int i = 0; i < idkey.size(); i++) {
 
-				String keyField = idkey[i];
-				String valueField = idvalue[i];
+				String keyField = idkey.get(i);
+				String valueField = idvalue.get(i);
 				if (keyField != null) {
 					if (valueField.indexOf("*") >= 0) {
 						bool.should(QueryBuilders.wildcardQuery(keyField, valueField))
@@ -474,10 +470,11 @@ public class EsRepository {
 						//.should(QueryBuilders.matchQuery(keyField, valueField))
 						
 					}
-				}else if(idkey[0] == "") {
+				}else if(idkey.get(0) == "") {
 					//밸류값만 검색할 때
 					bool.must(QueryBuilders.matchAllQuery())
-					.should(QueryBuilders.moreLikeThisQuery(idvalue)).must(QueryBuilders.queryStringQuery(valueField));
+					.must(QueryBuilders.queryStringQuery(valueField))
+					.should(QueryBuilders.simpleQueryStringQuery(valueField));
 					
 				}
 			}
@@ -499,7 +496,7 @@ public class EsRepository {
 			mapData.add(map);
 		}
 
-		total = (int) res.getHits().getTotalHits();
+		long total = res.getHits().getTotalHits();
 		int totals = res.getHits().getHits().length;
 		
 		Map<String, Object> totalData = new HashMap<>();
@@ -526,18 +523,17 @@ public class EsRepository {
 
 	
 
-	public Map<String, List<Object>> idSearch(String index, String type, String id, String config, Integer total, Integer searchSize) throws Exception {
+	public Map<String, List<Object>> idSearch(EsSearchVO vo, int searchSize) throws Exception {
 
-		System.out.println("searchSize??" + searchSize);
 		Map<String, List<Object>> dataList = new HashMap<>();
 		Map<String, Object> map = new LinkedHashMap<>();
 		List<Object> mapData = new ArrayList<>();
 		BoolQueryBuilder bool = new BoolQueryBuilder();
 		GetRequestBuilder req;
 		SearchRequestBuilder srb;
-		req = client.prepareGet(index, type, id);
+		req = client.prepareGet(vo.getIndex(), vo.getType(), vo.getId());
 		bool.must(QueryBuilders.matchAllQuery());
-		srb = client.prepareSearch(index).setTypes(type);
+		srb = client.prepareSearch(vo.getIndex()).setTypes(vo.getType());
 		SearchResponse srs = srb.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(0).setSize(searchSize).get();
 		
 		GetResponse res1 = req.get();
@@ -553,7 +549,7 @@ public class EsRepository {
 			totals = 0;
 			srs = srb.setSize(totals).get();
 		}
-		total = (int) srs.getHits().getHits().length; // 전체 데이터의 값
+		long total = srs.getHits().getHits().length; // 전체 데이터의 값
 				
 		Map<String, Object> totalData = new HashMap<>();
 		totalData.put("totalSearchData", total);
@@ -583,6 +579,8 @@ public class EsRepository {
 		
 		return dataList;
 	}
+
+
 
 	
 }
