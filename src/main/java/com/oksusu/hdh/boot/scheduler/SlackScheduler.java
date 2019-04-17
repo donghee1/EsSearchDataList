@@ -66,7 +66,7 @@ public class SlackScheduler {
 		header.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 		
 		//for문을 돌면서 맵 타입의 서버 인포에 리스트 타입의 서버인포스의 값을 한개씩 넣어준다.
-		for(Map<String, Object> serverInfo:serverInfos) {
+		for(Map<String, Object> serverInfo:serverInfos) { 
 			// 맵으로받은 데이터를 타입별로 맞춰 만든 새로운 변수에 넣어 준다.
 			String serverName = (String) serverInfo.get("name");
 			boolean isNotiWhenTrue = (boolean) serverInfo.get("isNotiWhenTrue");
@@ -82,23 +82,25 @@ public class SlackScheduler {
 				//httpHeader값을 변경한다. 매개변수는 URL, method(get,post), requsetEntity entity(headers, or body 널일수있음), responseReturn 값의 유형을 입력한다. 
 				ResponseEntity<String> response = restTemplate.exchange(checkUrl, HttpMethod.GET, new HttpEntity(header), String.class);
 				int httpStatusCode = response.getStatusCodeValue();
-				
+				//System.out.println("httpStatus???:::" + httpStatusCode); //200
+				//System.out.println("response??? :::" + response.toString());//리스폰스엔티티결과값 출력
 				//리스폰스엔티티가 200을 떨구면
 				//오브젝트맵퍼를 생성하고, 
 				if( httpStatusCode == 200) {
 					ObjectMapper mapper = new ObjectMapper();
 				
 					Map<String, Object> resultMap = mapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {});
-					String resultString = (String) resultMap.get("result");
+					System.out.println("???result?? :::" + resultMap.toString());
+					String resultString = (String) resultMap.get("result"); // OK 
 					
 					if( "OK".equals(resultString)) {
-						boolean status = (boolean) resultMap.get("status");
+						boolean status = (boolean) resultMap.get("status"); // true or false
 						log.info(serverName + " status: " + status);
 						
 						if( !status || (status && isNotiWhenTrue)) {
 							String text = "Listener Status: " + status + ((!status)?"\n재기동: " + solveUrl:"");
 							_SLACK_COLOR slackColor = ((!status)?_SLACK_COLOR.warning:_SLACK_COLOR.good);
-							
+							System.out.println("?????" + text.toString());
 							this.sendWebhook(serverName, text, slackColor); 												// webhook send
 						}
 					}else {
@@ -118,7 +120,7 @@ public class SlackScheduler {
 	
 	/**
 	 * slack webhook 전송
-	 * 
+	 * sssssssssssss
 	 * 커스텀 컬러(헥사코드)를 적용 하려면 _SLACK_COLOR 대신 String 타입으로 받아야함.
 	 * 
 	 * @param serverName

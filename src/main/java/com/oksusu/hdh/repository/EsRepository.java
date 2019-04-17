@@ -116,16 +116,14 @@ public class EsRepository {
 		
 		if(idvalue.get(0) != "") {
 			for(int i = 0; i < idvalue.size(); i++) {
-				
 				valueField = idvalue.get(i);
-				if(valueField != null) {
-						req.setQuery(QueryBuilders.rangeQuery(valueField))
-								.setQuery(QueryBuilders.queryStringQuery(valueField)).setQuery(QueryBuilders.simpleQueryStringQuery(valueField));	
-				
-				}	
-			}	
+				if(valueField.indexOf("*") >= 0) {
+				req.setQuery(QueryBuilders.matchAllQuery()).setQuery(QueryBuilders.wildcardQuery(valueField, "* ?"))
+				.setQuery(QueryBuilders.queryStringQuery(valueField)).setFrom(0).setSize(searchSize);
+				}
+			}
 		}else {
-			req.setQuery(QueryBuilders.matchAllQuery());
+				req.setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(searchSize);
 		}
 		
 		if(!"".equals(vo.getSortType())) {
@@ -182,19 +180,18 @@ public class EsRepository {
 	// 인덱스와 타입을 검색하여 결과값을 도출하는 메서드 입니다.
 	public Map<String, List<Object>> indexAndTypeSearch(EsSearchVO vo, List<String> idkey, List<String> idvalue,
 			int searchSize, String sortData) throws Exception {
-
 		Map<String, List<Object>> dataList = new HashMap<>();
-		SearchRequestBuilder req = null;
-
-		System.out.println("tyepSearh!!!!" + vo.toString());
+		SearchRequestBuilder req = null;	
+		BoolQueryBuilder bool = new BoolQueryBuilder();
 			req = client.prepareSearch(vo.getIndex()).setTypes(vo.getType()).setFrom(0).setSize(searchSize);
-			String valueField;
-		if(idvalue.get(0) != "") {
+			String valueField = null;
+		if(idvalue.get(0) != "" && idkey.get(0) == "") {
 			for(int i = 0; i < idvalue.size(); i++) {
 				valueField = idvalue.get(i);
-				req.setQuery(QueryBuilders.queryStringQuery(valueField))
-				.setQuery(QueryBuilders.simpleQueryStringQuery(valueField)).setFrom(0).setSize(searchSize);
-				
+					System.out.println("여기기야겨기기기기");
+				req.setQuery(QueryBuilders.matchAllQuery()).setQuery(QueryBuilders.queryStringQuery(valueField))
+				.setSize(searchSize).setFrom(0);
+				System.out.println("뭐야ㅐ뭐야!! :::" + req.get().toString());
 			}
 		}else {
 				req.setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(searchSize);

@@ -27,7 +27,7 @@ public class SlackNotifier {
 	private CommonProperties commonPro;
 	
 	/*
-	 * 참고 블로그 - https://java.ihoney.pe.kr/447
+	 * webkook 참고 블로그 - https://java.ihoney.pe.kr/447
 	 * slack attachment guide - https://api.slack.com/docs/message-attachments
 	 */
 	
@@ -69,7 +69,9 @@ public class SlackNotifier {
 	}
 	
 	public boolean notify(SlackMessageAttachement message) {
-		SlackMessage slackMessage = SlackMessage.builder().channel(commonPro.getWebHookChannel()).attachments(Lists.newArrayList(message)).build();
+		SlackMessage slackMessage = SlackMessage
+				.builder().channel(commonPro.getWebHookChannel())
+				.attachments(Lists.newArrayList(message)).build();
 		
 		try {
 			restTemplate.postForEntity(commonPro.getWebHookUrl(), slackMessage, String.class);
