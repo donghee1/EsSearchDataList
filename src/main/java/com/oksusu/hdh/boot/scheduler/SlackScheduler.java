@@ -3,6 +3,7 @@ package com.oksusu.hdh.boot.scheduler;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import com.oksusu.hdh.boot.config.CommonProperties;
 import com.oksusu.hdh.boot.util.SlackNotifier;
 import com.oksusu.hdh.boot.util.SlackNotifier.SlackMessageAttachement;
 
+import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,7 +43,7 @@ public class SlackScheduler {
 	 * - properties 의 서버를 체크하여 설정에 따라 slack 에 webhook 으로 메시지를 전송한다.
 	 * 
 	 */
-	@Scheduled(cron = "0 */5 * * * *")
+	@Scheduled(cron = "0 */59 * * * *")
 //	@Scheduled(cron = "*/10 * * * * *")
 	protected void serverSatusNotifier() {
 		

@@ -1,5 +1,5 @@
 # webhook info
-webhookUrl: https://hooks.slack.com/services/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
+webhookUrl: https://hooks.slack.com/services/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
                                                                  
 webhookChannel: 99_listener_check
 
@@ -22,3 +22,8 @@ checkParam: status=Y
 solveParam: use_yn=Y
 propertiesParam: m=getPropertyList
 
+
+
+
+    
+  

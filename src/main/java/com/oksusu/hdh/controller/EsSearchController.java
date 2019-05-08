@@ -25,7 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.oksusu.hdh.domain.EsSearchVO;
 import com.oksusu.hdh.service.EsSearchService;
 
+import lombok.extern.slf4j.Slf4j;
 
+//@Slf4j
 @Controller
 public class EsSearchController {
 
@@ -48,7 +50,6 @@ public class EsSearchController {
 
 		List<String> result = null;
 		vo.setConfig((String) listMap.get("config"));
-		System.out.println("??" + vo.getConfig());
 		
 		String config = vo.getConfig();
 		
@@ -74,7 +75,6 @@ public class EsSearchController {
 		List<String> typeList = new ArrayList<>();	
 		
 		vo.setIndex((String) listMap.get("index"));
-		System.out.println("???" + vo.getIndex());
 		
 		vo.setConfig((String) listMap.get("config"));
 		
@@ -93,7 +93,6 @@ public class EsSearchController {
 	@SuppressWarnings("unchecked")
 	public Map<String, List<Object>> startSearch(@RequestBody Map<String, Object> listMap)throws Exception{
 		
-		System.out.println("startsearch!!!!");
 		EsSearchVO vo = new EsSearchVO();
 		
 		List<String> idvalue = (List<String>) listMap.get("idvalue");
@@ -113,7 +112,6 @@ public class EsSearchController {
 		System.out.println("sizeData??" + sizeData);
 		System.out.println("sortdata??" + sortData);
 		
-		System.out.println("???" + vo.toString());
 		Map<String, List<Object>> data = new HashMap<>();
 		//String json = null;
 		
@@ -127,7 +125,6 @@ public class EsSearchController {
 			}
 		}
 		
-		System.out.println("???!!" + data.toString());
 		
 		return data;
 	}

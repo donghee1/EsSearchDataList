@@ -77,15 +77,12 @@ public  class EsSearchServiceImpl implements EsSearchService {
 			}
 			//String json = null ;
 				if ("".equals(vo.getType()) && "".equals(idkey.get(0))) {
-					System.out.println("onlyone!!!!");
 					mapList = repository.onlyOneIndexSearch(vo, searchSize, idkey, idvalue, sortData);
 				
 				}else if( !"".equals(vo.getType()) && "".equals(vo.getId()) && "".equals(idkey.get(0))) {
-					System.out.println("typeSearch!!!");
 					mapList = repository.indexAndTypeSearch(vo, idkey, idvalue, searchSize,sortData);
 				
 				}else if (!"".equals(vo.getType()) && !"".equals(vo.getId()) && "".equals(idkey.get(0)) && "".equals(idvalue.get(0)) ) {
-					System.out.println("아이디값이 왜 안될까요?");
 					mapList = repository.idSearch(vo, searchSize);
 					//json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
 				

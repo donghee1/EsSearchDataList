@@ -1,0 +1,75 @@
+2019:04:23 20:59:47.148 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : Starting OksusuApplication on handonghuiui-MacBookPro.local with PID 2940 (/Users/jinaworks/Downloads/EsSearchDataList/bin/main started by jinaworks in /Users/jinaworks/Downloads/EsSearchDataList) 
+2019:04:23 20:59:47.148 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : No active profile set, falling back to default profiles: default 
+2019:04:23 20:59:47.151 INFO  --- [restartedMain] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@13239258: startup date [Tue Apr 23 20:59:47 KST 2019]; root of context hierarchy 
+2019:04:23 20:59:47.687 INFO  --- [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8080 (http) 
+2019:04:23 20:59:47.689 INFO  --- [restartedMain] o.a.catalina.core.StandardService : Starting service [Tomcat] 
+2019:04:23 20:59:47.690 INFO  --- [restartedMain] o.a.catalina.core.StandardEngine : Starting Servlet Engine: Apache Tomcat/8.5.34 
+2019:04:23 20:59:47.823 INFO  --- [localhost-startStop-1] o.apache.jasper.servlet.TldScanner : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time. 
+2019:04:23 20:59:47.829 INFO  --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext 
+2019:04:23 20:59:47.829 INFO  --- [localhost-startStop-1] o.s.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 678 ms 
+2019:04:23 20:59:47.845 INFO  --- [localhost-startStop-1] o.s.b.w.s.ServletRegistrationBean : Servlet dispatcherServlet mapped to [/] 
+2019:04:23 20:59:47.846 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'characterEncodingFilter' to: [/*] 
+2019:04:23 20:59:47.846 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'hiddenHttpMethodFilter' to: [/*] 
+2019:04:23 20:59:47.847 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'httpPutFormContentFilter' to: [/*] 
+2019:04:23 20:59:47.847 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'requestContextFilter' to: [/*] 
+2019:04:23 20:59:48.072 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 20:59:48.132 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@13239258: startup date [Tue Apr 23 20:59:47 KST 2019]; root of context hierarchy 
+2019:04:23 20:59:48.147 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/getProperty],methods=[POST]}" onto public java.lang.String com.oksusu.hdh.boot.controller.SlackController.getProperty(java.util.Map<java.lang.String, java.lang.String>) 
+2019:04:23 20:59:48.151 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView com.oksusu.hdh.controller.EsSearchController.MainPage() 
+2019:04:23 20:59:48.152 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/checkServer],methods=[GET]}" onto public java.util.List<java.lang.String> com.oksusu.hdh.controller.EsSearchController.checkServerList(com.oksusu.hdh.domain.EsSearchVO,java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 20:59:48.153 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/typeList],methods=[POST]}" onto public java.util.List<java.lang.String> com.oksusu.hdh.controller.EsSearchController.startTypeList(com.oksusu.hdh.domain.EsSearchVO,java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 20:59:48.154 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/startSearch],methods=[POST]}" onto public java.util.Map<java.lang.String, java.util.List<java.lang.Object>> com.oksusu.hdh.controller.EsSearchController.startSearch(java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 20:59:48.155 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/1/hello]}" onto public java.lang.String com.oksusu.hdh.controller.MainController.Hello() 
+2019:04:23 20:59:48.159 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest) 
+2019:04:23 20:59:48.160 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) 
+2019:04:23 20:59:48.177 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 20:59:48.178 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 20:59:48.288 INFO  --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer : LiveReload server is running on port 35729 
+2019:04:23 20:59:48.329 INFO  --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter : Registering beans for JMX exposure on startup 
+2019:04:23 20:59:48.339 INFO  --- [restartedMain] o.s.s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing 
+2019:04:23 20:59:48.347 INFO  --- [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer : Tomcat started on port(s): 8080 (http) with context path '' 
+2019:04:23 20:59:48.351 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : Started OksusuApplication in 1.257 seconds (JVM running for 87.005) 
+2019:04:23 20:59:48.358 INFO  --- [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged 
+2019:04:23 21:00:00.118 INFO  --- [pool-3-thread-1] c.o.h.boot.scheduler.SlackScheduler : DEV status: true 
+2019:04:23 21:00:00.127 INFO  --- [pool-3-thread-1] c.o.h.boot.scheduler.SlackScheduler : BMT status: true 
+2019:04:23 21:00:00.137 INFO  --- [pool-3-thread-1] c.o.h.boot.scheduler.SlackScheduler : PROD status: true 
+2019:04:23 21:00:01.834 INFO  --- [Thread-15] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@13239258: startup date [Tue Apr 23 20:59:47 KST 2019]; root of context hierarchy 
+2019:04:23 21:00:04.261 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : Starting OksusuApplication on handonghuiui-MacBookPro.local with PID 2940 (/Users/jinaworks/Downloads/EsSearchDataList/bin/main started by jinaworks in /Users/jinaworks/Downloads/EsSearchDataList) 
+2019:04:23 21:00:04.262 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : No active profile set, falling back to default profiles: default 
+2019:04:23 21:00:04.265 INFO  --- [restartedMain] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@5e0a2ae6: startup date [Tue Apr 23 21:00:04 KST 2019]; root of context hierarchy 
+2019:04:23 21:00:04.849 INFO  --- [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8080 (http) 
+2019:04:23 21:00:04.852 INFO  --- [restartedMain] o.a.catalina.core.StandardService : Starting service [Tomcat] 
+2019:04:23 21:00:04.853 INFO  --- [restartedMain] o.a.catalina.core.StandardEngine : Starting Servlet Engine: Apache Tomcat/8.5.34 
+2019:04:23 21:00:04.989 INFO  --- [localhost-startStop-1] o.apache.jasper.servlet.TldScanner : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time. 
+2019:04:23 21:00:04.994 INFO  --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext 
+2019:04:23 21:00:04.995 INFO  --- [localhost-startStop-1] o.s.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 730 ms 
+2019:04:23 21:00:05.017 INFO  --- [localhost-startStop-1] o.s.b.w.s.ServletRegistrationBean : Servlet dispatcherServlet mapped to [/] 
+2019:04:23 21:00:05.018 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'characterEncodingFilter' to: [/*] 
+2019:04:23 21:00:05.018 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'hiddenHttpMethodFilter' to: [/*] 
+2019:04:23 21:00:05.018 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'httpPutFormContentFilter' to: [/*] 
+2019:04:23 21:00:05.019 INFO  --- [localhost-startStop-1] o.s.b.w.s.FilterRegistrationBean : Mapping filter: 'requestContextFilter' to: [/*] 
+2019:04:23 21:00:05.277 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 21:00:05.352 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@5e0a2ae6: startup date [Tue Apr 23 21:00:04 KST 2019]; root of context hierarchy 
+2019:04:23 21:00:05.368 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/getProperty],methods=[POST]}" onto public java.lang.String com.oksusu.hdh.boot.controller.SlackController.getProperty(java.util.Map<java.lang.String, java.lang.String>) 
+2019:04:23 21:00:05.371 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView com.oksusu.hdh.controller.EsSearchController.MainPage() 
+2019:04:23 21:00:05.372 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/checkServer],methods=[GET]}" onto public java.util.List<java.lang.String> com.oksusu.hdh.controller.EsSearchController.checkServerList(com.oksusu.hdh.domain.EsSearchVO,java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 21:00:05.372 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/typeList],methods=[POST]}" onto public java.util.List<java.lang.String> com.oksusu.hdh.controller.EsSearchController.startTypeList(com.oksusu.hdh.domain.EsSearchVO,java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 21:00:05.373 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/startSearch],methods=[POST]}" onto public java.util.Map<java.lang.String, java.util.List<java.lang.Object>> com.oksusu.hdh.controller.EsSearchController.startSearch(java.util.Map<java.lang.String, java.lang.Object>) throws java.lang.Exception 
+2019:04:23 21:00:05.378 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/1/hello]}" onto public java.lang.String com.oksusu.hdh.controller.MainController.Hello() 
+2019:04:23 21:00:05.381 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest) 
+2019:04:23 21:00:05.382 INFO  --- [restartedMain] o.s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) 
+2019:04:23 21:00:05.396 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 21:00:05.397 INFO  --- [restartedMain] o.s.w.s.h.SimpleUrlHandlerMapping : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler] 
+2019:04:23 21:00:05.479 INFO  --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer : LiveReload server is running on port 35729 
+2019:04:23 21:00:05.509 INFO  --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter : Registering beans for JMX exposure on startup 
+2019:04:23 21:00:05.524 INFO  --- [restartedMain] o.s.s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing 
+2019:04:23 21:00:05.532 INFO  --- [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer : Tomcat started on port(s): 8080 (http) with context path '' 
+2019:04:23 21:00:05.540 INFO  --- [restartedMain] com.oksusu.hdh.OksusuApplication : Started OksusuApplication in 1.362 seconds (JVM running for 104.195) 
+2019:04:23 21:00:05.543 INFO  --- [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged 
+2019:04:23 21:01:00.014 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : DEV status: true 
+2019:04:23 21:01:00.024 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : BMT status: true 
+2019:04:23 21:01:00.034 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : PROD status: true 
+2019:04:23 21:02:00.008 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : DEV status: true 
+2019:04:23 21:02:00.017 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : BMT status: true 
+2019:04:23 21:02:00.027 INFO  --- [pool-4-thread-1] c.o.h.boot.scheduler.SlackScheduler : PROD status: true 
+2019:04:23 21:02:34.729 INFO  --- [Thread-25] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@5e0a2ae6: startup date [Tue Apr 23 21:00:04 KST 2019]; root of context hierarchy 

@@ -107,7 +107,6 @@ public class EsRepository {
 		Map<String, List<Object>> oneIndexList = new HashMap<>();
 		
 		
-		System.out.println("repository" + vo.toString());
 		
 		SearchRequestBuilder req = client.prepareSearch(vo.getIndex()).setFrom(0).setSize(searchSize);
 		
@@ -188,10 +187,8 @@ public class EsRepository {
 		if(idvalue.get(0) != "" && idkey.get(0) == "") {
 			for(int i = 0; i < idvalue.size(); i++) {
 				valueField = idvalue.get(i);
-					System.out.println("여기기야겨기기기기");
 				req.setQuery(QueryBuilders.matchAllQuery()).setQuery(QueryBuilders.queryStringQuery(valueField))
 				.setSize(searchSize).setFrom(0);
-				System.out.println("뭐야ㅐ뭐야!! :::" + req.get().toString());
 			}
 		}else {
 				req.setQuery(QueryBuilders.matchAllQuery()).setFrom(0).setSize(searchSize);
@@ -288,7 +285,6 @@ public class EsRepository {
 				
 			}else if ("and".equals(vo.getSearchType())) {
 				for (int i = 0; i < idkey.size(); i++) {
-					System.out.println("테스트 중입니다.");
 					 keyField = idkey.get(i);
 					 valueField = idvalue.get(i);
 					if (keyField != null) {
@@ -317,7 +313,6 @@ public class EsRepository {
 							bool.must(QueryBuilders.matchAllQuery())
 							.should(QueryBuilders.wildcardQuery(keyField, valueField));
 						} else {
-							System.out.println("or 구간 입니다.");
 							bool.should(QueryBuilders.boolQuery()
 									.should(QueryBuilders.matchQuery(keyField, valueField)).minimumShouldMatch(1)
 									.must(QueryBuilders.matchAllQuery()).should(QueryBuilders.simpleQueryStringQuery(valueField)));
@@ -392,7 +387,6 @@ public class EsRepository {
 	public Map<String, List<Object>> indexAndKeyValueSearch(EsSearchVO vo, List<String> idkey
 			, List<String> idvalue, int searchSize, String sortData)throws Exception {
 
-		System.out.println("리포지토리" + idvalue.get(0));
 		Map<String, List<Object>> data = new HashMap<>();
 		List<Object> dataList = new ArrayList<>();
 		
