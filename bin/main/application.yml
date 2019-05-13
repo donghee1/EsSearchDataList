@@ -27,15 +27,21 @@ spring:
   data:
     elasticsearch:
       devCluster-name: els-cluster
-      bmtCluster-name: els-cluster
   elasticsearch:
     jest:
       proxy:
         devHost: 1.255.144.24
         devPort: 9300 
-        bmtHost: 1.255.98.109 
-        bmtPort: 9300
-        
+---
+spring:
+  data:
+    elasticsearch:
+      bmtCluster-name: els-cluster
+  elasticsearch:
+    jest:
+      proxy:
+        bmtHost: 1.255.98.109         
+        bmtPort: 9300 
   mvc:
     view:
       prefix: /WEB-INF/views/
