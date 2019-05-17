@@ -29,7 +29,7 @@
 
 ### properties ###
 /src/main/resources/*.properties
-/bin/main/resources/*.properties
+/bin/main/resources/*.yml
 src/main/resources/application.properties
 src/main/resources/application.yml
 

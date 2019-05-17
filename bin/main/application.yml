@@ -1,5 +1,5 @@
 # webhook info
-webhookUrl: https://hooks.slack.com/services/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
+webhookUrl: https://hooks.slack.com/services/TB0UFBYQ2/CuWwp217xw5PAMqfmsuUsNmI
                                                                  
 webhookChannel: 99_listener_check
 
@@ -40,7 +40,7 @@ spring:
   elasticsearch:
     jest:
       proxy:
-        bmtHost: 1.255.98.109         
+        bmtHost: 1.255.98.109    
         bmtPort: 9300 
   mvc:
     view:
