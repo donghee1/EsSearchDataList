@@ -69,7 +69,6 @@ public class SlackScheduler {
 			String serverName = (String) serverInfo.get("name");
 			boolean isNotiWhenTrue = (boolean) serverInfo.get("isNotiWhenTrue");
 			boolean stopStatus = (boolean) serverInfo.get("stop");
-			System.out.println("ddddd::::" + isNotiWhenTrue);
 			String serverUrl = (String) serverInfo.get("serverUrl");
 			
 			//1.255.144.21:8080 + /idxr/set/kafkaListener + status = Y
@@ -81,17 +80,13 @@ public class SlackScheduler {
 			try {
 				//httpHeader값을 추가한다. 매개변수는 URL, method(get,post), requsetEntity entity(headers, or body 널일수있음), responseReturn 값의 유형을 입력한다. 
 				ResponseEntity<String> response = restTemplate.exchange(checkUrl, HttpMethod.GET, new HttpEntity(header), String.class);
-				System.out.println("response??" + response.toString());
 				int httpStatusCode = response.getStatusCodeValue();
-				System.out.println("httpStatus???:::" + httpStatusCode); //200
-				System.out.println("response??? :::" + response.toString());//리스폰스엔티티결과값 출력
 				//리스폰스엔티티가 200을 떨구면
 				//오브젝트맵퍼를 생성하고, 
 				if( httpStatusCode == 200) {
 					ObjectMapper mapper = new ObjectMapper();
 				
 					Map<String, Object> resultMap = mapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {});
-					System.out.println("???result?? :::" + resultMap.toString());
 					String resultString = (String) resultMap.get("result"); // OK 
 					
 					if( "OK".equals(resultString)) {
@@ -104,8 +99,6 @@ public class SlackScheduler {
 							if( !status || (status && isNotiWhenTrue)) {
 								String text = "Listener Status: " + status + ((!status)?"\n재기동: " + solveUrl:"");
 								_SLACK_COLOR slackColor = ((!status)?_SLACK_COLOR.warning:_SLACK_COLOR.good);
-								System.out.println("?????" + text.toString());
-								System.out.println("stopStatus OFF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 								this.sendWebhook(serverName, text, slackColor); 												// webhook send
 							}
 						}
