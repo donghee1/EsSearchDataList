@@ -59,6 +59,7 @@ public class SlackNotifier {
 		private String channel;
 		private List<SlackMessageAttachement> attachments;
 		
+		
 //		void addAttachment(SlackMessageAttachement attachement) {
 //			if (this.attachments == null) {
 //				this.attachments = Lists.newArrayList();
@@ -68,6 +69,7 @@ public class SlackNotifier {
 //		}
 	}
 	
+	//이 메서드에서 url을 통해 슬랙으로 보내준다.
 	public boolean notify(SlackMessageAttachement message) {
 		SlackMessage slackMessage = SlackMessage
 				.builder().channel(commonPro.getWebHookChannel())
@@ -75,6 +77,7 @@ public class SlackNotifier {
 		
 		try {
 			restTemplate.postForEntity(commonPro.getWebHookUrl(), slackMessage, String.class);
+			
 			return true;
 		} catch (Exception e) {
 			log.error("Occur Exception: {}", e);
